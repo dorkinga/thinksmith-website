@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ThinkSmith — See How It Works</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --purple:#5B2C8F;--purple-mid:#7B3FB5;--purple-light:#EDE8F7;--purple-pale:#F7F4FC;
+  --gold:#C8963A;--dark:#0F0B1A;--gray:#4A4460;--gray-light:#8B83A3;
+  --off-white:#FAF9FC;--border:rgba(91,44,143,0.12);--green-pale:#F0FDF4;--green-border:#BBF7D0;
+}
+html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--off-white);color:var(--dark);font-size:15px;line-height:1.6;overflow-x:hidden}
+
+/* ── SHELL ── */
+.demo-wrap{max-width:860px;margin:0 auto;padding:0.5rem 1rem 2rem}
+
+/* ── PART TABS ── */
+.part-tabs{display:flex;background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:1.25rem;box-shadow:0 2px 10px rgba(91,44,143,0.06)}
+.part-tab{flex:1;padding:0.6rem 0.4rem;text-align:center;font-size:0.75rem;color:var(--gray-light);cursor:pointer;transition:all 0.2s;border-right:1px solid var(--border);position:relative;user-select:none;font-weight:400}
+.part-tab:last-child{border-right:none}
+.part-tab.active{background:var(--purple);color:white;font-weight:500}
+.part-tab.done{color:var(--purple);font-weight:500}
+.part-tab.done::after{content:'✓';position:absolute;top:3px;right:5px;font-size:0.6rem;color:var(--purple)}
+.part-tab.active::after{display:none}
+.tab-num{display:block;font-size:0.6rem;opacity:0.65;margin-bottom:0.1rem}
+
+/* ── SCENE CARD ── */
+.scene{background:white;border-radius:18px;border:1px solid var(--border);overflow:hidden;box-shadow:0 3px 20px rgba(91,44,143,0.07);min-height:480px;position:relative}
+
+/* ── SCENE HEADER ── */
+.scene-header{background:linear-gradient(135deg,var(--purple),var(--purple-mid));padding:0.9rem 1.25rem;display:flex;align-items:center;justify-content:space-between}
+.scene-title{font-family:'Playfair Display',serif;color:white;font-size:1rem;font-weight:700}
+.scene-meta{font-size:0.72rem;color:rgba(255,255,255,0.65)}
+.replay-btn{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:white;padding:0.3rem 0.75rem;border-radius:100px;font-size:0.72rem;cursor:pointer;font-family:inherit;transition:background 0.2s}
+.replay-btn:hover{background:rgba(255,255,255,0.25)}
+
+/* ── SCENE BODY ── */
+.scene-body{padding:1.25rem;display:flex;flex-direction:column;gap:1rem}
+
+/* ── CHALLENGE ── */
+.challenge-box{background:var(--purple-pale);border:1px solid var(--purple-light);border-radius:10px;padding:0.85rem 1rem}
+.challenge-label{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--purple);font-weight:500;margin-bottom:0.3rem}
+.challenge-text{font-size:0.88rem;color:var(--dark);line-height:1.5}
+
+/* ── TYPING AREA ── */
+.typing-area{border-radius:12px;border:1.5px solid var(--border);padding:0.9rem;min-height:110px;font-size:0.9rem;color:var(--dark);line-height:1.65;transition:background 0.6s,border-color 0.4s;position:relative}
+.typing-area.green-bg{background:var(--green-pale);border-color:var(--green-border)}
+.typing-cursor{display:inline-block;width:2px;height:1.1em;background:var(--purple);vertical-align:text-bottom;animation:blink 0.8s step-end infinite;margin-left:1px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.typing-cursor.hidden{display:none}
+
+/* ── RIVERA BUBBLE ── */
+.rivera-panel{display:none;background:white;border:1.5px solid #BFDBFE;border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(91,44,143,0.12);animation:slideIn 0.3s cubic-bezier(0.34,1.56,0.64,1)}
+.rivera-panel.visible{display:block}
+@keyframes slideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.rivera-head{background:#EFF6FF;padding:0.6rem 0.9rem;display:flex;align-items:center;gap:0.5rem;border-bottom:1px solid #BFDBFE}
+.rivera-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--purple-mid));color:white;font-family:'Playfair Display',serif;font-weight:700;font-size:0.75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rivera-name{font-size:0.75rem;font-weight:500;color:#1D4ED8}
+.rivera-role{font-size:0.65rem;color:#93C5FD}
+.rivera-body{padding:0.8rem 0.9rem}
+.bubble-teacher{background:#EFF6FF;border:1px solid #BFDBFE;border-radius:12px;border-top-left-radius:3px;padding:0.7rem 0.85rem;font-size:0.88rem;color:var(--dark);line-height:1.6;margin-bottom:0.5rem}
+.bubble-student{background:var(--purple);color:white;border-radius:12px;border-top-right-radius:3px;padding:0.7rem 0.85rem;font-size:0.88rem;line-height:1.6;margin-left:auto;max-width:85%;margin-bottom:0.5rem}
+
+/* ── PEER TABS ── */
+.peer-row{display:flex;gap:0.5rem;margin-bottom:0.75rem;flex-wrap:wrap}
+.peer-chip{padding:0.3rem 0.85rem;border-radius:100px;border:1px solid var(--border);font-size:0.78rem;cursor:pointer;transition:all 0.2s;color:var(--gray);background:white}
+.peer-chip.active{background:var(--purple);color:white;border-color:var(--purple)}
+.peer-chip.done{border-color:#86EFAC;color:#15803D;background:#F0FDF4}
+
+/* ── PEER WRITING ── */
+.peer-writing{background:var(--purple-pale);border-radius:10px;padding:0.85rem;font-size:0.85rem;color:var(--gray);line-height:1.65;font-style:italic;border-left:3px solid var(--purple);margin-bottom:0.75rem}
+.feedback-label{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--purple);font-weight:500;margin-bottom:0.4rem}
+.feedback-done{background:#F0FDF4;border:1px solid #BBF7D0;border-radius:10px;padding:0.7rem 0.85rem;font-size:0.85rem;color:#15803D;line-height:1.6}
+
+/* ── COMPETENCY BARS ── */
+.comp-block{margin-bottom:0.65rem}
+.comp-header{display:flex;justify-content:space-between;margin-bottom:0.25rem}
+.comp-label{font-size:0.8rem;font-weight:500;color:var(--dark)}
+.comp-score{font-size:0.8rem;font-weight:600;color:var(--purple)}
+.comp-bar{height:9px;background:#E9D5FF;border-radius:5px;overflow:hidden}
+.comp-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--purple),var(--purple-mid));width:0%;transition:width 1.4s cubic-bezier(0.4,0,0.2,1)}
+
+/* ── OVERALL RING ── */
+.outcome-top{display:flex;align-items:center;gap:1rem;background:var(--purple-pale);border-radius:14px;padding:1rem;margin-bottom:1rem}
+.ring-wrap{position:relative;width:72px;height:72px;flex-shrink:0}
+.ring-ripple{position:absolute;inset:0;border-radius:50%;background:var(--purple);animation:ripple 2.2s ease-out infinite;opacity:0.18}
+.ring-ripple2{position:absolute;inset:0;border-radius:50%;background:var(--purple);animation:ripple 2.2s ease-out infinite 0.9s;opacity:0.1}
+@keyframes ripple{0%{transform:scale(1);opacity:0.2}100%{transform:scale(1.7);opacity:0}}
+.ring-circle{position:relative;width:72px;height:72px;border-radius:50%;border:4px solid var(--purple);background:rgba(91,44,143,0.08);display:flex;align-items:center;justify-content:center;flex-direction:column}
+.ring-pct{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--purple);line-height:1;animation:scorePulse 2.8s ease-in-out infinite}
+@keyframes scorePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.65;transform:scale(0.93)}}
+.ring-label{font-size:0.55rem;color:var(--purple);opacity:0.7}
+.outcome-info{}
+.outcome-level{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--purple);font-weight:700}
+.outcome-sub{font-size:0.75rem;color:var(--gray-light);margin-top:0.15rem}
+
+/* ── NARRATIVE ── */
+.narrative-box{background:var(--purple-pale);border-radius:12px;padding:1rem;margin-bottom:0.75rem}
+.narrative-tag{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--purple);font-weight:500;margin-bottom:0.4rem}
+.narrative-text{font-size:0.85rem;color:var(--dark);line-height:1.7;font-weight:300}
+
+/* ── EVIDENCE ── */
+.evidence-item{border-left:3px solid var(--purple);background:var(--purple-pale);border-radius:0 10px 10px 0;padding:0.65rem 0.85rem;margin-bottom:0.5rem;font-size:0.82rem;color:var(--gray);line-height:1.6;font-style:italic}
+.evidence-tag{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--purple);font-weight:500;margin-bottom:0.2rem;font-style:normal}
+
+/* ── STATUS BAR ── */
+.status-bar{display:flex;align-items:center;gap:0.5rem;padding:0.6rem 0 0;font-size:0.75rem;color:var(--gray-light)}
+.status-dot{width:7px;height:7px;border-radius:50%;background:#86EFAC;animation:pulse-dot 1.8s ease-in-out infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.7)}}
+.status-dot.idle{background:var(--gray-light);animation:none}
+
+/* ── FOOTER ── */
+.demo-footer{text-align:center;padding:1.25rem 0 0;font-size:0.78rem;color:var(--gray-light)}
+.demo-footer a{color:var(--purple);text-decoration:none}
+
+@media(max-width:540px){
+  .part-tab{font-size:0.65rem;padding:0.5rem 0.25rem}
+  .scene-body{padding:0.9rem}
+}
+</style>
+</head>
+<body>
+<div class="demo-wrap">
+
+  <!-- TABS -->
+  <div class="part-tabs">
+    <div class="part-tab active" id="tab-1" onclick="goTo(1)"><span class="tab-num">Part</span>My Thinking</div>
+    <div class="part-tab" id="tab-2" onclick="goTo(2)"><span class="tab-num">Part</span>Peer Ideas</div>
+    <div class="part-tab" id="tab-3" onclick="goTo(3)"><span class="tab-num">Part</span>Their Feedback</div>
+    <div class="part-tab" id="tab-4" onclick="goTo(4)"><span class="tab-num">Part</span>Outcome</div>
+  </div>
+
+  <!-- SCENE -->
+  <div class="scene" id="scene">
+
+    <!-- PART 1 -->
+    <div id="p1" class="p-scene">
+      <div class="scene-header">
+        <div><div class="scene-title">Part 1 — Write Your Thinking</div><div class="scene-meta">Maya · Grade 8 Mathematics · Compound Interest</div></div>
+        <button class="replay-btn" onclick="goTo(1)">↺ Replay</button>
+      </div>
+      <div class="scene-body">
+        <div class="challenge-box">
+          <div class="challenge-label">Your challenge</div>
+          <div class="challenge-text">Why does compound interest grow faster over time than simple interest? Use an example to show your thinking.</div>
+        </div>
+        <div class="typing-area" id="p1-text"><span class="typing-cursor" id="p1-cursor"></span></div>
+        <div class="rivera-panel" id="p1-rivera">
+          <div class="rivera-head"><div class="rivera-avatar">R</div><div><div class="rivera-name">Ms. Rivera</div><div class="rivera-role">AI Teacher · ThinkSmith</div></div></div>
+          <div class="rivera-body">
+            <div class="bubble-teacher" id="p1-rivera-msg"></div>
+          </div>
+        </div>
+        <div class="status-bar"><div class="status-dot" id="p1-dot"></div><span id="p1-status">Waiting to begin…</span></div>
+      </div>
+    </div>
+
+    <!-- PART 2 -->
+    <div id="p2" class="p-scene" style="display:none">
+      <div class="scene-header">
+        <div><div class="scene-title">Part 2 — Check Peer Thinking</div><div class="scene-meta">Maya · reading and giving feedback to three peers</div></div>
+        <button class="replay-btn" onclick="goTo(2)">↺ Replay</button>
+      </div>
+      <div class="scene-body">
+        <div class="peer-row">
+          <div class="peer-chip done" id="p2-chip-1">Riley ✓</div>
+          <div class="peer-chip done" id="p2-chip-2">Ethan ✓</div>
+          <div class="peer-chip active" id="p2-chip-3">Maya A</div>
+        </div>
+        <div class="peer-writing" id="p2-peer-text"></div>
+        <div class="feedback-label">Maya's feedback to Peer 3</div>
+        <div class="typing-area" id="p2-text"><span class="typing-cursor" id="p2-cursor"></span></div>
+        <div class="rivera-panel" id="p2-rivera">
+          <div class="rivera-head"><div class="rivera-avatar">R</div><div><div class="rivera-name">Ms. Rivera</div><div class="rivera-role">AI Teacher · ThinkSmith</div></div></div>
+          <div class="rivera-body">
+            <div class="bubble-student" id="p2-q-bubble" style="display:none"></div>
+            <div class="bubble-teacher" id="p2-rivera-msg"></div>
+          </div>
+        </div>
+        <div class="status-bar"><div class="status-dot" id="p2-dot"></div><span id="p2-status">Waiting to begin…</span></div>
+      </div>
+    </div>
+
+    <!-- PART 3 -->
+    <div id="p3" class="p-scene" style="display:none">
+      <div class="scene-header">
+        <div><div class="scene-title">Part 3 — Peer Feedback to You</div><div class="scene-meta">Maya · reflecting on feedback received from peers</div></div>
+        <button class="replay-btn" onclick="goTo(3)">↺ Replay</button>
+      </div>
+      <div class="scene-body">
+        <div class="peer-row">
+          <div class="peer-chip done" id="p3-chip-1">Riley ✓</div>
+          <div class="peer-chip done" id="p3-chip-2">Ethan ✓</div>
+          <div class="peer-chip active" id="p3-chip-3">Peer 3</div>
+        </div>
+        <div class="peer-writing" id="p3-peer-text"></div>
+        <div class="feedback-label">Maya's reflection</div>
+        <div class="typing-area" id="p3-text"><span class="typing-cursor" id="p3-cursor"></span></div>
+        <div class="rivera-panel" id="p3-rivera">
+          <div class="rivera-head"><div class="rivera-avatar">R</div><div><div class="rivera-name">Ms. Rivera</div><div class="rivera-role">AI Teacher · ThinkSmith</div></div></div>
+          <div class="rivera-body">
+            <div class="bubble-student" id="p3-q-bubble" style="display:none"></div>
+            <div class="bubble-teacher" id="p3-rivera-msg"></div>
+          </div>
+        </div>
+        <div class="status-bar"><div class="status-dot" id="p3-dot"></div><span id="p3-status">Waiting to begin…</span></div>
+      </div>
+    </div>
+
+    <!-- PART 4 -->
+    <div id="p4" class="p-scene" style="display:none">
+      <div class="scene-header">
+        <div><div class="scene-title">Thinking Outcome — Snapshot</div><div class="scene-meta">Maya · Compound Interest · Grade 8 Mathematics</div></div>
+        <button class="replay-btn" onclick="goTo(4)">↺ Replay</button>
+      </div>
+      <div class="scene-body">
+        <div class="outcome-top">
+          <div class="ring-wrap">
+            <div class="ring-ripple"></div>
+            <div class="ring-ripple2"></div>
+            <div class="ring-circle"><div class="ring-pct" id="p4-score">0%</div><div class="ring-label">Overall</div></div>
+          </div>
+          <div class="outcome-info">
+            <div class="outcome-level" id="p4-level">—</div>
+            <div class="outcome-sub">Overall Thinking Outcome · 5 competencies assessed</div>
+          </div>
+        </div>
+        <div id="p4-bars"></div>
+        <div class="narrative-box" id="p4-narrative" style="display:none">
+          <div class="narrative-tag">Personal Thinking Record — Snapshot</div>
+          <div id="p4-narrative-paras"></div>
+        </div>
+
+        <div class="status-bar"><div class="status-dot" id="p4-dot"></div><span id="p4-status">Generating Thinking Outcome…</span></div>
+      </div>
+    </div>
+
+  </div><!-- /scene -->
+
+  <div class="demo-footer">
+    Interactive demo of the ThinkSmith learning journey &nbsp;·&nbsp;
+    <a href="https://thinksmith.ca">Start free at thinksmith.ca</a>
+  </div>
+</div>
+
+<!-- ── Ms Rivera Greeting Modal (matches real app) ── -->
+<div id="greeting-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;align-items:flex-end;justify-content:center;padding:1rem">
+  <div style="background:white;border-radius:20px;width:100%;max-width:420px;box-shadow:0 24px 60px rgba(0,0,0,0.3);overflow:hidden;animation:slideUp 0.35s cubic-bezier(0.34,1.56,0.64,1)">
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,#2563EB,var(--purple));padding:1rem 1.25rem;display:flex;align-items:center;gap:0.75rem">
+      <div style="width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:white;font-family:'Playfair Display',serif;font-weight:700;font-size:1rem;flex-shrink:0">R</div>
+      <div>
+        <p style="font-size:0.85rem;font-weight:700;color:white;margin:0">Ms. Rivera</p>
+        <p style="font-size:0.72rem;color:rgba(255,255,255,0.75);margin:0">AI Teacher · ThinkSmith</p>
+      </div>
+    </div>
+    <!-- Message -->
+    <div style="padding:1.1rem 1.25rem">
+      <p style="font-size:0.88rem;color:var(--dark);line-height:1.65;margin-bottom:0.9rem">
+        Your Thinking Outcome assessment comes from five areas: Knowledge &amp; Understanding, Creative Thinking, Critical Thinking, Communication, and Application.
+      </p>
+      <ul style="list-style:none;padding:0;margin:0 0 0.9rem 0">
+        <li style="display:flex;gap:0.5rem;font-size:0.85rem;color:var(--dark);line-height:1.6;margin-bottom:0.4rem"><span style="color:var(--purple);flex-shrink:0;margin-top:0.15rem">›</span><span>Your solution to the challenge</span></li>
+        <li style="display:flex;gap:0.5rem;font-size:0.85rem;color:var(--dark);line-height:1.6;margin-bottom:0.4rem"><span style="color:var(--purple);flex-shrink:0;margin-top:0.15rem">›</span><span>Revisiting your solution as your understanding grows</span></li>
+        <li style="display:flex;gap:0.5rem;font-size:0.85rem;color:var(--dark);line-height:1.6;margin-bottom:0.4rem"><span style="color:var(--purple);flex-shrink:0;margin-top:0.15rem">›</span><span>Listening and clearly expressing your thinking to peers</span></li>
+        <li style="display:flex;gap:0.5rem;font-size:0.85rem;color:var(--dark);line-height:1.6;margin-bottom:0.4rem"><span style="color:var(--purple);flex-shrink:0;margin-top:0.15rem">›</span><span>Strong, specific peer comments show real Thinking and Communication skills — vague responses like "good job" do not.</span></li>
+        <li style="display:flex;gap:0.5rem;font-size:0.85rem;color:var(--dark);line-height:1.6;margin-bottom:0"><span style="color:var(--purple);flex-shrink:0;margin-top:0.15rem">›</span><span>Asking Ms. Rivera for help also counts — that conversation becomes evidence in your Thinking Outcome.</span></li>
+      </ul>
+      <div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:10px;padding:0.75rem 0.9rem;font-size:0.82rem;color:#1E40AF;line-height:1.6">
+        <strong>You can return to your solution at any time</strong> to revise it after seeing peer ideas. Your peers will regenerate their feedback on your updated work.
+      </div>
+    </div>
+    <!-- Button -->
+    <div style="padding:0 1.25rem 1.25rem">
+      <button onclick="dismissGreeting()" style="width:100%;background:var(--purple);color:white;border:none;border-radius:12px;padding:0.75rem;font-size:0.9rem;font-weight:500;cursor:pointer;font-family:inherit;transition:background 0.2s"
+        onmouseover="this.style.background='var(--purple-mid)'" onmouseout="this.style.background='var(--purple)'">
+        Got it — let's begin
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+</style>
+
+<script>
+// ── Timeline management ──
+let timers = [];
+let current = 1;
+
+function clearTimers() {
+  timers.forEach(clearTimeout);
+  timers = [];
+}
+
+function after(ms, fn) {
+  const t = setTimeout(fn, ms);
+  timers.push(t);
+  return t;
+}
+
+function dismissGreeting() {
+  const overlay = document.getElementById('greeting-overlay');
+  if (overlay) overlay.style.display = 'none';
+  // Start typing sequence
+  after(400, () => {
+    if (window._part1Start) window._part1Start();
+  });
+}
+
+function goTo(n) {
+  clearTimers();
+  // Hide all scenes
+  [1,2,3,4].forEach(i => {
+    const s = document.getElementById('p'+i);
+    if (s) s.style.display = 'none';
+    const tab = document.getElementById('tab-'+i);
+    tab.classList.remove('active','done');
+    if (i < n) tab.classList.add('done');
+  });
+  // Show target
+  document.getElementById('p'+n).style.display = 'block';
+  document.getElementById('tab-'+n).classList.add('active');
+  current = n;
+  // Run scene
+  if (n === 1) runPart1();
+  if (n === 2) runPart2();
+  if (n === 3) runPart3();
+  if (n === 4) runPart4();
+}
+
+// ── Typing engine ──
+function typeInto(elId, cursorId, text, speed, cb) {
+  const el = document.getElementById(elId);
+  const cur = document.getElementById(cursorId);
+  let i = 0;
+  let existing = el.innerHTML.replace(/<span.*<\/span>/,'') || '';
+  function tick() {
+    if (i >= text.length) { if (cb) cb(); return; }
+    existing += text[i++];
+    el.innerHTML = existing + (cur ? '<span class="typing-cursor" id="'+cursorId+'"></span>' : '');
+    const t = setTimeout(tick, speed + Math.random() * speed * 0.6);
+    timers.push(t);
+  }
+  tick();
+}
+
+function clearTyping(elId, cursorId) {
+  const el = document.getElementById(elId);
+  if (el) el.innerHTML = '<span class="typing-cursor" id="'+(cursorId||'')+'"></span>';
+}
+
+function setStatus(id, dotId, msg, active) {
+  const s = document.getElementById(id);
+  const d = document.getElementById(dotId);
+  if (s) s.textContent = msg;
+  if (d) { d.className = 'status-dot' + (active ? '' : ' idle'); }
+}
+
+function showRivera(panelId, msgId, msg, qBubbleId, qText, cb) {
+  const panel = document.getElementById(panelId);
+  const msgEl = document.getElementById(msgId);
+  panel.classList.add('visible');
+  if (qBubbleId && qText) {
+    const qb = document.getElementById(qBubbleId);
+    qb.style.display = 'block';
+    qb.textContent = qText;
+  }
+  // Type Ms Rivera response
+  msgEl.textContent = '';
+  let i = 0;
+  function tick() {
+    if (i >= msg.length) { if (cb) cb(); return; }
+    msgEl.textContent += msg[i++];
+    const t = setTimeout(tick, 22 + Math.random() * 15);
+    timers.push(t);
+  }
+  tick();
+}
+
+function hideRivera(panelId) {
+  const panel = document.getElementById(panelId);
+  panel.classList.remove('visible');
+  panel.style.display = 'none';
+  after(50, () => { panel.style.display = ''; });
+}
+
+// ════════════════════════════════════
+// PART 1
+// ════════════════════════════════════
+function runPart1() {
+  clearTyping('p1-text','p1-cursor');
+  hideRivera('p1-rivera');
+  const _p1t = document.getElementById('p1-text');
+  if (_p1t) { _p1t.className = 'typing-area'; _p1t.style.display = 'block'; }
+  // Hide greeting overlay if shown
+  const _ov = document.getElementById('greeting-overlay');
+  if (_ov) _ov.style.display = 'none';
+  window._part1Start = null;
+  setStatus('p1-status','p1-dot','Maya is thinking…', false);
+
+  // Show greeting overlay — waits for "Got it" button
+  const overlay = document.getElementById('greeting-overlay');
+  if (overlay) {
+    overlay.style.display = 'flex';
+    setStatus('p1-status','p1-dot','Ms. Rivera is welcoming Maya…', true);
+  }
+
+  const weak = "compound interest is when you get interest every year and it adds up more than simple interest because simple interest is always the same amount.";
+  const revised = "Compound interest grows faster because each year you earn interest on both your original amount and all the interest you've already earned. So the base keeps getting bigger. For example with $100 at 5%: year 1 you earn $5 and now have $105, year 2 you earn $5.25 on the $105, year 3 even more. With simple interest you'd only ever earn $5 a year. The difference gets huge over time.";
+
+  // Step 1: start typing after greeting dismissed — triggered by dismissGreeting()
+  // Store callback so dismissGreeting can call it
+  window._part1Start = () => {
+    setStatus('p1-status','p1-dot','Maya is writing her first attempt…', true);
+    document.getElementById('p1-text').classList.add('green-bg');
+    typeInto('p1-text','p1-cursor', weak, 38, () => {
+      // Step 2: pause, then Rivera appears
+      setStatus('p1-status','p1-dot','Ms. Rivera is reviewing…', true);
+      after(1800, () => {
+        showRivera('p1-rivera','p1-rivera-msg',
+          "Good start, Maya — you've got the right instinct that compound interest adds up more. But here's a question: you said simple interest 'is always the same amount' — can you tell me WHY that is, and why compound interest isn't? What's actually different about how the two are calculated?",
+          null, null,
+          () => {
+            // Step 3: pause, Rivera stays up, student re-edits
+            after(2800, () => {
+              hideRivera('p1-rivera');
+              setStatus('p1-status','p1-dot','Maya is revising her solution…', true);
+              // Clear and retype revised
+              const textEl = document.getElementById('p1-text');
+              textEl.innerHTML = '<span class="typing-cursor" id="p1-cursor"></span>';
+              typeInto('p1-text','p1-cursor', revised, 28, () => {
+                setStatus('p1-status','p1-dot','Maya moves to Part 2 →', false);
+                after(2200, () => {
+                  goTo(2);
+                });
+              });
+            });
+          }
+        );
+      });
+    });
+  }; // end window._part1Start
+}
+
+// ════════════════════════════════════
+// PART 2
+// ════════════════════════════════════
+function runPart2() {
+  hideRivera('p2-rivera');
+  document.getElementById('p2-q-bubble').style.display = 'none';
+  document.getElementById('p2-rivera-msg').textContent = '';
+
+  const peerText = "Peer 3 (A level): The key difference is that compound interest uses the total accumulated balance as the new principal each period, whereas simple interest only ever calculates against the original principal. Mathematically: A = P(1+r)^t versus A = P(1+rt). Over 30 years at 7%, $1000 becomes $7,612 with compound versus $3,100 with simple. The exponential growth curve versus linear growth is what creates the dramatic long-term difference.";
+  const existing = "This is the strongest explanation of the three. You correctly identified both formulas and the exponential vs linear difference is exactly right. Your numbers check out too.";
+  const finalWords = " One thing I'd push you on: you haven't explained WHY the formula works — just what it produces.";
+  const question = "Ms. Rivera, can you review my feedback to Peer 3?";
+  const riveraResp = "Your feedback to Peer 3 is specific and accurate — you identified what was strong and you've got a real observation with the 'why the formula works' point. That's exactly the kind of critical thinking that strengthens your Thinking Outcome. One nudge: can you name specifically what Peer 3 would need to add to explain the why?";
+
+  setStatus('p2-status','p2-dot','Loading Part 2…', false);
+  document.getElementById('p2-peer-text').textContent = peerText;
+
+  // Set pre-filled feedback (Riley and Ethan already done)
+  const textEl = document.getElementById('p2-text');
+  textEl.innerHTML = existing + '<span class="typing-cursor" id="p2-cursor"></span>';
+
+  after(1000, () => {
+    setStatus('p2-status','p2-dot','Maya finishing feedback to Peer 3…', true);
+    typeInto('p2-text','p2-cursor', finalWords, 42, () => {
+      // Pause then ask Rivera
+      after(1600, () => {
+        setStatus('p2-status','p2-dot','Maya asks Ms. Rivera to review her feedback…', true);
+        showRivera('p2-rivera','p2-rivera-msg', riveraResp, 'p2-q-bubble', question, () => {
+          setStatus('p2-status','p2-dot','Ms. Rivera responds', false);
+          after(3500, () => { goTo(3); });
+        });
+      });
+    });
+  });
+}
+
+// ════════════════════════════════════
+// PART 3
+// ════════════════════════════════════
+function runPart3() {
+  hideRivera('p3-rivera');
+  document.getElementById('p3-q-bubble').style.display = 'none';
+  document.getElementById('p3-rivera-msg').textContent = '';
+
+  const peerFeedback = "Peer 3's feedback on Maya: Your explanation of the compounding mechanism is solid and your example is clear. I'd say your feedback to me was a bit harsh though — you pointed out what I was missing but didn't acknowledge what I got right first.";
+  const existing = "I disagree that my feedback was harsh — I did say your explanation was the strongest of the three. But I take the point that I could have been warmer before the criticism.";
+  const finalWords = " I'll remember that for next time.";
+  const question = "Do you think I was being too harsh in my peer feedback?";
+  const riveraResp = "That's a thoughtful question to ask, Maya. Your feedback was direct and specific — which is actually good. Being harsh would mean unfair or unkind. What you did was honest. But Peer 3 raises a fair point: leading with a specific strength before the critique tends to make feedback land better. It's not about being softer — it's about being more effective. Does that distinction make sense?";
+
+  setStatus('p3-status','p3-dot','Loading Part 3…', false);
+  document.getElementById('p3-peer-text').textContent = peerFeedback;
+
+  const textEl = document.getElementById('p3-text');
+  textEl.innerHTML = existing + '<span class="typing-cursor" id="p3-cursor"></span>';
+
+  after(1000, () => {
+    setStatus('p3-status','p3-dot','Maya finishing her reflection…', true);
+    typeInto('p3-text','p3-cursor', finalWords, 45, () => {
+      after(1400, () => {
+        setStatus('p3-status','p3-dot','Maya asks Ms. Rivera a question…', true);
+        showRivera('p3-rivera','p3-rivera-msg', riveraResp, 'p3-q-bubble', question, () => {
+          setStatus('p3-status','p3-dot','Ms. Rivera responds', false);
+          after(3800, () => { goTo(4); });
+        });
+      });
+    });
+  });
+}
+
+// ════════════════════════════════════
+// PART 4 — THINKING OUTCOME
+// ════════════════════════════════════
+function runPart4() {
+  setStatus('p4-status','p4-dot','Generating Thinking Outcome…', true);
+  document.getElementById('p4-score').textContent = '0%';
+  document.getElementById('p4-level').textContent = '—';
+  document.getElementById('p4-narrative').style.display = 'none';
+  const _evEl = document.getElementById('p4-evidence');
+  if (_evEl) _evEl.style.display = 'none';
+
+  const comps = [
+    { label: 'Knowledge & Understanding', score: 81 },
+    { label: 'Creative Thinking',         score: 74 },
+    { label: 'Critical Thinking',         score: 71 },
+    { label: 'Communication',             score: 78 },
+    { label: 'Application',               score: 70 },
+  ];
+  const overall = Math.round(comps.reduce((s,c) => s + c.score, 0) / comps.length);
+
+  // Render empty bars
+  const barsEl = document.getElementById('p4-bars');
+  barsEl.innerHTML = comps.map(c => `
+    <div class="comp-block">
+      <div class="comp-header">
+        <span class="comp-label">${c.label}</span>
+        <span class="comp-score" id="bar-score-${c.label.replace(/\s/g,'')}">&nbsp;</span>
+      </div>
+      <div class="comp-bar"><div class="comp-fill" id="bar-${c.label.replace(/\s/g,'')}"></div></div>
+    </div>`).join('');
+
+  // Animate score count-up
+  after(800, () => {
+    let cur = 0;
+    const step = Math.ceil(overall / 35);
+    function tick() {
+      const sc2 = document.getElementById('p4-score');
+      const lv2 = document.getElementById('p4-level');
+      if (!sc2 || !lv2) return;
+      cur = Math.min(cur + step, overall);
+      sc2.textContent = cur + '%';
+      if (cur < overall) { const t = setTimeout(tick, 40); timers.push(t); }
+      else { lv2.textContent = 'Strong'; }
+    }
+    tick();
+  });
+
+  // Animate bars one by one
+  comps.forEach((comp, i) => {
+    after(900 + i * 250, () => {
+      const key = comp.label.replace(/\s/g,'');
+      const fill = document.getElementById('bar-'+key);
+      const scoreEl = document.getElementById('bar-score-'+key);
+      if (fill) fill.style.width = comp.score + '%';
+      if (scoreEl) scoreEl.textContent = comp.score + '%';
+      // Also guard score/level in case of navigation
+      const sc = document.getElementById('p4-score');
+      const lv = document.getElementById('p4-level');
+      if (!sc || !lv) return;
+    });
+  });
+
+  // Narrative appears paragraph by paragraph
+  const narrativeParas = [
+    "Maya shows solid understanding of the compound interest mechanism and can explain it clearly with a numerical example.",
+    "Her Critical Thinking score reflects strong, specific peer feedback — she identifies exactly where a peer's reasoning falls short.",
+    "The conversation with Ms. Rivera about whether her feedback was 'too harsh' demonstrates genuine self-reflection, which is evidence of Communication growth.",
+    "Application has the most room to grow: the next step is connecting compound interest to a second real-world context, such as debt or inflation."
+  ];
+
+  after(2400, () => {
+    const nar = document.getElementById('p4-narrative');
+    const parasEl = document.getElementById('p4-narrative-paras');
+    if (!nar || !parasEl) return;
+    nar.style.display = 'block';
+    parasEl.innerHTML = '';
+
+    narrativeParas.forEach((para, idx) => {
+      after(idx * 1200, () => {
+        const div = document.createElement('div');
+        div.style.cssText = 'font-size:0.85rem;color:var(--dark);line-height:1.7;font-weight:300;margin-bottom:0.6rem;opacity:0;transition:opacity 0.5s';
+        div.textContent = para;
+        parasEl.appendChild(div);
+        // Fade in
+        requestAnimationFrame(() => requestAnimationFrame(() => { div.style.opacity = '1'; }));
+      });
+    });
+
+    after(narrativeParas.length * 1200 + 600, () => {
+      setStatus('p4-status','p4-dot','Thinking Outcome complete', false);
+    });
+  });
+}
+
+// ── Start on Part 1 ──
+goTo(1);
+</script>
+</body>
+</html>
