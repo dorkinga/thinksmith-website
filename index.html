@@ -1313,9 +1313,7 @@
 function openDemo() {
   const overlay = document.getElementById('demoOverlay');
   const frame = document.getElementById('demoFrame');
-  if (!frame.src || frame.src === window.location.href) {
-    frame.src = 'demo/index.html';
-  }
+  frame.src = 'demo/index.html';
   overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
