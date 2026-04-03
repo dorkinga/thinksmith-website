@@ -333,10 +333,12 @@ function runP3(){
   hideR("p3-riv");
   var q=document.getElementById("p3-q"); if(q) q.style.display="none";
   var m=document.getElementById("p3-msg"); if(m) m.textContent="";
-  var pfb="Peer 3’s feedback on Reese: Your explanation of the compounding mechanism is solid and your example is clear. I’d say your feedback to me was a bit harsh though — you pointed out what I was missing but didn’t acknowledge what I got right first.";
-  var refl="I disagree that my feedback was harsh — I did say your explanation was the strongest of the three and that your numbers were correct. But I take the point that I could have been warmer before the criticism. I’ll remember that for next time — lead with what worked, then name what could be stronger.";
-  var question="Do you think I was being too harsh in my peer feedback?";
-  var riveraR="That’s a thoughtful question to ask, Reese. Your feedback was direct and specific — which is actually good. Being harsh would mean unfair or unkind. What you did was honest. But Peer 3 raises a fair point: leading with a specific strength before the critique tends to make feedback land better. It’s not about being softer — it’s about being more effective. Does that distinction make sense?";
+
+  var pfb="Peer 3's feedback on Reese's solution: Your explanation is really clear and I liked that you used a year-by-year example with real numbers — that made it easy to follow. One thing I think you could add is why the formula uses an exponent. You showed that the balance grows each year, but you didn't explain what causes that pattern mathematically. That would make your answer even stronger.";
+  var refl="That's a fair point about the exponent — I focused on showing what happens each year but didn't explain the why behind the formula. I think the reason the exponent appears is because you're multiplying the same growth rate repeatedly, so it compounds on itself. I'll add that to my revised solution. The feedback was specific and useful, which is exactly what I tried to give to the peers too.";
+  var question="Do you think Peer 3's feedback on my solution was fair?";
+  var riveraR="Yes — and notice what made it useful: they named something specific that was missing rather than just saying 'good job' or 'needs work.' That's exactly the standard you applied to your own peer feedback. The question now is: does their observation change how you would explain compound interest? What would you add about the exponent?";
+
   st("p3-st","p3-dot","Loading Part 3…",false);
   var pe=document.getElementById("p3-peer"); if(pe) pe.textContent=pfb;
   clrType("p3-text","p3-cur");
