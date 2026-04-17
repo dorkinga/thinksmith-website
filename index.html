@@ -56,17 +56,6 @@
     font-weight: 700;
     text-decoration: none;
     letter-spacing: -0.02em;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.15rem;
-    line-height: 1;
-  }
-  .nav-logo img {
-    width: auto;
-    height: auto;
-    max-height: 36px; /* ~30% of a typical 120px logo */
-    display: block;
   }
 
   .nav-links {
@@ -969,10 +958,7 @@
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">
-    <img src="logo-silver.png" alt="ThinkSmith logo">
-    ThinkSmith
-  </a>
+  <a href="#" class="nav-logo">ThinkSmith</a>
   <ul class="nav-links">
     <li><a href="#how">How it works</a></li>
     <li><a href="#parents">For parents</a></li>
@@ -988,6 +974,7 @@
     <div class="hero-text fade-in">
       <div class="hero-eyebrow">✦ K–12 &amp; Higher Education</div>
       <h1>Where students learn to <em>think</em></h1>
+      <p class="hero-eyebrow" style="margin-bottom:0.5rem;">✦ If you're searching for a tool that builds real thinking — not just better answers — you're in the right place.</p>
       <p class="hero-sub">ThinkSmith is not another AI that does the work for your child. It's the AI that makes them do it themselves — and shows exactly how their thinking grows.</p>
       <div class="hero-actions">
         <button class="btn-primary" onclick="openDemo()">View demo →</button>
@@ -1362,6 +1349,199 @@
     </div>
   </div>
 </section>
+
+<!-- WHY IT WORKS — Literature + Simulated Data -->
+<section style="background:#fff; padding:5rem 2rem;">
+  <div style="max-width:1000px; margin:0 auto;">
+    <span class="section-label">The research behind it</span>
+    <h2 style="font-family:'Playfair Display',serif; font-size:2.2rem; font-weight:700; color:#0F0B1A; line-height:1.25; margin-bottom:0.75rem;">
+      Why Thinking Out Loud <em style="color:#5B2C8F; font-style:italic;">changes</em> what learners can do
+    </h2>
+    <p style="color:#4A4460; max-width:660px; margin-bottom:3.5rem; font-size:1.05rem; line-height:1.7;">
+      When peers show their reasoning — not just their answers — something different happens for every level of learner. ThinkSmith is built on three of the most replicated findings in learning science.
+    </p>
+
+    <!-- Mechanism cards -->
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-bottom:3.5rem;">
+      <div style="background:#F7F4FC; border-radius:16px; padding:1.75rem;">
+        <div style="font-size:1.5rem; margin-bottom:0.75rem;">🧠</div>
+        <div style="font-size:0.75rem; font-weight:600; color:#5B2C8F; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.5rem;">Zone of Proximal Development</div>
+        <p style="font-size:0.92rem; color:#4A4460; line-height:1.6;">Learning happens in the gap between what a student can do alone and what they can do with guidance. Visible peer reasoning is that guide — it shows the path, not just the destination.</p>
+        <div style="font-size:0.78rem; color:#8B83A3; margin-top:0.75rem;">Vygotsky, 1978</div>
+      </div>
+      <div style="background:#F7F4FC; border-radius:16px; padding:1.75rem;">
+        <div style="font-size:1.5rem; margin-bottom:0.75rem;">📝</div>
+        <div style="font-size:0.75rem; font-weight:600; color:#5B2C8F; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.5rem;">The Protégé Effect</div>
+        <p style="font-size:0.92rem; color:#4A4460; line-height:1.6;">When you evaluate someone else's reasoning, you understand the material more deeply than when you study it alone. Parts 2 and 3 of ThinkSmith are built entirely on this mechanism.</p>
+        <div style="font-size:0.78rem; color:#8B83A3; margin-top:0.75rem;">Chase, Chin, Oppezzo & Schwartz, 2009</div>
+      </div>
+      <div style="background:#F7F4FC; border-radius:16px; padding:1.75rem;">
+        <div style="font-size:1.5rem; margin-bottom:0.75rem;">🔍</div>
+        <div style="font-size:0.75rem; font-weight:600; color:#5B2C8F; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.5rem;">Elaborative Interrogation</div>
+        <p style="font-size:0.92rem; color:#4A4460; line-height:1.6;">Generating explanations for <em>why</em> something is true — not just what — improves retention and transfer significantly. Strong learners need arguments to challenge, not answers to agree with.</p>
+        <div style="font-size:0.78rem; color:#8B83A3; margin-top:0.75rem;">King, 1992 · Pressley et al.</div>
+      </div>
+    </div>
+
+    <!-- Literature table -->
+    <h3 style="font-family:'Playfair Display',serif; font-size:1.35rem; font-weight:700; color:#5B2C8F; margin-bottom:0.5rem; text-align:center;">
+      What the literature says about one of ThinkSmith's core strategies
+    </h3>
+    <p style="text-align:center; font-size:0.85rem; color:#8B83A3; margin-bottom:1.5rem;">Thinking Out Loud vs. conclusions-only peer work — predicted effect by learner level</p>
+
+    <div style="border:1px solid rgba(91,44,143,0.12); border-radius:16px; overflow:hidden; margin-bottom:1rem;">
+      <!-- Header row -->
+      <div style="display:grid; grid-template-columns:1.2fr 1.8fr 1.8fr; background:#0F0B1A; color:white; font-size:0.82rem; font-weight:500;">
+        <div style="padding:0.9rem 1.2rem;">Learner level</div>
+        <div style="padding:0.9rem 1.2rem; border-left:1px solid rgba(255,255,255,0.1);">Mode A — conclusions only<br><span style="font-weight:300; opacity:0.65;">(Thailand study / traditional)</span></div>
+        <div style="padding:0.9rem 1.2rem; border-left:1px solid rgba(255,255,255,0.1); background:rgba(29,158,117,0.25);">Mode B — Thinking Out Loud<br><span style="font-weight:300; opacity:0.65;">(ThinkSmith)</span></div>
+      </div>
+      <!-- D row -->
+      <div style="display:grid; grid-template-columns:1.2fr 1.8fr 1.8fr; border-top:1px solid rgba(91,44,143,0.1); background:#fff9f7;">
+        <div style="padding:1.1rem 1.2rem;">
+          <div style="font-weight:600; color:#c0392b; font-size:0.95rem;">D · Struggling</div>
+          <div style="font-size:0.8rem; color:#c0392b; opacity:0.8; margin-top:0.2rem;">Cannot yet generate sophisticated reasoning independently</div>
+        </div>
+        <div style="padding:1.1rem 1.2rem; border-left:1px solid rgba(91,44,143,0.08); font-size:0.88rem; color:#4A4460; line-height:1.5;">Peer answer is a destination they cannot reach. No scaffold. Engagement collapses.</div>
+        <div style="padding:1.1rem 1.2rem; border-left:1px solid rgba(91,44,143,0.08); font-size:0.88rem; color:#0F6E56; line-height:1.5; background:rgba(29,158,117,0.05);">Peer reasoning is a path they can follow. ZPD activated. Can borrow the structure even without generating it. <strong>+18pp</strong></div>
+      </div>
+      <!-- C row -->
+      <div style="display:grid; grid-template-columns:1.2fr 1.8fr 1.8fr; border-top:1px solid rgba(91,44,143,0.1);">
+        <div style="padding:1.1rem 1.2rem;">
+          <div style="font-weight:600; color:#d68910; font-size:0.95rem;">C · Developing</div>
+          <div style="font-size:0.8rem; color:#d68910; opacity:0.8; margin-top:0.2rem;">Has foundation but reasoning gaps prevent full understanding</div>
+        </div>
+        <div style="padding:1.1rem 1.2rem; border-left:1px solid rgba(91,44,143,0.08); font-size:0.88rem; color:#4A4460; line-height:1.5;">Peer answer confirms what they already think. No mechanism to fill gaps in their reasoning.</div>
+        <div style="padding:1.1rem 1.2rem; border-left:1px solid rgba(91,44,143,0.08); font-size:0.88rem; color:#0F6E56; line-height:1.5; background:rgba(29,158,117,0.05);">Visible reasoning shows exactly where their gaps are. Peak ZPD effect — close enough to the next level to reach it. <strong>+28pp ← peak</strong></div>
+      </div>
+      <!-- B row -->
+      <div style="display:grid; grid-template-columns:1.2fr 1.8fr 1.8fr; border-top:1px solid rgba(91,44,143,0.1); background:#f5f8fb;">
+        <div style="padding:1.1rem 1.2rem;">
+          <div style="font-weight:600; color:#1a5276; font-size:0.95rem;">B · Proficient</div>
+          <div style="font-size:0.8rem; color:#1a5276; opacity:0.8; margin-top:0.2rem;">Sound reasoning, one or two gaps in depth</div>
+        </div>
+        <div style="padding:1.1rem 1.2rem; border-left:1px solid rgba(91,44,143,0.08); font-size:0.88rem; color:#4A4460; line-height:1.5;">Gets reasonable content from peers but same Part 2 dip as others. Self-corrects in Part 3.</div>
+        <div style="padding:1.1rem 1.2rem; border-left:1px solid rgba(91,44,143,0.08); font-size:0.88rem; color:#0F6E56; line-height:1.5; background:rgba(29,158,117,0.05);">Gets richer content — eliminates Part 2 dip entirely. Doesn't need scaffolding — needs intellectual content. <strong>+7pp</strong></div>
+      </div>
+      <!-- A row -->
+      <div style="display:grid; grid-template-columns:1.2fr 1.8fr 1.8fr; border-top:1px solid rgba(91,44,143,0.1);">
+        <div style="padding:1.1rem 1.2rem;">
+          <div style="font-weight:600; color:#1a6b3a; font-size:0.95rem;">A · Exemplary</div>
+          <div style="font-size:0.8rem; color:#1a6b3a; opacity:0.8; margin-top:0.2rem;">Sophisticated reasoning, challenges assumptions, needs challenge</div>
+        </div>
+        <div style="padding:1.1rem 1.2rem; border-left:1px solid rgba(91,44,143,0.08); font-size:0.88rem; color:#4A4460; line-height:1.5;">Paradox: score DECLINES across the activity without arguments to interrogate. 88%→66%→61%</div>
+        <div style="padding:1.1rem 1.2rem; border-left:1px solid rgba(91,44,143,0.08); font-size:0.88rem; color:#0F6E56; line-height:1.5; background:rgba(29,158,117,0.05);">Visible reasoning gives them arguments to challenge, not just answers to agree with. Elaborative interrogation. <strong>+9pp</strong></div>
+      </div>
+    </div>
+    <p style="font-size:0.78rem; color:#8B83A3; text-align:center; margin-bottom:3rem;">ZPD = Zone of Proximal Development (Vygotsky) · Elaborative interrogation (King, 1992) · Protégé Effect (Chase et al.) · Preliminary simulation data consistent with theoretical predictions</p>
+
+    <!-- Comparison bars -->
+    <h3 style="font-family:'Playfair Display',serif; font-size:1.35rem; font-weight:700; color:#0F0B1A; margin-bottom:0.5rem; text-align:center;">
+      What happens when peers show their reasoning vs. just their answers
+    </h3>
+    <p style="text-align:center; font-size:0.85rem; color:#8B83A3; margin-bottom:2rem;">Running average by learner level · preliminary simulation data</p>
+
+    <div style="background:#f9f8fc; border-radius:16px; padding:2rem; margin-bottom:1rem;">
+      <div style="display:flex; gap:1.5rem; margin-bottom:1.5rem; font-size:0.82rem; color:#4A4460;">
+        <div style="display:flex; align-items:center; gap:0.5rem;"><div style="width:14px; height:14px; border-radius:3px; background:#C8963A;"></div> Standard (conclusions only)</div>
+        <div style="display:flex; align-items:center; gap:0.5rem;"><div style="width:14px; height:14px; border-radius:3px; background:#1d9e75;"></div> ThinkSmith Thinking Out Loud</div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:1.1rem;">
+        <!-- D -->
+        <div style="display:flex; align-items:center; gap:1rem;">
+          <div style="width:100px; font-size:0.88rem; color:#4A4460; flex-shrink:0;">D · Struggling</div>
+          <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
+            <div style="display:flex; height:22px; border-radius:4px; overflow:hidden;">
+              <div style="width:6%; background:#C8963A; display:flex; align-items:center; padding-left:6px;"><span style="font-size:10px; color:white; font-weight:600; white-space:nowrap;">6%</span></div>
+              <div style="width:94%; background:#eee;"></div>
+            </div>
+            <div style="display:flex; height:22px; border-radius:4px; overflow:hidden;">
+              <div style="width:24%; background:#1d9e75; display:flex; align-items:center; padding-left:6px;"><span style="font-size:10px; color:white; font-weight:600; white-space:nowrap;">24%</span></div>
+              <div style="width:76%; background:#eee;"></div>
+            </div>
+          </div>
+          <div style="width:44px; text-align:right; font-size:0.88rem; font-weight:600; color:#1a6b3a; flex-shrink:0;">+18pp</div>
+        </div>
+        <!-- C -->
+        <div style="display:flex; align-items:center; gap:1rem;">
+          <div style="width:100px; font-size:0.88rem; color:#4A4460; flex-shrink:0;">C · Developing</div>
+          <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
+            <div style="display:flex; height:22px; border-radius:4px; overflow:hidden;">
+              <div style="width:28%; background:#C8963A; display:flex; align-items:center; padding-left:6px;"><span style="font-size:10px; color:white; font-weight:600; white-space:nowrap;">28%</span></div>
+              <div style="width:72%; background:#eee;"></div>
+            </div>
+            <div style="display:flex; height:22px; border-radius:4px; overflow:hidden;">
+              <div style="width:56%; background:#1d9e75; display:flex; align-items:center; padding-left:6px;"><span style="font-size:10px; color:white; font-weight:600; white-space:nowrap;">56%</span></div>
+              <div style="width:44%; background:#eee;"></div>
+            </div>
+          </div>
+          <div style="width:44px; text-align:right; font-size:0.88rem; font-weight:600; color:#1a6b3a; flex-shrink:0;">+28pp</div>
+        </div>
+        <!-- B -->
+        <div style="display:flex; align-items:center; gap:1rem;">
+          <div style="width:100px; font-size:0.88rem; color:#4A4460; flex-shrink:0;">B · Proficient</div>
+          <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
+            <div style="display:flex; height:22px; border-radius:4px; overflow:hidden;">
+              <div style="width:64%; background:#C8963A; display:flex; align-items:center; padding-left:6px;"><span style="font-size:10px; color:white; font-weight:600; white-space:nowrap;">64%</span></div>
+              <div style="width:36%; background:#eee;"></div>
+            </div>
+            <div style="display:flex; height:22px; border-radius:4px; overflow:hidden;">
+              <div style="width:71%; background:#1d9e75; display:flex; align-items:center; padding-left:6px;"><span style="font-size:10px; color:white; font-weight:600; white-space:nowrap;">71%</span></div>
+              <div style="width:29%; background:#eee;"></div>
+            </div>
+          </div>
+          <div style="width:44px; text-align:right; font-size:0.88rem; font-weight:600; color:#1a6b3a; flex-shrink:0;">+7pp</div>
+        </div>
+        <!-- A -->
+        <div style="display:flex; align-items:center; gap:1rem;">
+          <div style="width:100px; font-size:0.88rem; color:#4A4460; flex-shrink:0;">A · Exemplary</div>
+          <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
+            <div style="display:flex; height:22px; border-radius:4px; overflow:hidden;">
+              <div style="width:72%; background:#C8963A; display:flex; align-items:center; padding-left:6px;"><span style="font-size:10px; color:white; font-weight:600; white-space:nowrap;">72%</span></div>
+              <div style="width:28%; background:#eee;"></div>
+            </div>
+            <div style="display:flex; height:22px; border-radius:4px; overflow:hidden;">
+              <div style="width:81%; background:#1d9e75; display:flex; align-items:center; padding-left:6px;"><span style="font-size:10px; color:white; font-weight:600; white-space:nowrap;">81%</span></div>
+              <div style="width:19%; background:#eee;"></div>
+            </div>
+          </div>
+          <div style="width:44px; text-align:right; font-size:0.88rem; font-weight:600; color:#1a6b3a; flex-shrink:0;">+9pp</div>
+        </div>
+      </div>
+      <p style="font-size:0.78rem; color:#8B83A3; margin-top:1.25rem;">Part 1 scores are identical in both modes — the only variable is how peers present their thinking.</p>
+    </div>
+
+    <!-- Thailand proof stat -->
+    <div style="background:linear-gradient(135deg,#0F0B1A,#2D1B4E); border-radius:16px; padding:2rem 2.5rem; display:flex; align-items:center; gap:3rem; flex-wrap:wrap;">
+      <div style="flex:1; min-width:200px;">
+        <div style="font-size:0.75rem; font-weight:600; color:rgba(255,255,255,0.5); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.5rem;">Real-world validation</div>
+        <div style="font-size:2.5rem; font-weight:700; color:#C8963A; line-height:1;">+17.31%</div>
+        <div style="font-size:0.9rem; color:rgba(255,255,255,0.7); margin-top:0.4rem;">higher final exam average vs traditional instruction</div>
+        <div style="font-size:0.78rem; color:rgba(255,255,255,0.4); margin-top:0.5rem;">Ubon Ratchathani University pilot · 1,742 students · 22 courses · peer-reviewed</div>
+      </div>
+      <div style="display:flex; gap:2rem; flex-wrap:wrap;">
+        <div style="text-align:center;">
+          <div style="font-size:1.8rem; font-weight:700; color:white;">1,742</div>
+          <div style="font-size:0.78rem; color:rgba(255,255,255,0.5); margin-top:0.2rem;">students</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:1.8rem; font-weight:700; color:white;">22</div>
+          <div style="font-size:0.78rem; color:rgba(255,255,255,0.5); margin-top:0.2rem;">courses</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:1.8rem; font-weight:700; color:white;">93%</div>
+          <div style="font-size:0.78rem; color:rgba(255,255,255,0.5); margin-top:0.2rem;">found it more rewarding</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:1.8rem; font-weight:700; color:white;">7</div>
+          <div style="font-size:0.78rem; color:rgba(255,255,255,0.5); margin-top:0.2rem;">disciplines</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 
 <!-- CTA -->
 <section class="cta-section">
