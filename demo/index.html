@@ -13,10 +13,11 @@
   --gold:#C8963A;--dark:#0F0B1A;--gray:#4A4460;--gray-light:#8B83A3;
   --off-white:#FAF9FC;--border:rgba(91,44,143,0.12);--green:#1d9e75;--green-pale:#F0FDF4;--green-border:#BBF7D0;
 }
-html,body{font-family:'DM Sans',sans-serif;background:var(--off-white);color:var(--dark);font-size:14px;line-height:1.6;overflow-x:hidden}
+html,body{font-family:'DM Sans',sans-serif;background:var(--off-white);color:var(--dark);font-size:14px;line-height:1.6;overflow-x:hidden;min-height:100vh;width:100%}
 
 /* ── SHELL ── */
-.demo-wrap{max-width:1100px;margin:0 auto;padding:0.5rem 1.5rem 1.5rem}
+.demo-wrap{width:100%;max-width:100%;padding:0.5rem calc((100vw - 1100px)/2 + 0px) 1.5rem;box-sizing:border-box}
+@media(max-width:1140px){.demo-wrap{padding:0.5rem 1.5rem 1.5rem}}
 
 /* ── TABS ── */
 .part-tabs{display:flex;background:white;border-radius:12px;border:1px solid var(--border);overflow:hidden;margin-bottom:1rem;box-shadow:0 2px 8px rgba(91,44,143,0.06)}
