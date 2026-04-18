@@ -17,7 +17,7 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--off-white);color:var
 
 /* ── SHELL ── */
 .demo-wrap{width:100%;max-width:100%;padding:0.5rem calc((100vw - 1100px)/2 + 0px) 1.5rem;box-sizing:border-box}
-@media(max-width:1140px){.demo-wrap{padding:0.5rem 1.5rem 1.5rem}}
+@media(max-width:1140px){.demo-wrap{padding:0.5rem 1.5rem 1.5rem}[style*="calc((100vw - 1100px)/2)"]{padding-left:1.5rem!important;padding-right:1.5rem!important}}
 
 /* ── TABS ── */
 .part-tabs{display:flex;background:white;border-radius:12px;border:1px solid var(--border);overflow:hidden;margin-bottom:1rem;box-shadow:0 2px 8px rgba(91,44,143,0.06)}
@@ -132,6 +132,19 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--off-white);color:var
 </style>
 </head>
 <body>
+
+<!-- Back to website bar -->
+<div style="background:var(--purple);padding:0.6rem calc((100vw - 1100px)/2);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100">
+  <a href="index.html" style="color:rgba(255,255,255,0.85);font-size:0.8rem;text-decoration:none;display:flex;align-items:center;gap:0.4rem;font-family:'DM Sans',sans-serif;transition:color 0.2s" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.85)'">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    Back to thinksmith.ca
+  </a>
+  <div style="font-family:'Playfair Display',serif;color:white;font-size:0.9rem;font-weight:700">ThinkSmith — Interactive Demo</div>
+  <a href="https://app.thinksmith.ca" style="color:rgba(255,255,255,0.85);font-size:0.78rem;text-decoration:none;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);padding:0.3rem 0.85rem;border-radius:100px;transition:background 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">
+    Try it free →
+  </a>
+</div>
+
 <div class="demo-wrap">
 
   <!-- TABS -->
