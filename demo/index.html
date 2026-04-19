@@ -4,8 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ThinkSmith — See How It Works</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<!-- Fonts load from CDN when online; graceful fallback when offline -->
+<style>
+:root {
+  --font-display: Georgia, 'Times New Roman', serif;
+  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+</style>
+<style>
+/* Fallback font stack when Google Fonts unavailable (offline/file://) */
+:root {
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+</style>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -13,9 +25,78 @@
   --gold:#C8963A;--dark:#0F0B1A;--gray:#4A4460;--gray-light:#8B83A3;
   --off-white:#FAF9FC;--border:rgba(91,44,143,0.12);--green:#1d9e75;--green-pale:#F0FDF4;--green-border:#BBF7D0;
 }
-html,body{font-family:'DM Sans',sans-serif;background:var(--off-white);color:var(--dark);font-size:14px;line-height:1.6;overflow-x:hidden;min-height:100vh;width:100%}
+html,body{font-family:var(--font-body,'DM Sans',system-ui,sans-serif);background:var(--off-white);color:var(--dark);font-size:14px;line-height:1.6;overflow-x:hidden;min-height:100vh;width:100%}
 
 /* ── SHELL ── */
+
+/* ── PART INTRO OVERLAY ── */
+.intro-overlay{
+  position:absolute;inset:0;z-index:100;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  overflow:hidden;border-radius:16px;pointer-events:all;
+}
+.intro-dim{
+  position:absolute;inset:0;background:rgba(247,244,252,0.9);border-radius:16px;
+  backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+}
+.intro-panel{
+  position:relative;z-index:2;width:min(500px,86%);
+  display:flex;flex-direction:column;align-items:center;
+}
+.intro-badge{
+  font-family:var(--font-display,'Playfair Display',Georgia,serif);font-size:1.25rem;font-weight:700;
+  color:#5B2C8F;letter-spacing:-0.02em;text-align:center;margin-bottom:0.15rem;
+  opacity:0;transform:translateY(8px);transition:opacity 0.5s ease,transform 0.5s ease;
+}
+.intro-sub{
+  font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;
+  color:#9b8bc4;text-align:center;margin-bottom:1.4rem;
+  opacity:0;transition:opacity 0.5s ease 0.25s;
+}
+.intro-scroll-window{
+  width:100%;height:200px;overflow:hidden;position:relative;
+  mask-image:linear-gradient(to bottom,transparent 0%,black 20%,black 80%,transparent 100%);
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 20%,black 80%,transparent 100%);
+}
+.intro-lines{display:flex;flex-direction:column;gap:0;width:100%;}
+.intro-item{
+  font-size:1.05rem;line-height:1.65;color:#2a2060;
+  padding:0.35rem 0;
+  opacity:0;
+  transition:opacity 0.4s ease;
+  display:flex;align-items:flex-start;gap:0.6rem;flex-shrink:0;
+}
+/* intro-item.sub not used in new design */
+.intro-item.show{opacity:1;transform:translateY(0);}
+.intro-item.fade-top{opacity:0;transform:translateY(-16px);}
+.intro-dot{width:5px;height:5px;border-radius:50%;background:#5B2C8F;flex-shrink:0;margin-top:0.52rem;}
+.intro-sub-dot{width:3px;height:3px;border-radius:50%;background:#9b8bc4;flex-shrink:0;margin-top:0.58rem;margin-left:0.2rem;}
+/* Final competency screen */
+.intro-final{
+  position:relative;z-index:2;width:min(580px,92%);text-align:center;
+  opacity:0;transition:opacity 0.6s ease;
+}
+.intro-final.show{opacity:1;}
+.intro-final-title{
+  font-family:var(--font-display,'Playfair Display',Georgia,serif);font-size:1.05rem;font-weight:700;
+  color:#5B2C8F;margin-bottom:0.65rem;
+}
+.intro-final-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:0.45rem;text-align:left;margin-bottom:1.1rem;
+}
+.intro-final-comp{
+  background:white;border:1px solid rgba(91,44,143,0.15);border-radius:10px;
+  padding:0.55rem 0.7rem;
+}
+.intro-final-comp-name{font-size:0.72rem;font-weight:600;color:#5B2C8F;margin-bottom:0.18rem;}
+.intro-final-comp-desc{font-size:0.66rem;color:#4A4460;line-height:1.5;}
+.intro-final-cta{
+  background:#5B2C8F;color:white;border:none;border-radius:10px;
+  padding:0.6rem 1.75rem;font-size:0.82rem;font-weight:500;cursor:pointer;
+  font-family:inherit;transition:background 0.2s;
+}
+.intro-final-cta:hover{background:#7B3FB5;}
+
 .demo-wrap{width:100%;max-width:100%;padding:0.5rem calc((100vw - 1100px)/2 + 0px) 1.5rem;box-sizing:border-box}
 @media(max-width:1140px){.demo-wrap{padding:0.5rem 1.5rem 1.5rem}[style*="calc((100vw - 1100px)/2)"]{padding-left:1.5rem!important;padding-right:1.5rem!important}}
 
@@ -33,9 +114,9 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--off-white);color:var
 .demo-layout{display:grid;grid-template-columns:1fr 230px;gap:0.75rem;align-items:start}
 
 /* ── SCENE CARD ── */
-.scene{background:white;border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:0 3px 16px rgba(91,44,143,0.07)}
+.scene{position:relative;background:white;border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:0 3px 16px rgba(91,44,143,0.07)}
 .scene-header{background:linear-gradient(135deg,var(--purple),var(--purple-mid));padding:0.75rem 1rem;display:flex;align-items:center;justify-content:space-between}
-.scene-title{font-family:'Playfair Display',serif;color:white;font-size:0.9rem;font-weight:700}
+.scene-title{font-family:var(--font-display,'Playfair Display',Georgia,serif);color:white;font-size:0.9rem;font-weight:700}
 .scene-meta{font-size:0.65rem;color:rgba(255,255,255,0.65)}
 .replay-btn{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:white;padding:0.25rem 0.65rem;border-radius:100px;font-size:0.65rem;cursor:pointer;font-family:inherit;transition:background 0.2s}
 .replay-btn:hover{background:rgba(255,255,255,0.25)}
@@ -58,7 +139,7 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--off-white);color:var
 .rivera-panel.visible{display:block}
 @keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .rivera-head{background:#EFF6FF;padding:0.5rem 0.8rem;display:flex;align-items:center;gap:0.5rem;border-bottom:1px solid #BFDBFE}
-.rivera-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--purple-mid));color:white;font-family:'Playfair Display',serif;font-weight:700;font-size:0.7rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rivera-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--purple-mid));color:white;font-family:var(--font-display,'Playfair Display',Georgia,serif);font-weight:700;font-size:0.7rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .rivera-name{font-size:0.7rem;font-weight:500;color:#1D4ED8}
 .rivera-role{font-size:0.6rem;color:#93C5FD}
 .rivera-body{padding:0.7rem 0.8rem}
@@ -92,9 +173,9 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--off-white);color:var
 .ring-ripple2{position:absolute;inset:0;border-radius:50%;background:var(--purple);animation:ripple 2.2s ease-out infinite 0.9s;opacity:0.1}
 @keyframes ripple{0%{transform:scale(1);opacity:0.2}100%{transform:scale(1.7);opacity:0}}
 .ring-circle{position:relative;width:64px;height:64px;border-radius:50%;border:4px solid var(--purple);background:rgba(91,44,143,0.08);display:flex;align-items:center;justify-content:center;flex-direction:column}
-.ring-pct{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:var(--purple);line-height:1}
+.ring-pct{font-family:var(--font-display,'Playfair Display',Georgia,serif);font-size:1.15rem;font-weight:700;color:var(--purple);line-height:1}
 .ring-label{font-size:0.5rem;color:var(--purple);opacity:0.7}
-.outcome-level{font-family:'Playfair Display',serif;font-size:1rem;color:var(--purple);font-weight:700}
+.outcome-level{font-family:var(--font-display,'Playfair Display',Georgia,serif);font-size:1rem;color:var(--purple);font-weight:700}
 .outcome-sub{font-size:0.7rem;color:var(--gray-light);margin-top:0.1rem}
 .comp-block{margin-bottom:0.55rem}
 .comp-header{display:flex;justify-content:space-between;margin-bottom:0.2rem}
@@ -107,9 +188,9 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--off-white);color:var
 
 /* ── TICKER PANEL ── */
 .ticker{background:white;border-radius:16px;border:1px solid var(--border);padding:1rem;box-shadow:0 3px 16px rgba(91,44,143,0.07);position:sticky;top:0.5rem}
-.ticker-title{font-family:'Playfair Display',serif;font-size:0.9rem;font-weight:700;color:var(--dark);text-align:center;margin-bottom:0.15rem}
+.ticker-title{font-family:var(--font-display,'Playfair Display',Georgia,serif);font-size:0.9rem;font-weight:700;color:var(--dark);text-align:center;margin-bottom:0.15rem}
 .ticker-label{font-size:0.58rem;text-transform:uppercase;letter-spacing:1px;color:var(--gray-light);text-align:center;margin-bottom:0.5rem}
-.ticker-avg{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:var(--green);text-align:center;line-height:1;transition:all 0.8s;margin-bottom:0.25rem}
+.ticker-avg{font-family:var(--font-display,'Playfair Display',Georgia,serif);font-size:2.2rem;font-weight:700;color:var(--green);text-align:center;line-height:1;transition:all 0.8s;margin-bottom:0.25rem}
 .ticker-live{display:flex;align-items:center;gap:0.4rem;justify-content:center;font-size:0.65rem;color:var(--gray-light);margin-bottom:0.75rem}
 .ticker-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;animation:pulse-dot 2s ease-in-out infinite}
 .ticker-div{height:1px;background:var(--border);margin:0.6rem 0}
@@ -134,12 +215,12 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--off-white);color:var
 <body>
 
 <!-- Back to website bar -->
-<div style="background:var(--purple);padding:0.6rem calc((100vw - 1100px)/2);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100">
-  <a href="index.html" style="color:rgba(255,255,255,0.85);font-size:0.8rem;text-decoration:none;display:flex;align-items:center;gap:0.4rem;font-family:'DM Sans',sans-serif;transition:color 0.2s" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.85)'">
+<div style="background:var(--purple);padding:0.6rem max(1.5rem, calc((100vw - 1100px)/2));display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100">
+  <a href="https://thinksmith.ca" target="_blank" style="color:rgba(255,255,255,0.85);font-size:0.8rem;text-decoration:none;display:flex;align-items:center;gap:0.4rem;transition:color 0.2s" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.85)'">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-    Back to thinksmith.ca
+    thinksmith.ca ↗
   </a>
-  <div style="font-family:'Playfair Display',serif;color:white;font-size:0.9rem;font-weight:700">ThinkSmith — Interactive Demo</div>
+  <div style="font-family:var(--font-display,'Playfair Display',Georgia,serif);color:white;font-size:0.9rem;font-weight:700">ThinkSmith — Interactive Demo</div>
   <a href="https://app.thinksmith.ca" style="color:rgba(255,255,255,0.85);font-size:0.78rem;text-decoration:none;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);padding:0.3rem 0.85rem;border-radius:100px;transition:background 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">
     Try it free →
   </a>
@@ -162,12 +243,12 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--off-white);color:var
       <div class="scene" id="scene">
 
         <!-- PART 1 -->
-        <div id="p1" class="p-scene">
+        <div id="p1" class="p-scene" style="display:none">
           <div class="scene-header">
             <div><div class="scene-title">Part 1 — Write Your Thinking</div><div class="scene-meta">Maya · Grade 8 Mathematics · Compound Interest</div></div>
             <button class="replay-btn" onclick="goTo(1)">↺ Replay</button>
           </div>
-          <div style="background:#F7F4FC;border-bottom:1px solid rgba(91,44,143,0.12);padding:0.65rem 1rem;font-size:0.76rem;color:#4A4460"><div style="font-size:0.62rem;font-weight:600;color:#5B2C8F;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.3rem">What happens in Part 1</div><div style="display:flex;gap:1.25rem;flex-wrap:wrap"><span>✎ Write your own answer to the challenge</span><span>◈ Your Thinking Outcome score updates live as you write</span><span>🎓 Ask Ms. Rivera for coaching at any time</span></div></div>
+          
           <div class="scene-body">
             <div class="challenge-box">
               <div class="challenge-label">Your challenge</div>
@@ -191,7 +272,7 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--off-white);color:var
             <div><div class="scene-title">Part 2 — Peers Think Out Loud</div><div class="scene-meta">Maya · peers narrate their reasoning, not just their answers</div></div>
             <button class="replay-btn" onclick="goTo(2)">↺ Replay</button>
           </div>
-          <div style="background:#E1F5EE;border-bottom:1px solid #9FE1CB;padding:0.65rem 1rem;font-size:0.76rem;color:#085041"><div style="font-size:0.62rem;font-weight:600;color:#0F6E56;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.3rem">What happens in Part 2</div><div style="display:flex;gap:1.25rem;flex-wrap:wrap"><span>👁 Read how peers reasoned through the challenge — step by step, not just their answer</span><span>✎ Write specific feedback on each peer's thinking</span><span>◈ Your score updates as you engage</span></div></div>
+          
           <div class="scene-body">
             <div class="peer-row">
               <div class="peer-chip done">Riley ✓</div>
@@ -221,7 +302,7 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--off-white);color:var
             <div><div class="scene-title">Part 3 — Peer Feedback to You</div><div class="scene-meta">Maya · reflecting on feedback received from peers</div></div>
             <button class="replay-btn" onclick="goTo(3)">↺ Replay</button>
           </div>
-          <div style="background:#F7F4FC;border-bottom:1px solid rgba(91,44,143,0.12);padding:0.65rem 1rem;font-size:0.76rem;color:#4A4460"><div style="font-size:0.62rem;font-weight:600;color:#5B2C8F;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.3rem">What happens in Part 3</div><div style="display:flex;gap:1.25rem;flex-wrap:wrap"><span>📩 Peers give written feedback on your Part 1 solution</span><span>✎ You respond — agree, disagree, or update your thinking</span><span>🎓 Ask Ms. Rivera whether the feedback was fair</span></div></div>
+          
           <div class="scene-body">
             <div class="peer-row">
               <div class="peer-chip done">Riley ✓</div>
@@ -251,7 +332,7 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--off-white);color:var
             <div><div class="scene-title">Thinking Outcome — Snapshot</div><div class="scene-meta">Maya · Compound Interest · Grade 8 Mathematics</div></div>
             <button class="replay-btn" onclick="goTo(4)">↺ Replay</button>
           </div>
-          <div style="background:linear-gradient(135deg,rgba(91,44,143,0.05),rgba(29,158,117,0.05));border-bottom:1px solid rgba(91,44,143,0.12);padding:0.65rem 1rem;font-size:0.76rem;color:#4A4460"><div style="font-size:0.62rem;font-weight:600;color:#5B2C8F;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.3rem">What you receive — the Thinking Outcome</div><div style="display:flex;gap:1.25rem;flex-wrap:wrap"><span>📊 Five competency scores built from your writing</span><span>📝 A personal thinking record written about you</span><span>📈 Growth trajectory showing how your thinking developed</span></div></div>
+          
           <div class="scene-body">
             <div class="outcome-top">
               <div class="ring-wrap">
@@ -333,45 +414,12 @@ html,body{font-family:'DM Sans',sans-serif;background:var(--off-white);color:var
 
   <div class="demo-footer">
     Interactive demo of the ThinkSmith learning journey &nbsp;·&nbsp;
-    <a href="https://thinksmith.ca">Start free at thinksmith.ca</a>
+    <a href="https://thinksmith.ca" target="_blank">Start free at thinksmith.ca</a>
   </div>
 </div>
 
 <!-- GREETING MODAL — simplified -->
-<div id="greeting-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;align-items:flex-end;justify-content:center;padding:1rem">
-  <div style="background:white;border-radius:18px;width:100%;max-width:380px;box-shadow:0 24px 60px rgba(0,0,0,0.25);overflow:hidden;animation:slideUp 0.35s cubic-bezier(0.34,1.56,0.64,1)">
-    <div style="background:linear-gradient(135deg,#2563EB,var(--purple));padding:0.85rem 1.1rem;display:flex;align-items:center;gap:0.65rem">
-      <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:white;font-family:'Playfair Display',serif;font-weight:700;font-size:0.9rem;flex-shrink:0">R</div>
-      <div>
-        <p style="font-size:0.8rem;font-weight:700;color:white;margin:0">Ms. Rivera · AI Teacher</p>
-        <p style="font-size:0.65rem;color:rgba(255,255,255,0.7);margin:0">ThinkSmith</p>
-      </div>
-    </div>
-    <div style="padding:1rem 1.1rem">
-      <p style="font-size:0.88rem;color:var(--dark);font-weight:500;margin-bottom:0.65rem">Welcome, Maya. Three things to know:</p>
-      <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:0.85rem">
-        <div style="display:flex;gap:0.6rem;align-items:flex-start">
-          <div style="width:22px;height:22px;border-radius:50%;background:var(--purple-pale);color:var(--purple);font-size:0.7rem;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:0.1rem">1</div>
-          <p style="font-size:0.82rem;color:var(--dark);line-height:1.5">Write your own thinking first — your Thinking Outcome score updates as you write.</p>
-        </div>
-        <div style="display:flex;gap:0.6rem;align-items:flex-start">
-          <div style="width:22px;height:22px;border-radius:50%;background:var(--purple-pale);color:var(--purple);font-size:0.7rem;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:0.1rem">2</div>
-          <p style="font-size:0.82rem;color:var(--dark);line-height:1.5">In Part 2 you'll read how peers <em>reasoned</em> through the problem — not just their answers.</p>
-        </div>
-        <div style="display:flex;gap:0.6rem;align-items:flex-start">
-          <div style="width:22px;height:22px;border-radius:50%;background:var(--purple-pale);color:var(--purple);font-size:0.7rem;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:0.1rem">3</div>
-          <p style="font-size:0.82rem;color:var(--dark);line-height:1.5">You can return to update your solution at any time — your score will recalculate.</p>
-        </div>
-      </div>
-    </div>
-    <div style="padding:0 1.1rem 1.1rem">
-      <button onclick="dismissGreeting()" style="width:100%;background:var(--purple);color:white;border:none;border-radius:10px;padding:0.65rem;font-size:0.85rem;font-weight:500;cursor:pointer;font-family:inherit;transition:background 0.2s" onmouseover="this.style.background='var(--purple-mid)'" onmouseout="this.style.background='var(--purple)'">
-        Got it — let's begin
-      </button>
-    </div>
-  </div>
-</div>
-<style>@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}</style>
+
 
 <script>
 let timers = [], current = 1;
@@ -398,13 +446,9 @@ var revisitAddition = "\n\nAfter seeing how Jordan worked through the formula in
 
 function avg(s){ return s ? Math.round((s.ku+s.ct+s.cr+s.co+s.ap)/5) : 0; }
 
-function clearTimers(){ timers.forEach(clearTimeout); timers=[]; }
+function clearTimers(){ clearIntroTimers(); timers.forEach(clearTimeout); timers=[]; }
 function after(ms,fn){ const t=setTimeout(fn,ms); timers.push(t); return t; }
 
-function dismissGreeting(){
-  document.getElementById('greeting-overlay').style.display='none';
-  after(300, ()=>{ if(window._p1Start) window._p1Start(); });
-}
 
 function setStatus(id,dotId,msg,active){
   const s=document.getElementById(id), d=document.getElementById(dotId);
@@ -413,17 +457,20 @@ function setStatus(id,dotId,msg,active){
 }
 
 function setTickerPart(part, scores, liveMsg, guidance, changeBadge){
-  // Update the specific part's bars
-  const keys = ['ku','ct','cr','co','ap'];
-  keys.forEach(k=>{
-    const fill = document.getElementById('tk-'+part+'-'+k);
-    const val = document.getElementById('tv-'+part+'-'+k);
-    if(fill) fill.style.width = (scores[k]||0)+'%';
-    if(val) val.textContent = (scores[k]||0)+'%';
-  });
-  // Show part section if Part 2 or 3
+  // Show part section first if Part 2 or 3 (bars need to be visible before animating)
   if(part===2){ const s=document.getElementById('tk-p2-section'); if(s) s.style.display='block'; }
   if(part===3){ const s=document.getElementById('tk-p3-section'); if(s) s.style.display='block'; }
+  // Animate bars rolling out one by one — not all at once
+  const keys = ['ku','ct','cr','co','ap'];
+  keys.forEach((k, i)=>{
+    const delay = part===1 ? i*150 : 600 + i*500; // Parts 2&3 roll in slowly one by one
+    setTimeout(()=>{
+      const fill = document.getElementById('tk-'+part+'-'+k);
+      const val = document.getElementById('tv-'+part+'-'+k);
+      if(fill) fill.style.width = (scores[k]||0)+'%';
+      if(val) val.textContent = (scores[k]||0)+'%';
+    }, delay);
+  });
   // Show part overall score
   const pScore = document.getElementById('tk-p'+part+'-score');
   if(pScore){ pScore.style.display='block'; pScore.textContent=avg(scores)+'%'; }
@@ -472,15 +519,238 @@ function typeInto(elId, cursorId, text, speed, cb){
 }
 function clearTyping(elId,cursorId){ const el=document.getElementById(elId); if(el) el.innerHTML='<span class="typing-cursor" id="'+(cursorId||'')+'"></span>'; }
 
+
+// ══════════════════════════════════════
+// PART INTRO SEQUENCES
+// ══════════════════════════════════════
+
+const INTRO_SCRIPTS = {
+  1: {
+    badge: 'What you are about to see',
+    title: 'Part 1 — Learner’s Solution',
+    items: [
+      'Learner views the challenge',
+      'Learner enters their solution',
+      'Ticker displays competency performance of the learner’s solution',
+      'Learner asks Ms. Rivera the teacher to read their work',
+      'Learner edits their solution based on Ms. Rivera’s guidance',
+      'Ticker competency levels are adjusted',
+    ]
+  },
+  2: {
+    badge: 'What you are about to see',
+    title: 'Part 2 — Check out Peers’ Solutions',
+    note: 'Peers present their solutions by thinking out loud. This lets the learner see how each peer arrived at their answer and decide what to adopt, question, or challenge.',
+    items: [
+      'Learner reviews solutions from 3 peers',
+      'Learner provides feedback to each peer',
+      'Ticker displays competency performance of the learner’s feedback to peers',
+      'Learner asks Ms. Rivera a question',
+      'Learner adjusts their feedback to peers',
+    ]
+  },
+  3: {
+    badge: 'What you are about to see',
+    title: 'Part 3 — Check out Peers’ Feedback',
+    note: 'Peers present their solutions by thinking out loud. This lets the learner see how each peer arrived at their answer and decide what to adopt, question, or challenge.',
+    items: [
+      'Learner reviews feedback from 3 peers on their own solution',
+      'Learner responds to each peer’s feedback',
+      'Ticker displays competency performance of the learner’s responses',
+      'Learner asks Ms. Rivera a question',
+      'Learner adjusts their responses',
+    ]
+  },
+  revisit: {
+    badge: 'What you are about to see',
+    title: 'Learner revisits their initial solution',
+    items: [
+      'Peer review prompts the learner to reconsider and revise their original solution, which in turn updates the Ticker competency bars.',
+    ]
+  },
+  4: {
+    badge: 'What you are about to see',
+    title: 'Part 4 — Your Overall Thinking',
+    showFinal: true,
+    items: [
+      'Learner views the detail of their full thinking journey',
+      'Overall competency scores are generated from evidence across all three parts',
+      'A personal thinking narrative is written about the learner specifically',
+    ]
+  }
+};
+
+var introTimers = [];
+function clearIntroTimers(){ introTimers.forEach(clearTimeout); introTimers=[]; }
+
+function showIntro(partNum, onDone){
+  clearIntroTimers();
+  const script = INTRO_SCRIPTS[partNum];
+  const overlay = document.getElementById('intro-overlay');
+  const badge = document.getElementById('intro-badge');
+  const sub = document.getElementById('intro-sub');
+  const track = document.getElementById('intro-track');
+  const panel = document.getElementById('intro-panel');
+  const finalEl = document.getElementById('intro-final');
+
+  if(!overlay || !badge || !sub || !track){ onDone(); return; }
+  if(!script){ onDone(); return; }
+
+  // Reset
+  if(finalEl){ finalEl.style.opacity='0'; finalEl.style.display='none'; }
+  if(panel){ panel.style.display='flex'; panel.style.opacity='1'; }
+  track.innerHTML = '';
+  overlay.style.transition = '';
+  overlay.style.opacity = '1';
+  overlay.style.display = 'flex';
+
+  // ── Step 1: Show only the badge ("What you are about to see") ──
+  badge.textContent = script.badge;
+  badge.style.opacity = '0';
+  badge.style.transform = 'translateY(8px)';
+  sub.style.opacity = '0';
+  sub.textContent = ''; // hide part title initially
+
+  introTimers.push(setTimeout(()=>{
+    badge.style.opacity = '1';
+    badge.style.transform = 'translateY(0)';
+  }, 200));
+
+  // ── Step 2: After 2s, show the bold part title ──
+  introTimers.push(setTimeout(()=>{
+    sub.style.opacity = '1';
+    sub.textContent = script.title;
+  }, 2000));
+
+  // ── Step 3: After another 1.5s, show ALL items at once ──
+  introTimers.push(setTimeout(()=>{
+    script.items.forEach((text)=>{
+      const div = document.createElement('div');
+      div.className = 'intro-item';
+      const dot = document.createElement('div');
+      dot.className = 'intro-dot';
+      const span = document.createElement('span');
+      span.textContent = text;
+      div.appendChild(dot);
+      div.appendChild(span);
+      div.style.opacity = '0';
+      div.style.transform = 'none';
+      track.appendChild(div);
+    });
+    // Add highlighted note if present
+    if(script.note){
+      const noteDiv = document.createElement('div');
+      noteDiv.style.cssText = [
+        'margin-top:1rem',
+        'padding:0.75rem 1rem',
+        'background:linear-gradient(135deg,#EDE8F7,#E8F4EE)',
+        'border-left:4px solid #5B2C8F',
+        'border-radius:0 10px 10px 0',
+        'font-size:0.95rem',
+        'line-height:1.6',
+        'color:#2a1a5e',
+        'font-style:italic',
+        'opacity:0',
+      ].join(';');
+      noteDiv.textContent = '✨ ' + script.note;
+      track.appendChild(noteDiv);
+      // Fade note in slightly after bullets
+      setTimeout(()=>{ noteDiv.style.opacity='1'; noteDiv.style.transition='opacity 0.5s ease'; }, 300);
+    }
+    // Fade bullets in together
+    requestAnimationFrame(()=>{ requestAnimationFrame(()=>{
+      track.querySelectorAll('.intro-item').forEach(el=>{ el.style.opacity='1'; });
+    }); });
+  }, 3500));
+
+  // ── Step 4: Hold long enough to read, then close ──
+  // Reading time: ~1.5s per line + 3s base
+  const noteBonus = script.note ? 8000 : 0; // extra 8s for parts with the highlighted note
+  const READ_TIME = 3500 + 3000 + Math.max(script.items.length * 1500, 4000) + 5000 + noteBonus;
+  const FADE_DURATION = 600;
+
+  if(script.showFinal){
+    introTimers.push(setTimeout(()=>{
+      overlay.style.transition = 'opacity '+FADE_DURATION+'ms ease';
+      overlay.style.opacity = '0';
+      introTimers.push(setTimeout(()=>{
+        overlay.style.display = 'none';
+        overlay.style.opacity = '1';
+        overlay.style.transition = '';
+        onDone();
+      }, FADE_DURATION));
+    }, READ_TIME));
+  } else {
+    introTimers.push(setTimeout(()=>{
+      overlay.style.transition = 'opacity '+FADE_DURATION+'ms ease';
+      overlay.style.opacity = '0';
+      introTimers.push(setTimeout(()=>{
+        overlay.style.display = 'none';
+        overlay.style.opacity = '1';
+        overlay.style.transition = '';
+        onDone();
+      }, FADE_DURATION));
+    }, READ_TIME));
+  }
+}
+
+// Show intro for a named key (e.g. 'revisit') then call onDone
+function showNamedIntro(key, onDone){
+  // Temporarily set partNum to key — reuse showIntro with string key
+  const script = INTRO_SCRIPTS[key];
+  if(!script){ onDone(); return; }
+  // Swap key into partNum slot temporarily
+  const orig = INTRO_SCRIPTS['_tmp'];
+  INTRO_SCRIPTS['_tmp'] = script;
+  showIntro('_tmp', ()=>{ delete INTRO_SCRIPTS['_tmp']; onDone(); });
+}
+function showFinalScreen(){
+  const overlay = document.getElementById('intro-overlay');
+  const panel = document.getElementById('intro-panel');
+  const finalEl = document.getElementById('intro-final');
+  if(!overlay || !finalEl) return;
+  // Clear any leftover transitions
+  overlay.style.transition = 'none';
+  overlay.style.opacity = '0';
+  overlay.style.display = 'flex';
+  overlay.style.flexDirection = 'column';
+  overlay.style.alignItems = 'center';
+  overlay.style.justifyContent = 'center';
+  if(panel) panel.style.display = 'none';
+  finalEl.style.transition = 'none';
+  finalEl.style.opacity = '0';
+  finalEl.style.display = 'block';
+  // Force paint then fade in
+  requestAnimationFrame(()=>{ requestAnimationFrame(()=>{
+    overlay.style.transition = 'opacity 0.8s ease';
+    finalEl.style.transition = 'opacity 0.8s ease 0.4s';
+    overlay.style.opacity = '1';
+    finalEl.style.opacity = '1';
+  }); });
+}
+
+function closeFinalScreen(){
+  const overlay = document.getElementById('intro-overlay');
+  if(overlay){
+    overlay.style.transition = 'opacity 0.4s ease';
+    overlay.style.opacity = '0';
+    setTimeout(()=>{
+      overlay.style.display = 'none';
+      overlay.style.opacity = '1';
+      overlay.style.transition = '';
+    }, 400);
+  }
+}
+
 function goTo(n){
   clearTimers();
   riveraTriggered1=false; riveraTriggered2=false; riveraTriggered3=false;
+  // Hide all scenes and reset tabs
   [1,2,3,4].forEach(i=>{
     const s=document.getElementById('p'+i); if(s) s.style.display='none';
     const tab=document.getElementById('tab-'+i); tab.classList.remove('active','done');
     if(i<n) tab.classList.add('done');
   });
-  document.getElementById('p'+n).style.display='block';
   document.getElementById('tab-'+n).classList.add('active');
   // Hide all ask buttons
   ['p1-ask-btn','p2-ask-btn','p3-ask-btn'].forEach(id=>{
@@ -489,10 +759,22 @@ function goTo(n){
 
   const isRevisit = (n===1 && part1Done);
   current=n;
-  if(n===1) runPart1(isRevisit);
-  if(n===2) runPart2();
-  if(n===3) runPart3();
-  if(n===4) runPart4();
+
+  // Skip intro for revisit — the revisit intro was already shown by showNamedIntro
+  if(isRevisit){
+    document.getElementById('p'+n).style.display='block';
+    runPart1(true);
+    return;
+  }
+
+  // Show intro overlay, then reveal the scene and run the part
+  showIntro(n, ()=>{
+    document.getElementById('p'+n).style.display='block';
+    if(n===1) runPart1(false);
+    if(n===2) runPart2();
+    if(n===3) runPart3();
+    if(n===4) runPart4();
+  });
 }
 
 // ══════════════════════
@@ -501,7 +783,6 @@ function goTo(n){
 function runPart1(isRevisit){
   clearTyping('p1-text','p1-cursor');
   hideRivera('p1-rivera');
-  document.getElementById('greeting-overlay').style.display='none';
   setStatus('p1-status','p1-dot','Waiting to begin…',false);
 
 
@@ -519,14 +800,15 @@ function runPart1(isRevisit){
           setTickerPart(1, SCORES.revisit, 'Score updated ↑',
             'Returning to revise after reading peer reasoning. Your score reflects stronger analytical depth.',
             '<span class="ticker-change up">+' + (avg(SCORES.revisit)-avg(SCORES.revised)) + 'pp after revision ↑</span>');
+          after(2800, ()=>{ goTo(4); }); // Now proceed to Part 4
         });
       });
     });
     return;
   }
 
-  // Show greeting on first load
-  window._p1Start = ()=>{
+  // Start Part 1 animation directly
+  (()=>{
     setStatus('p1-status','p1-dot','Maya is writing her first attempt…',true);
     document.getElementById('p1-text').classList.add('green-bg');
 
@@ -545,11 +827,7 @@ function runPart1(isRevisit){
         after(1800, ()=>{ if(!riveraTriggered1) triggerRivera1(); });
       });
     });
-  };
-
-  const overlay = document.getElementById('greeting-overlay');
-  overlay.style.display='flex';
-  setStatus('p1-status','p1-dot','Ms. Rivera is welcoming Maya…',true);
+  })();
 }
 
 function triggerRivera1(){
@@ -644,7 +922,7 @@ function triggerRivera2(){
               'Specific evidence makes feedback stronger — and raises your score.',
               '<span class="ticker-change up">+' + (avg(SCORES.part2adj)-avg(SCORES.part2)) + 'pp after adjustment ↑</span>');
             setStatus('p2-status','p2-dot','Part 2 complete',false);
-            after(2800, ()=>{ goTo(3); });
+            after(2800, ()=>{ goTo(3); }); // Proceed to Part 3
           });
         });
       }
@@ -669,7 +947,14 @@ function runPart3(){
 
   after(700, ()=>{
     setStatus('p3-status','p3-dot',"Maya reflecting on Jordan's challenge…",true);
-    setTickerPart(3,SCORES.part3,'Scoring Part 3 reflection…',null,null);
+    // Show Part 3 ticker as learner begins — low scores rolling in as she writes
+    after(1000, ()=>{
+      setTickerPart(3, {ku:48,ct:42,cr:50,co:52,ap:40}, 'Scoring Part 3…', null, null);
+    });
+    // Mid-way through writing — scores build
+    after(5000, ()=>{
+      setTickerPart(3, {ku:62,ct:58,cr:65,co:68,ap:55}, 'Thinking deepening…', null, null);
+    });
     typeInto('p3-text','p3-cursor', reflection1, 34, ()=>{
       after(400, ()=>{
         typeInto('p3-text','p3-cursor', reflection2, 32, ()=>{
@@ -700,7 +985,10 @@ function triggerRivera3(){
           'Defending your claim with evidence raises your Critical Thinking score.',
           '<span class="ticker-change up">+' + (avg(SCORES.part3)-avg(SCORES.part2adj)) + 'pp in Part 3 ↑</span>');
         setStatus('p3-status','p3-dot','Part 3 complete',false);
-        after(3200, ()=>{ goTo(4); });
+        after(3200, ()=>{
+          // Show revisit intro, then go to Part 1 for revision
+          showNamedIntro('revisit', ()=>{ goTo(1); });
+        });
       }
     );
   });
@@ -769,11 +1057,42 @@ function runPart4(){
       });
     });
     after(paras.length*1100+400, ()=>{ setStatus('p4-status','p4-dot','Thinking Outcome complete',false); });
+    after(paras.length*1100+3000, ()=>{ showFinalScreen(); });
   });
 }
 
-// Start
-goTo(1);
+// Start — show intro first, then Part 1
+// Run when DOM is ready — handles both fresh load and already-loaded states
+function initDemo(){
+  setTimeout(function(){ goTo(1); }, 400);
+}
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', initDemo);
+} else {
+  initDemo();
+}
 </script>
+
+<!-- INTRO OVERLAY — fixed position, outside scene, always on top -->
+<div id="intro-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(15,11,26,0.72);align-items:center;justify-content:center;flex-direction:column;transition:opacity 0.5s ease;">
+  <div id="intro-panel" style="width:min(620px,90%);display:flex;flex-direction:column;align-items:center;background:white;border-radius:20px;padding:2.25rem 2.5rem 2rem;box-shadow:0 32px 80px rgba(0,0,0,0.35);">
+    <div id="intro-badge" style="font-family:Georgia,serif;font-size:1.85rem;font-weight:700;color:#5B2C8F;text-align:center;margin-bottom:0.3rem;opacity:0;transform:translateY(8px);transition:opacity 0.6s ease,transform 0.6s ease;"></div>
+    <div id="intro-sub" style="font-size:1.15rem;font-weight:700;color:#1a1a2e;text-align:center;margin-bottom:1.5rem;opacity:0;transition:opacity 0.5s ease;"></div>
+    <div style="width:100%;overflow:visible;">
+      <div id="intro-track" style="display:flex;flex-direction:column;gap:0;width:100%;"></div>
+    </div>
+  </div>
+  <div id="intro-final" style="display:none;width:min(680px,92%);background:white;border-radius:20px;padding:2rem 2.25rem;box-shadow:0 32px 80px rgba(0,0,0,0.35);text-align:center;">
+    <div style="font-family:Georgia,serif;font-size:1.25rem;font-weight:700;color:#5B2C8F;margin-bottom:0.85rem;">How ThinkSmith measures your thinking</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;text-align:left;margin-bottom:1.1rem;">
+      <div style="background:#F7F4FC;border-radius:10px;padding:0.6rem 0.8rem;"><div style="font-size:0.9rem;font-weight:700;color:#5B2C8F;margin-bottom:0.25rem;">Knowledge &amp; Understanding</div><div style="font-size:0.85rem;color:#4A4460;line-height:1.6;">Are the core ideas used accurately? Does the learner understand concepts, not just repeat them?</div></div>
+      <div style="background:#F7F4FC;border-radius:10px;padding:0.6rem 0.8rem;"><div style="font-size:0.9rem;font-weight:700;color:#5B2C8F;margin-bottom:0.25rem;">Critical Thinking</div><div style="font-size:0.85rem;color:#4A4460;line-height:1.6;">Does the learner reason carefully, evaluate evidence, and question assumptions?</div></div>
+      <div style="background:#F7F4FC;border-radius:10px;padding:0.6rem 0.8rem;"><div style="font-size:0.9rem;font-weight:700;color:#5B2C8F;margin-bottom:0.25rem;">Creative Thinking</div><div style="font-size:0.85rem;color:#4A4460;line-height:1.6;">Does the learner make original or unexpected connections beyond the obvious?</div></div>
+      <div style="background:#F7F4FC;border-radius:10px;padding:0.6rem 0.8rem;"><div style="font-size:0.9rem;font-weight:700;color:#5B2C8F;margin-bottom:0.25rem;">Communication</div><div style="font-size:0.85rem;color:#4A4460;line-height:1.6;">Is the thinking expressed clearly, with logical flow a reader can follow?</div></div>
+      <div style="background:#F7F4FC;border-radius:10px;padding:0.6rem 0.8rem;grid-column:1/-1;"><div style="font-size:0.9rem;font-weight:700;color:#5B2C8F;margin-bottom:0.25rem;">Application</div><div style="font-size:0.85rem;color:#4A4460;line-height:1.6;">Does the learner connect ideas to real situations using specific named examples rather than vague references?</div></div>
+    </div>
+    <button onclick="closeFinalScreen()" style="background:#5B2C8F;color:white;border:none;border-radius:10px;padding:0.65rem 2rem;font-size:0.82rem;font-weight:500;cursor:pointer;font-family:inherit;transition:background 0.2s;" onmouseover="this.style.background='#7B3FB5'" onmouseout="this.style.background='#5B2C8F'">Close &rarr;</button>
+  </div>
+</div>
 </body>
 </html>
