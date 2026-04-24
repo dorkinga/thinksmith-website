@@ -783,7 +783,7 @@
   .ticker-comp-lbl { width: 72px; flex-shrink: 0; font-size: 10.5px; white-space: pre-line; line-height: 1.3; color: #374151; padding-right: 6px; }
   .ticker-comp-lbl.ov { font-weight: 700; color: #111827; font-size: 11px; }
   .ticker-chart-cell { width: 148px; flex-shrink: 0; }
-  .ticker-comp-pct { width: 48px; flex-shrink: 0; text-align: right; font-size: 13px; font-weight: 700; color: #10b981; }
+  .ticker-comp-pct { width: 60px; flex-shrink: 0; text-align: right; font-size: 10.5px; font-weight: 600; color: #6d28d9; text-transform: lowercase; font-family: 'DM Sans', sans-serif; letter-spacing: 0.01em; }
   .ticker-status-bar { padding: 5px 14px 7px; font-size: 10px; color: #9ca3af; }
   .ticker-feature { display: flex; gap: 0.9rem; align-items: flex-start; margin-bottom: 1.5rem; }
   .ticker-feature-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--purple); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; }
@@ -895,8 +895,8 @@
     <div class="hero-text fade-in">
       <div class="hero-eyebrow">✦ K–12 &amp; Higher Education</div>
       <h1>Where students learn to <em>think</em></h1>
-      <p class="hero-eyebrow" style="margin-bottom:0.5rem;">✦ If you're searching for a tool that builds real thinking — not just better answers — you're in the right place.</p>
-      <p class="hero-sub">ThinkSmith is not another AI that does the work for your child. It's the AI that makes them do it themselves — and shows exactly how their thinking grows.</p>
+      <p class="hero-eyebrow" style="margin-bottom:0.5rem;">✦ If you're searching for a tool that recognizes real thinking — not just grades better answers — you're in the right place.</p>
+      <p class="hero-sub">ThinkSmith is not another AI that does the work for your child. It observes how their thinking develops as they write, and shows it back to them in their own words.</p>
       <div class="hero-actions">
         <button class="btn-primary" onclick="openDemo()">View demo →</button>
         <a href="https://app.thinksmith.ca" class="btn-ghost" style="color:var(--gold);font-size:0.92rem;font-weight:500;text-decoration:none;border:1px solid rgba(200,150,58,0.5);padding:0.6rem 1.2rem;border-radius:100px;transition:background 0.2s;">Free Pilot Login →</a>
@@ -913,30 +913,30 @@
           <div class="card-label">Thinking Outcome</div>
           <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;">
             <div>
-              <div style="font-size:0.82rem;color:var(--gray);margin-bottom:0.2rem;">Overall competency</div>
-              <div class="score-val" style="animation:scorePulse 2.5s ease-in-out infinite;">76%</div>
-              <div style="font-size:0.75rem;color:var(--gold);">Developing Well</div>
+              <div style="font-size:0.82rem;color:var(--gray);margin-bottom:0.2rem;">Your thinking</div>
+              <div class="score-val" style="animation:scorePulse 2.5s ease-in-out infinite;font-size:1.6rem;letter-spacing:-0.01em;">Developing well</div>
+              <div style="font-size:0.72rem;color:var(--gold);margin-top:0.15rem;">high confidence</div>
             </div>
-            <div style="font-size:0.72rem;color:var(--gray-light);text-align:right;">5 competencies<br>assessed</div>
+            <div style="font-size:0.72rem;color:var(--gray-light);text-align:right;">5 competencies<br>observed</div>
           </div>
           <div class="comp-row">
-            <div class="comp-label"><span>Knowledge &amp; Understanding</span><span class="comp-pct">81%</span></div>
+            <div class="comp-label"><span>Knowledge &amp; Understanding</span><span class="comp-pct">strong</span></div>
             <div class="comp-bar"><div class="comp-fill" style="width:81%"></div></div>
           </div>
           <div class="comp-row">
-            <div class="comp-label"><span>Creative Thinking</span><span class="comp-pct">74%</span></div>
+            <div class="comp-label"><span>Creative Thinking</span><span class="comp-pct">dev. well</span></div>
             <div class="comp-bar"><div class="comp-fill" style="width:74%"></div></div>
           </div>
           <div class="comp-row">
-            <div class="comp-label"><span>Critical Thinking</span><span class="comp-pct">70%</span></div>
+            <div class="comp-label"><span>Critical Thinking</span><span class="comp-pct">dev. well</span></div>
             <div class="comp-bar"><div class="comp-fill" style="width:70%"></div></div>
           </div>
           <div class="comp-row">
-            <div class="comp-label"><span>Communication</span><span class="comp-pct">72%</span></div>
+            <div class="comp-label"><span>Communication</span><span class="comp-pct">dev. well</span></div>
             <div class="comp-bar"><div class="comp-fill" style="width:72%"></div></div>
           </div>
           <div class="comp-row">
-            <div class="comp-label"><span>Application</span><span class="comp-pct">68%</span></div>
+            <div class="comp-label"><span>Application</span><span class="comp-pct">developing</span></div>
             <div class="comp-bar"><div class="comp-fill" style="width:68%"></div></div>
           </div>
         </div>
@@ -971,9 +971,9 @@
 <section style="background:linear-gradient(160deg,#1a1a2e 0%,#2d1b4e 100%);padding:5rem 2rem;">
   <div class="container" style="max-width:1100px;margin:0 auto;">
     <span class="section-label" style="color:rgba(255,255,255,0.45);">What makes ThinkSmith different</span>
-    <h2 style="color:white;max-width:680px;margin-bottom:1rem;">ThinkSmith doesn&rsquo;t just use AI &mdash; it&nbsp;is an <em style="color:#9B60D5;">XAI&mdash;native</em> platform</h2>
-    <p style="color:rgba(255,255,255,0.7);font-size:1.05rem;line-height:1.7;max-width:700px;margin-bottom:0.75rem;">Where most AI tools give answers, ThinkSmith exposes the reasoning process &mdash; the part educators care about most.</p>
-    <p style="color:rgba(255,255,255,0.55);font-size:0.9rem;line-height:1.6;max-width:660px;margin-bottom:3rem;"><strong style="color:rgba(255,255,255,0.75);">XAI (Explainable AI)</strong> is the idea that AI should make its thinking visible, auditable, and understandable. That principle is built into ThinkSmith at every layer.</p>
+    <h2 style="color:white;max-width:680px;margin-bottom:1rem;">ThinkSmith doesn&rsquo;t grade thinking &mdash; it <em style="color:#9B60D5;">recognizes</em> it</h2>
+    <p style="color:rgba(255,255,255,0.7);font-size:1.05rem;line-height:1.7;max-width:700px;margin-bottom:0.75rem;">Where most AI tools score answers, ThinkSmith observes how thinking develops &mdash; and shows it back to the learner in their own words.</p>
+    <p style="color:rgba(255,255,255,0.55);font-size:0.9rem;line-height:1.6;max-width:660px;margin-bottom:3rem;"><strong style="color:rgba(255,255,255,0.75);">XAI (Explainable AI)</strong> is the idea that AI should make its reasoning visible, auditable, and understandable. Every observation ThinkSmith makes is grounded in evidence from the student&rsquo;s own writing.</p>
 
     <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin-bottom:3rem;">
 
@@ -987,15 +987,15 @@
       <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:1.5rem;">
         <div style="font-size:1.4rem;margin-bottom:0.6rem;">📊</div>
         <div style="font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:#9B60D5;margin-bottom:0.4rem;">Teachers</div>
-        <p style="color:rgba(255,255,255,0.85);font-size:0.92rem;line-height:1.6;font-weight:500;margin-bottom:0.3rem;">See transparent evidence, not black-box scoring.</p>
-        <p style="color:rgba(255,255,255,0.5);font-size:0.83rem;line-height:1.55;margin:0;">Every competency score is tied to observable features in the student&rsquo;s own writing, aligned with Ontario&rsquo;s Achievement Chart.</p>
+        <p style="color:rgba(255,255,255,0.85);font-size:0.92rem;line-height:1.6;font-weight:500;margin-bottom:0.3rem;">See transparent evidence, not black-box grading.</p>
+        <p style="color:rgba(255,255,255,0.5);font-size:0.83rem;line-height:1.55;margin:0;">Every competency level is tied to observable features in the student&rsquo;s own writing, informed by Ontario&rsquo;s Achievement Chart structure.</p>
       </div>
 
       <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:1.5rem;">
         <div style="font-size:1.4rem;margin-bottom:0.6rem;">👪</div>
         <div style="font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:#9B60D5;margin-bottom:0.4rem;">Parents</div>
         <p style="color:rgba(255,255,255,0.85);font-size:0.92rem;line-height:1.6;font-weight:500;margin-bottom:0.3rem;">See clarity, not mystery.</p>
-        <p style="color:rgba(255,255,255,0.5);font-size:0.83rem;line-height:1.55;margin:0;">Feedback is understandable because the reasoning behind it is visible. Parents can follow why a score was given &mdash; in plain language.</p>
+        <p style="color:rgba(255,255,255,0.5);font-size:0.83rem;line-height:1.55;margin:0;">Feedback is understandable because the reasoning behind it is visible. Parents can follow why a level was observed &mdash; in plain language.</p>
       </div>
 
       <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:1.5rem;">
@@ -1018,34 +1018,29 @@
 <!-- HOW IT WORKS -->
 <section id="how" style="background: white;">
   <div class="container">
-    <span class="section-label">The five-part journey</span>
+    <span class="section-label">The 3-Part journey</span>
     <h2>Every challenge follows the <em>same path</em></h2>
-    <p class="section-sub">Whether a student is exploring a topic from curiosity or working through a course syllabus, the thinking process is always the same five parts. Ms. Rivera, the AI teacher, is available throughout every part — to review their work, answer questions, or simply help them find their own thinking.</p>
+    <p class="section-sub">Whether a student is exploring a topic from curiosity or working through a course syllabus, the thinking process is always the same three Parts &mdash; followed by a Portfolio. Ms. Rivera, the AI teacher, is available throughout to review their work, answer questions, or simply help them find their own thinking.</p>
     <div class="journey-steps fade-in">
       <div class="step">
         <div class="step-num">1</div>
-        <div class="step-title">Write your own thinking</div>
-        <div class="step-desc">Before seeing anything else. Raw and honest.</div>
+        <div class="step-title">Part 1 &mdash; My Solution</div>
+        <div class="step-desc">Write your own thinking first, before seeing anything else. Raw and honest.</div>
       </div>
       <div class="step">
         <div class="step-num">2</div>
-        <div class="step-title">Check peer thinking</div>
-        <div class="step-desc">Three AI peers at different quality levels. Read and give specific feedback.</div>
+        <div class="step-title">Part 2 &mdash; Feedback to Peers</div>
+        <div class="step-desc">Three AI peers share their thinking at different quality levels. Give each one specific feedback.</div>
       </div>
       <div class="step">
         <div class="step-num">3</div>
-        <div class="step-title">Receive peer feedback</div>
-        <div class="step-desc">The peers respond to your thinking. Write your reflection.</div>
+        <div class="step-title">Part 3 &mdash; Feedback from Peers</div>
+        <div class="step-desc">The peers respond to your thinking. Write your reflection on what they said.</div>
       </div>
       <div class="step">
-        <div class="step-num">4</div>
-        <div class="step-title">Revise if needed</div>
-        <div class="step-desc">Return to your solution with new understanding. Peers regenerate.</div>
-      </div>
-      <div class="step">
-        <div class="step-num">5</div>
-        <div class="step-title">Thinking Outcome</div>
-        <div class="step-desc">Evidence-based competency scores built from your own writing.</div>
+        <div class="step-num">✦</div>
+        <div class="step-title">Portfolio</div>
+        <div class="step-desc">Evidence-based recognition of how your thinking developed across all three Parts &mdash; with quotes from your own writing.</div>
       </div>
     </div>
   </div>
@@ -1058,11 +1053,11 @@
       <div class="fade-in">
         <span class="section-label">For parents</span>
         <h2>Not a grade. A genuine <em>picture of how they think</em>.</h2>
-        <p class="section-sub">The Thinking Outcome is not a score for getting the right answer. It is a competency assessment built entirely from evidence in your child's own writing — with direct quotes.</p>
+        <p class="section-sub">The Thinking Outcome is not a score for getting the right answer. It is a recognition of how your child&rsquo;s thinking is developing &mdash; built entirely from evidence in their own writing, with direct quotes.</p>
         <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem;">
           <li style="display: flex; gap: 0.75rem; align-items: flex-start; font-size: 0.95rem; color: var(--gray);">
             <span style="color: var(--purple); margin-top: 0.1rem;">✓</span>
-            Five competency scores with evidence quotes from their actual writing
+            Five competency levels with evidence quotes from their actual writing
           </li>
           <li style="display: flex; gap: 0.75rem; align-items: flex-start; font-size: 0.95rem; color: var(--gray);">
             <span style="color: var(--purple); margin-top: 0.1rem;">✓</span>
@@ -1070,48 +1065,52 @@
           </li>
           <li style="display: flex; gap: 0.75rem; align-items: flex-start; font-size: 0.95rem; color: var(--gray);">
             <span style="color: var(--purple); margin-top: 0.1rem;">✓</span>
-            A growth trajectory across all four parts of the journey
+            A growth trajectory across all three Parts of the journey
+          </li>
+          <li style="display: flex; gap: 0.75rem; align-items: flex-start; font-size: 0.95rem; color: var(--gray);">
+            <span style="color: var(--purple); margin-top: 0.1rem;">✓</span>
+            View your child&rsquo;s dashboard exactly as they see it
           </li>
           <li style="display: flex; gap: 0.75rem; align-items: flex-start; font-size: 0.95rem; color: var(--gray);">
             <span style="color: var(--purple); margin-top: 0.1rem;">✓</span>
             Downloadable as a PDF to share with instructors
           </li>
         </ul>
-        <p style="font-size: 0.88rem; color: var(--gray-light); font-style: italic;">Low early scores are normal and expected. They mean the assessment is honest.</p>
+        <p style="font-size: 0.88rem; color: var(--gray-light); font-style: italic;">Early levels reading &ldquo;emerging&rdquo; or &ldquo;developing&rdquo; are normal and expected. They mean the observation is honest.</p>
         <div style="margin-top: 1.25rem; padding: 1rem 1.1rem; background: var(--purple-pale); border-radius: 12px; border-left: 3px solid var(--purple);">
           <p style="font-size: 0.82rem; color: var(--gray); line-height: 1.7; margin: 0;">
-            <strong style="color: var(--purple); font-weight: 500; display: block; margin-bottom: 0.4rem;">What parents ask: "Why do all five scores move together?"</strong>
-            The five competencies aren't five separate tests — they're five ways of looking at the same learning journey. Strong thinking tends to strengthen all five at once, which is why the lines move together. But the differences matter: a consistently high Communication score with a lower Creative Thinking score tells you your child expresses ideas clearly and is ready to be challenged to take more intellectual risks. A high Critical Thinking score with lower Knowledge &amp; Understanding tells you the reasoning skills are strong but the conceptual foundation needs more depth. <em>The gaps between competencies are where the most useful feedback lives.</em>
+            <strong style="color: var(--purple); font-weight: 500; display: block; margin-bottom: 0.4rem;">What parents ask: &ldquo;Why do all five levels move together?&rdquo;</strong>
+            The five competencies aren&rsquo;t five separate tests &mdash; they&rsquo;re five ways of looking at the same learning journey. Strong thinking tends to strengthen all five at once, which is why the levels move together. But the differences matter: a consistently strong Communication level with a lower Creative Thinking level tells you your child expresses ideas clearly and is ready to be challenged to take more intellectual risks. A strong Critical Thinking level with lower Knowledge &amp; Understanding tells you the reasoning skills are strong but the conceptual foundation needs more depth. <em>The gaps between competencies are where the most useful feedback lives.</em>
           </p>
         </div>
       </div>
       <div class="competency-block fade-in">
         <div class="competency-title">Thinking Outcome — Emily S. · White Forest Cake Recipe</div>
         <div class="comp-row">
-          <div class="comp-label"><span>Knowledge &amp; Understanding</span><span class="comp-pct">81%</span></div>
+          <div class="comp-label"><span>Knowledge &amp; Understanding</span><span class="comp-pct">strong</span></div>
           <div class="comp-bar"><div class="comp-fill" style="width:81%"></div></div>
         </div>
         <div class="comp-row">
-          <div class="comp-label"><span>Creative Thinking</span><span class="comp-pct">74%</span></div>
+          <div class="comp-label"><span>Creative Thinking</span><span class="comp-pct">dev. well</span></div>
           <div class="comp-bar"><div class="comp-fill" style="width:74%"></div></div>
         </div>
         <div class="comp-row">
-          <div class="comp-label"><span>Critical Thinking</span><span class="comp-pct">71%</span></div>
+          <div class="comp-label"><span>Critical Thinking</span><span class="comp-pct">dev. well</span></div>
           <div class="comp-bar"><div class="comp-fill" style="width:71%"></div></div>
         </div>
         <div class="comp-row">
-          <div class="comp-label"><span>Communication</span><span class="comp-pct">78%</span></div>
+          <div class="comp-label"><span>Communication</span><span class="comp-pct">dev. well</span></div>
           <div class="comp-bar"><div class="comp-fill" style="width:78%"></div></div>
         </div>
         <div class="comp-row">
-          <div class="comp-label"><span>Application</span><span class="comp-pct">70%</span></div>
+          <div class="comp-label"><span>Application</span><span class="comp-pct">dev. well</span></div>
           <div class="comp-bar"><div class="comp-fill" style="width:70%"></div></div>
         </div>
         <div style="margin-top: 1.5rem; padding: 1rem; background: var(--purple-pale); border-radius: 12px; font-size: 0.82rem; color: var(--gray); line-height: 1.6; border-left: 3px solid var(--purple);">
           <strong style="color: var(--purple); font-weight: 500; display: block; margin-bottom: 0.3rem;">Evidence — Communication</strong>
-          "Emily's explanation of the cultural significance of the recipe demonstrates clear communication... her feedback to Riley showed she could identify what was missing in another student's reasoning."
+          &ldquo;Emily&rsquo;s explanation of the cultural significance of the recipe demonstrates clear communication... her feedback to Riley showed she could identify what was missing in another student&rsquo;s reasoning.&rdquo;
         </div>
-        <div class="outcome-badge">✦ Developing Well · Overall 76%</div>
+        <div class="outcome-badge">✦ Your Thinking — Developing well</div>
       </div>
     </div>
   </div>
@@ -1161,7 +1160,7 @@
           <div class="principle-icon">📝</div>
           <div class="principle-text">
             <strong>Your conversation counts</strong>
-            Asking Ms. Rivera for help is part of the evidence for your Thinking Outcome. Engagement with your AI teacher strengthens your score — not just your understanding.
+            Asking Ms. Rivera for help is part of the evidence for your Thinking Outcome. Engagement with your AI teacher strengthens how your thinking is recognized &mdash; not just your understanding.
           </div>
         </div>
       </div>
@@ -1210,14 +1209,14 @@
     <div class="ticker-section-inner">
       <div class="ticker-panel-demo">
         <div class="ticker-panel-hdr">
-          <span class="ticker-panel-title">Thinking Outcome</span>
-          <span class="ticker-live-badge"><div class="ticker-live-dot"></div>Live</span>
+          <span class="ticker-panel-title">Your thinking, so far</span>
+          <span class="ticker-live-badge"><div class="ticker-live-dot"></div>Active</span>
         </div>
         <div class="ticker-stu-row">
           <div class="ticker-av">MS</div>
           <div>
             <div style="font-size:12px;font-weight:600;color:#111827;">Emily S.</div>
-            <div style="font-size:10px;color:#9ca3af;transition:all 0.5s;" id="ticker-sub-lbl">Part 1 · Cooking &amp; Culture</div>
+            <div style="font-size:10px;color:#9ca3af;transition:all 0.5s;" id="ticker-sub-lbl">Part 1 &middot; Cooking &amp; Culture</div>
           </div>
         </div>
         <div style="display:flex;padding:4px 14px 3px;border-bottom:0.5px solid rgba(0,0,0,0.06);background:#f9f8f4;">
@@ -1227,43 +1226,43 @@
             <div style="flex:1;text-align:center;font-size:9.5px;font-weight:600;color:#9ca3af;letter-spacing:.03em;">Part 2</div>
             <div style="flex:1;text-align:center;font-size:9.5px;font-weight:600;color:#9ca3af;letter-spacing:.03em;">Part 3</div>
           </div>
-          <div style="width:48px;flex-shrink:0;"></div>
+          <div style="width:60px;flex-shrink:0;"></div>
         </div>
-        <div class="ticker-comp-row ov"><div class="ticker-comp-lbl ov">Thinking&#10;Outcome</div><div class="ticker-chart-cell" id="tc-ov"></div><div class="ticker-comp-pct" id="tp-ov">0%</div></div>
-        <div class="ticker-comp-row"><div class="ticker-comp-lbl">Knowledge &amp;&#10;Und.</div><div class="ticker-chart-cell" id="tc-ku"></div><div class="ticker-comp-pct" id="tp-ku">0%</div></div>
-        <div class="ticker-comp-row"><div class="ticker-comp-lbl">Creative&#10;Thinking</div><div class="ticker-chart-cell" id="tc-ct"></div><div class="ticker-comp-pct" id="tp-ct">0%</div></div>
-        <div class="ticker-comp-row"><div class="ticker-comp-lbl">Critical&#10;Thinking</div><div class="ticker-chart-cell" id="tc-cr"></div><div class="ticker-comp-pct" id="tp-cr">0%</div></div>
-        <div class="ticker-comp-row"><div class="ticker-comp-lbl">Communication</div><div class="ticker-chart-cell" id="tc-co"></div><div class="ticker-comp-pct" id="tp-co">0%</div></div>
-        <div class="ticker-comp-row" style="border-bottom:none;"><div class="ticker-comp-lbl">Application</div><div class="ticker-chart-cell" id="tc-ap"></div><div class="ticker-comp-pct" id="tp-ap">0%</div></div>
-        <div class="ticker-status-bar">● Live — updating as Maya writes</div>
+        <div class="ticker-comp-row ov"><div class="ticker-comp-lbl ov">Your&#10;Thinking</div><div class="ticker-chart-cell" id="tc-ov"></div><div class="ticker-comp-pct" id="tp-ov">&mdash;</div></div>
+        <div class="ticker-comp-row"><div class="ticker-comp-lbl">Knowledge &amp;&#10;Und.</div><div class="ticker-chart-cell" id="tc-ku"></div><div class="ticker-comp-pct" id="tp-ku">&mdash;</div></div>
+        <div class="ticker-comp-row"><div class="ticker-comp-lbl">Creative&#10;Thinking</div><div class="ticker-chart-cell" id="tc-ct"></div><div class="ticker-comp-pct" id="tp-ct">&mdash;</div></div>
+        <div class="ticker-comp-row"><div class="ticker-comp-lbl">Critical&#10;Thinking</div><div class="ticker-chart-cell" id="tc-cr"></div><div class="ticker-comp-pct" id="tp-cr">&mdash;</div></div>
+        <div class="ticker-comp-row"><div class="ticker-comp-lbl">Communication</div><div class="ticker-chart-cell" id="tc-co"></div><div class="ticker-comp-pct" id="tp-co">&mdash;</div></div>
+        <div class="ticker-comp-row" style="border-bottom:none;"><div class="ticker-comp-lbl">Application</div><div class="ticker-chart-cell" id="tc-ap"></div><div class="ticker-comp-pct" id="tp-ap">&mdash;</div></div>
+        <div class="ticker-status-bar">&bull; Active &mdash; observing as Emily writes</div>
       </div>
       <div>
         <div class="ticker-feature">
           <div class="ticker-feature-icon">📈</div>
           <div class="ticker-feature-text">
             <h4>Updates every time they write</h4>
-            <p>Every sentence scored. Every Ms. Rivera interaction counted. Every peer feedback analysed. The chart builds across all three parts so you see the full arc — not just the final result.</p>
+            <p>Every sentence observed. Every Ms. Rivera interaction considered. Every peer feedback analysed. The chart builds across all three Parts so you see the full arc &mdash; not just the final result.</p>
           </div>
         </div>
         <div class="ticker-feature">
           <div class="ticker-feature-icon">🟢</div>
           <div class="ticker-feature-text">
-            <h4>Green means ≥ 60%. Red means below.</h4>
-            <p>The line turns green the moment a competency crosses 60% and turns red if it drops back. A student can watch their own thinking improve in real time as they revise after Ms. Rivera's feedback.</p>
+            <h4>Watch thinking develop in real time</h4>
+            <p>As the student writes and revises, the chart shows how each competency is currently developing. A student can see the moment their thinking moves from emerging to developing well &mdash; after a conversation with Ms. Rivera, after considering peer feedback, or after their own revision.</p>
           </div>
         </div>
         <div class="ticker-feature">
           <div class="ticker-feature-icon">🔍</div>
           <div class="ticker-feature-text">
             <h4>The gaps tell the real story</h4>
-            <p>The five competencies aren't five separate tests — they're five lenses on the same thinking. A high Communication score with a lower Creative Thinking score tells you your child expresses ideas clearly and is ready to be challenged to think beyond expected frameworks. A high Critical Thinking score with lower Knowledge &amp; Understanding tells you the reasoning is strong but the conceptual foundation needs depth. <strong>The gaps are where the most useful feedback lives.</strong></p>
+            <p>The five competencies aren&rsquo;t five separate tests &mdash; they&rsquo;re five lenses on the same thinking. A strong Communication level with a lower Creative Thinking level tells you your child expresses ideas clearly and is ready to be challenged to think beyond expected frameworks. A strong Critical Thinking level with lower Knowledge &amp; Understanding tells you the reasoning is strong but the conceptual foundation needs depth. <strong>The gaps are where the most useful feedback lives.</strong></p>
           </div>
         </div>
         <div class="ticker-feature">
           <div class="ticker-feature-icon">📋</div>
           <div class="ticker-feature-text">
-            <h4>Ticker and portfolio: the same numbers</h4>
-            <p>The live Thinking Outcome and the final portfolio report are the same assessment — one shown live during learning, one presented formally at the end. No surprises. No unexplained gaps.</p>
+            <h4>Ticker and portfolio: the same observation</h4>
+            <p>The live Thinking Outcome and the final portfolio report are the same recognition &mdash; one shown live during learning, one presented formally at the end. No surprises. No unexplained gaps.</p>
           </div>
         </div>
       </div>
@@ -1596,6 +1595,27 @@ function openDemo() {
     return v0 + (v1-v0)*local;
   }
 
+  // Map score 0-100 to level label. Thresholds match the canonical
+  // competencyLevel.ts mapping used by the Ticker, Portfolio, and Dashboard.
+  // (Short forms used because the marketing demo has a narrow label column.)
+  function scoreToLevelLabel(score) {
+    if(score <= 0) return '\u2014'; // em dash
+    if(score <= 20) return 'not yet';
+    if(score <= 40) return 'emerging';
+    if(score <= 60) return 'developing';
+    if(score <= 80) return 'dev. well';
+    return 'strong';
+  }
+
+  // Same score → level → color mapping. Purple ramp that deepens with level.
+  function scoreToLineColor(score) {
+    if(score <= 20) return '#AFA9EC';   // very light — not yet
+    if(score <= 40) return '#AFA9EC';   // emerging
+    if(score <= 60) return '#7F77DD';   // developing
+    if(score <= 80) return '#534AB7';   // developing well
+    return '#26215C';                    // strong
+  }
+
   // Build full smooth path up to progress t (0..1) for one competency key
   function buildPath(key, H, maxT) {
     var steps = 80; // sample points for smooth curve
@@ -1624,36 +1644,25 @@ function openDemo() {
       return d;
     }
 
-    // Split at 60% crossover
-    var crossX = PAD + CROSS_T*(W-PAD*2);
-    var redPts  = pts.filter(function(p){return p[0]<=crossX || (p[0]<=crossX+2);});
-    var greenPts = pts.filter(function(p){return p[0]>=crossX-2;});
-
     var dividers = '<line x1="'+CW.toFixed(1)+'" y1="0" x2="'+CW.toFixed(1)+'" y2="'+H+'" stroke="#d1d5db" stroke-width="0.8" stroke-dasharray="3,2"/>'
                  + '<line x1="'+(2*CW).toFixed(1)+'" y1="0" x2="'+(2*CW).toFixed(1)+'" y2="'+H+'" stroke="#d1d5db" stroke-width="0.8" stroke-dasharray="3,2"/>';
 
+    // Single purple line whose color deepens with the current level.
+    // (No more red/green grade-style split — this is observation, not grading.)
     var lastScore = pts.length ? pts[pts.length-1][2] : 0;
-    var allRed = maxT <= CROSS_T;
-    var allGreen = !allRed && redPts.length < 3;
-
-    var areaPath='', linePath='';
-
-    if(allRed || pts.length < 2) {
-      var ld = crPath(pts);
+    var lineColor = scoreToLineColor(lastScore);
+    var ld = crPath(pts);
+    var areaPath = '';
+    var linePath = '';
+    if(pts.length >= 2) {
       var lp = pts[pts.length-1];
       areaPath = ld+' L'+lp[0].toFixed(1)+','+H+' L'+pts[0][0].toFixed(1)+','+H+' Z';
-      linePath = '<path d="'+ld+'" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round"/>';
-    } else {
-      var rd = crPath(redPts);
-      var gd = crPath(greenPts);
-      var lp2 = pts[pts.length-1];
-      areaPath = crPath(pts)+' L'+lp2[0].toFixed(1)+','+H+' L'+pts[0][0].toFixed(1)+','+H+' Z';
-      linePath = '<path d="'+rd+'" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round"/>'
-               + '<path d="'+gd+'" fill="none" stroke="#10b981" stroke-width="1.8" stroke-linecap="round"/>';
+      linePath = '<path d="'+ld+'" fill="none" stroke="'+lineColor+'" stroke-width="1.8" stroke-linecap="round"/>';
     }
 
+    // Area fill tinted to match the current line color at low opacity.
     return '<svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg">'
-      + '<path d="'+areaPath+'" fill="#d1fae5" opacity="0.4"/>'
+      + '<path d="'+areaPath+'" fill="'+lineColor+'" opacity="0.10"/>'
       + linePath
       + dividers
       + '</svg>';
@@ -1664,23 +1673,25 @@ function openDemo() {
     var elapsed = ts-startTime;
     var progress = Math.min(elapsed/DURATION, 1);
 
-    // Update all rows
+    // Update all rows — chart redraws every frame, level word updates too
     COMP_KEYS.forEach(function(key){
       var cell=document.getElementById('tc-'+key);
       var pctEl=document.getElementById('tp-'+key);
       if(cell) cell.innerHTML=buildPath(key, ROW_H[key], progress);
       if(pctEl) {
         var score=progress>0?Math.round(interpolate(key,progress)):0;
-        pctEl.textContent=score+'%';
+        var label = scoreToLevelLabel(score);
+        pctEl.textContent = label;
+        pctEl.style.color = scoreToLineColor(score);
       }
     });
 
     // Update sub-label
     var lbl=document.getElementById('ticker-sub-lbl');
     if(lbl){
-      if(progress<0.52)lbl.textContent='Part 1 · Cooking & Culture';
-      else if(progress<0.80)lbl.textContent='Part 2 · Cooking & Culture';
-      else lbl.textContent='Part 3 · Cooking & Culture';
+      if(progress<0.52)lbl.textContent='Part 1 \u00b7 Cooking & Culture';
+      else if(progress<0.80)lbl.textContent='Part 2 \u00b7 Cooking & Culture';
+      else lbl.textContent='Part 3 \u00b7 Cooking & Culture';
     }
 
     if(progress < 1) {
