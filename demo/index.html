@@ -234,18 +234,23 @@ html,body{font-family:var(--font-body,'DM Sans',system-ui,sans-serif);background
   display:flex;align-items:center;justify-content:center;
 }
 
-/* ── Revisit banner ───────────────────────────────────────────────────
-   Shown briefly when Maya returns to Part 1 from the end of Part 3 to
-   refine her solution. The banner sits in the middle of the Part 1
-   panel (the left scene area, not the whole page), with a semi-
-   transparent backdrop so the underlying Part 1 content is dimmed but
-   still visible. The banner card is centered, with a soft purple glow
-   to pull the viewer's eye. It fades in, holds long enough to read,
-   and fades out as the revision animation begins.
+/* ── Part banner ───────────────────────────────────────────────────────
+   Centered card overlay used at the start of each Part (and during the
+   Part 1 revisit) to announce what's about to happen. The banner sits
+   in the middle of the active scene panel — not the whole page — so
+   the Ticker on the right stays visible behind it and the viewer feels
+   continuity between parts.
 
-   Positioned absolutely inside the .p-scene container — that's why
-   .p-scene needs position:relative (set on .p1-scene-wrap below). */
-.revisit-banner-overlay{
+   How it works:
+     · One banner element per Part (#p1-banner, #p2-banner, etc.)
+     · showPartBanner(partNum, text, durationMs, onDone) fades it in,
+       holds for the duration, fades it out, calls onDone.
+     · Each .p-scene container has position:relative so the absolutely
+       positioned banner is anchored to that scene, not the viewport.
+
+   Originally built for the revisit transition only; generalized when
+   adding Part-level intro banners. */
+.part-banner-overlay{
   position:absolute;
   inset:0;
   background:rgba(247,244,252,0.88);
@@ -260,10 +265,10 @@ html,body{font-family:var(--font-body,'DM Sans',system-ui,sans-serif);background
   pointer-events:none;
   transition:opacity 0.5s ease;
 }
-.revisit-banner-overlay.visible{
+.part-banner-overlay.visible{
   opacity:1;
 }
-.revisit-banner{
+.part-banner-card{
   background:white;
   border:1.5px solid var(--purple-light);
   border-radius:14px;
@@ -278,8 +283,8 @@ html,body{font-family:var(--font-body,'DM Sans',system-ui,sans-serif);background
   color:var(--purple);
   line-height:1.55;
 }
-/* Make the Part 1 scene a positioning context for the banner overlay */
-#p1{position:relative}
+/* Make every Part scene a positioning context for its banner overlay */
+#p1, #p2, #p3, #p4{position:relative}
 .typing-cursor{display:inline-block;width:2px;height:1em;background:var(--purple);vertical-align:text-bottom;animation:blink 0.8s step-end infinite;margin-left:1px}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 /* ── RIVERA PANEL ── */
@@ -363,12 +368,21 @@ html,body{font-family:var(--font-body,'DM Sans',system-ui,sans-serif);background
       <div class="scene" id="scene">
         <!-- PART 1 -->
         <div id="p1" class="p-scene" style="display:none">
-          <!-- Revisit banner: shown only when Maya returns to Part 1
-               from the end of Part 3 (the runPart1(true) branch fades
-               this in for ~3.5s, then fades it out and starts the
-               revision animation). Hidden during the fresh Part 1 run. -->
-          <div class="revisit-banner-overlay" id="p1-revisit-banner">
-            <div class="revisit-banner">
+          <!-- Part 1 has two banners that share the same generic
+               part-banner-* CSS but display at different moments:
+                 · p1-intro-banner — at the very start of Part 1,
+                   announcing what the learner will do.
+                 · p1-revisit-banner — when the learner returns from
+                   Part 3 to refine their solution.
+               They never appear simultaneously. Both are hidden by
+               default; the showPartBanner JS helper toggles .visible. -->
+          <div class="part-banner-overlay" id="p1-intro-banner">
+            <div class="part-banner-card">
+              Learner develops their initial solution and begins shaping their thinking with Ms. Rivera's guidance.
+            </div>
+          </div>
+          <div class="part-banner-overlay" id="p1-revisit-banner">
+            <div class="part-banner-card">
               Learner returns to refine their solution using feedback from Ms. Rivera and peers.
             </div>
           </div>
@@ -419,6 +433,11 @@ html,body{font-family:var(--font-body,'DM Sans',system-ui,sans-serif);background
         </div>
         <!-- PART 2 -->
         <div id="p2" class="p-scene" style="display:none">
+          <div class="part-banner-overlay" id="p2-intro-banner">
+            <div class="part-banner-card">
+              Learner studies peer thinking and refines their own ideas by giving thoughtful feedback.
+            </div>
+          </div>
           <div class="scene-header">
             <div><div class="scene-title">Part 2 — Review Peers Solutions</div><div class="scene-meta">Maya · peers narrate their reasoning, not just their answers</div></div>
             <button class="replay-btn" onclick="goTo(2)">↺ Replay</button>
@@ -448,6 +467,11 @@ html,body{font-family:var(--font-body,'DM Sans',system-ui,sans-serif);background
         </div>
         <!-- PART 3 -->
         <div id="p3" class="p-scene" style="display:none">
+          <div class="part-banner-overlay" id="p3-intro-banner">
+            <div class="part-banner-card">
+              Learner deepens their understanding by responding to peer feedback on their solution.
+            </div>
+          </div>
           <div class="scene-header">
             <div><div class="scene-title">Part 3 — Peer Feedback to learners solution</div><div class="scene-meta">Maya · reflecting on feedback received from peers</div></div>
             <button class="replay-btn" onclick="goTo(3)">↺ Replay</button>
@@ -477,6 +501,11 @@ html,body{font-family:var(--font-body,'DM Sans',system-ui,sans-serif);background
         </div>
         <!-- PART 4 -->
         <div id="p4" class="p-scene" style="display:none">
+          <div class="part-banner-overlay" id="p4-intro-banner">
+            <div class="part-banner-card">
+              Learner reviews their full thinking journey and sees how their competencies have grown.
+            </div>
+          </div>
           <div class="scene-header">
             <div><div class="scene-title">Your Portfolio — Snapshot</div><div class="scene-meta">Maya · Compound Interest · Grade 8 Mathematics</div></div>
             <button class="replay-btn" onclick="goTo(4)">↺ Replay</button>
@@ -762,6 +791,48 @@ function resetReveals(scopeId){
     el.classList.remove('revealed');
   });
 }
+
+// ══════════════════════════════════════
+// PART BANNER
+// ══════════════════════════════════════
+// Show a banner overlay (centered card) inside a Part scene for a given
+// duration, then fade out and call onDone. Used at the start of each
+// Part to announce what the learner is about to do, and during the
+// Part 1 revisit when the learner returns to refine their solution.
+//
+// Args:
+//   bannerId: element ID of a .part-banner-overlay div (e.g. 'p1-intro-banner')
+//   durationMs: how long to hold the banner visible after fade-in (default 3500)
+//   onDone: callback fired after the fade-out completes
+//
+// Timing breakdown (CSS transition is 0.5s on opacity):
+//   t=0      → add .visible (fade-in begins)
+//   t=500ms  → fully visible, hold begins
+//   t=500+durationMs → remove .visible (fade-out begins)
+//   t=1000+durationMs → fade-out complete, onDone fires
+function showPartBanner(bannerId, durationMs, onDone){
+  const banner = document.getElementById(bannerId);
+  if(!banner){ if(onDone) onDone(); return; }
+  // Hide any other banner that might still be visible (defensive)
+  document.querySelectorAll('.part-banner-overlay.visible').forEach(el=>{
+    if(el.id !== bannerId) el.classList.remove('visible');
+  });
+  banner.classList.add('visible');
+  const hold = (typeof durationMs === 'number') ? durationMs : 3500;
+  // Fade-in is 500ms (CSS transition); add hold; then fade-out is 500ms
+  after(500 + hold, ()=>{
+    banner.classList.remove('visible');
+    after(500, ()=>{ if(onDone) onDone(); });
+  });
+}
+
+// Hide every banner immediately (no fade). Used at the start of each
+// runPart to make sure no stale banner from a previous run is showing.
+function hideAllBanners(){
+  document.querySelectorAll('.part-banner-overlay.visible').forEach(el=>{
+    el.classList.remove('visible');
+  });
+}
 // ══════════════════════════════════════
 // PART INTRO SEQUENCES — REMOVED
 // ══════════════════════════════════════
@@ -861,12 +932,6 @@ function runPart1(isRevisit){
     revealRegion('p1-text-region', true);
     revealRegion('ticker-region', true);
 
-    // Show the revisit banner first — a centered card explaining what's
-    // about to happen, with a delay long enough for the viewer to read it.
-    // Banner fades in, holds, then fades out before the typing begins.
-    const banner = document.getElementById('p1-revisit-banner');
-    if(banner) banner.classList.add('visible');
-
     // Pre-fill the existing solution so the banner appears OVER the
     // already-written first draft (sets the stage: "this is what was
     // written; now they're returning to refine it").
@@ -875,19 +940,14 @@ function runPart1(isRevisit){
     setStatus('p1-status','p1-dot','Maya is updating her solution with new insights…',true);
     setTickerPart(1, SCORES.revised, 'Updating with new insights…', 'When you revise based on what you learned from peers, the Ticker shows your thinking developing.');
 
-    // Banner read time: 3500ms is generous enough for the one sentence,
-    // not so long that the viewer wonders why nothing's happening.
-    after(3500, ()=>{
-      if(banner) banner.classList.remove('visible');
-      // Small gap after fade-out before typing begins
-      after(700, ()=>{
-        typeInto('p1-text','p1-cursor', revisitAddition, 22, ()=>{
-          setStatus('p1-status','p1-dot','Solution updated ✓ — observing your revised thinking',false);
-          after(600, ()=>{
-            setTickerPart(1, SCORES.revisit, 'Thinking developing further',
-              'Returning to revise after reading peer reasoning makes your analytical depth more visible.');
-            after(2800, ()=>{ goTo(4); });
-          });
+    // Show the revisit banner; once it fades out, begin the typing sequence.
+    showPartBanner('p1-revisit-banner', 6000, ()=>{
+      typeInto('p1-text','p1-cursor', revisitAddition, 22, ()=>{
+        setStatus('p1-status','p1-dot','Solution updated ✓ — observing your revised thinking',false);
+        after(600, ()=>{
+          setTickerPart(1, SCORES.revisit, 'Thinking developing further',
+            'Returning to revise after reading peer reasoning makes your analytical depth more visible.');
+          after(2800, ()=>{ goTo(4); });
         });
       });
     });
@@ -912,9 +972,7 @@ function runPart1(isRevisit){
   revealRegion('p1-ask-btn', false);
   revealRegion('p1-rivera', false);
   document.getElementById('p1-rivera-pill').classList.remove('visible');
-  // Hide the revisit banner if it was left visible from a prior cycle
-  const revisitBanner = document.getElementById('p1-revisit-banner');
-  if(revisitBanner) revisitBanner.classList.remove('visible');
+  hideAllBanners();
   setSpotlight(null);
   // Clear challenge text so it can be typed fresh
   clearTyping('p1-challenge-text','p1-challenge-cursor');
@@ -923,13 +981,13 @@ function runPart1(isRevisit){
 
   const HOLD = 2500;
   const PRE  = 1000;
-  const STAND_ALONE_HOLD = 2500;
+  const STAND_ALONE_HOLD = 1200; // shorter now that the banner takes the lead-in time
 
-  // ── Step 0: Part 1 heading alone, no other content ──
-  // The scene-header (purple Part 1 bar) is part of the always-visible
-  // shell, not a reveal-on-cue region, so it shows as soon as Part 1's
-  // p1 scene becomes visible. We just hold here before revealing more.
-  after(STAND_ALONE_HOLD, ()=>{
+  // ── Step 0: Intro banner, then Part 1 heading alone briefly ──
+  // The intro banner announces what's about to happen, then fades. After
+  // a short hold on the empty Part 1 scene, the sequential reveals begin.
+  showPartBanner('p1-intro-banner', 6000, ()=>{
+    after(STAND_ALONE_HOLD, ()=>{
     // ── Step 1: Learner reviews challenge ──
     revealRegion('p1-challenge-region', true);
     setSpotlight('p1-challenge-region', 'Learner reviews challenge');
@@ -990,6 +1048,7 @@ function runPart1(isRevisit){
           });
         });
       });
+    });
     });
   });
 }
@@ -1062,6 +1121,7 @@ function runPart2(){
   // panel is the persistent visual record that "Rivera was consulted
   // here," which is what the learner experience would show too.
   setSpotlight(null);
+  hideAllBanners();
   revealRegion('ticker-region', true);
   hideRivera('p2-rivera');
   document.getElementById('p2-q-bubble').style.display='none';
@@ -1071,7 +1131,10 @@ function runPart2(){
   const feedback1 = "What worked: you caught your own mistake mid-explanation — that moment where you tested your first answer and found it wrong is exactly the kind of reasoning that makes this the strongest of the three.";
   const feedback2 = " Your formula insight is right — the exponent is the key. One push: you showed the first three years. What happens to the gap at year 20?";
   document.getElementById('p2-peer-text').textContent = peerText;
-  after(700, ()=>{
+  // Show the Part 2 intro banner first; once it fades, the existing
+  // feedback-typing animation begins. The 700ms setup delay that used
+  // to come first is now replaced by the banner's fade-in/hold/fade-out.
+  showPartBanner('p2-intro-banner', 6000, ()=>{
     setStatus('p2-status','p2-dot','Maya writing feedback to Jordan…',true);
     setTicker(SCORES.revised,"Observing Maya's feedback…",null);
     typeInto('p2-text','p2-cursor', feedback1, 36, ()=>{
@@ -1119,6 +1182,7 @@ function triggerRivera2(){
 // ══════════════════════
 function runPart3(){
   setSpotlight(null);
+  hideAllBanners();
   revealRegion('ticker-region', true);
   hideRivera('p3-rivera');
   document.getElementById('p3-q-bubble').style.display='none';
@@ -1128,7 +1192,7 @@ function runPart3(){
   const reflection1 = "Jordan's challenge is fair — I stated that the gap accelerates but didn't prove it. Let me check: year 10: compound $163 vs simple $150 = gap of $13. Year 20: $265 vs $200 = gap of $65. Year 30: $432 vs $250 = gap of $182.";
   const reflection2 = " Yes, the gap genuinely accelerates — it's not linear. The acceleration is what makes compound interest so powerful over long time horizons. I should have shown the calculation, not just asserted it.";
   document.getElementById('p3-peer-text').textContent = peerFeedback;
-  after(700, ()=>{
+  showPartBanner('p3-intro-banner', 6000, ()=>{
     setStatus('p3-status','p3-dot',"Maya reflecting on Jordan's challenge…",true);
     // Show Part 3 ticker as learner begins — low scores rolling in as she writes
     after(1000, ()=>{
@@ -1179,6 +1243,7 @@ function triggerRivera3(){
 // ══════════════════════
 function runPart4(){
   setSpotlight(null);
+  hideAllBanners();
   revealRegion('ticker-region', true);
   setStatus('p4-status','p4-dot','Preparing your Portfolio…',true);
   const p4StarEl = document.getElementById('p4-star');
@@ -1206,6 +1271,9 @@ function runPart4(){
       </div>
       <div class="comp-bar"><div class="comp-fill" id="p4f-${c.key}"></div></div>
     </div>`).join('');
+  // Show the Portfolio intro banner first, then run the ring animation,
+  // bar fills, and narrative reveal.
+  showPartBanner('p4-intro-banner', 6000, ()=>{
   // Ring animation — star + level word fade in together, no percentage tick
   after(600, ()=>{
     if(p4RingLvlEl){
@@ -1253,6 +1321,7 @@ function runPart4(){
     });
     after(paras.length*1100+400, ()=>{ setStatus('p4-status','p4-dot','Portfolio complete',false); });
     after(paras.length*1100+3000, ()=>{ showFinalScreen(); });
+  });
   });
 }
 // Start — show intro first, then Part 1
