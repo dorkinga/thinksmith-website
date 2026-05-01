@@ -33,7 +33,7 @@
   --level-well:#534AB7;
   --level-strong:#26215C;
 }
-html,body{font-family:var(--font-body,'DM Sans',system-ui,sans-serif);background:var(--off-white);color:var(--dark);font-size:14px;line-height:1.6;overflow-x:hidden;min-height:100vh;width:100%}
+html,body{font-family:var(--font-body,'DM Sans',system-ui,sans-serif);background:var(--off-white);color:var(--dark);font-size:16px;line-height:1.6;overflow-x:hidden;min-height:100vh;width:100%}
 /* ── SHELL ── */
 /* ── PART INTRO OVERLAY ── */
 .intro-overlay{
@@ -111,7 +111,7 @@ html,body{font-family:var(--font-body,'DM Sans',system-ui,sans-serif);background
    other via goTo() calls at the end of each part. */
 .tab-num{display:block;font-size:0.58rem;opacity:0.65;margin-bottom:0.1rem}
 /* ── TWO-COLUMN LAYOUT ── */
-.demo-layout{display:grid;grid-template-columns:1fr 230px;gap:0.75rem;align-items:start}
+.demo-layout{display:grid;grid-template-columns:1fr 260px;gap:0.75rem;align-items:start}
 /* ── SCENE CARD ── */
 .scene{position:relative;background:white;border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:0 3px 16px rgba(91,44,143,0.07)}
 .scene-header{background:linear-gradient(135deg,var(--purple),var(--purple-mid));padding:0.75rem 1rem;display:flex;align-items:center;justify-content:space-between}
@@ -233,6 +233,53 @@ html,body{font-family:var(--font-body,'DM Sans',system-ui,sans-serif);background
   font-size:0.62rem;font-weight:700;
   display:flex;align-items:center;justify-content:center;
 }
+
+/* ── Revisit banner ───────────────────────────────────────────────────
+   Shown briefly when Maya returns to Part 1 from the end of Part 3 to
+   refine her solution. The banner sits in the middle of the Part 1
+   panel (the left scene area, not the whole page), with a semi-
+   transparent backdrop so the underlying Part 1 content is dimmed but
+   still visible. The banner card is centered, with a soft purple glow
+   to pull the viewer's eye. It fades in, holds long enough to read,
+   and fades out as the revision animation begins.
+
+   Positioned absolutely inside the .p-scene container — that's why
+   .p-scene needs position:relative (set on .p1-scene-wrap below). */
+.revisit-banner-overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(247,244,252,0.88);
+  backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:50;
+  border-radius:16px;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 0.5s ease;
+}
+.revisit-banner-overlay.visible{
+  opacity:1;
+}
+.revisit-banner{
+  background:white;
+  border:1.5px solid var(--purple-light);
+  border-radius:14px;
+  padding:1.5rem 2rem;
+  max-width:520px;
+  width:88%;
+  text-align:center;
+  box-shadow:0 12px 40px rgba(91,44,143,0.2);
+  font-family:var(--font-display,'Playfair Display',Georgia,serif);
+  font-size:1.1rem;
+  font-weight:600;
+  color:var(--purple);
+  line-height:1.55;
+}
+/* Make the Part 1 scene a positioning context for the banner overlay */
+#p1{position:relative}
 .typing-cursor{display:inline-block;width:2px;height:1em;background:var(--purple);vertical-align:text-bottom;animation:blink 0.8s step-end infinite;margin-left:1px}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 /* ── RIVERA PANEL ── */
@@ -299,7 +346,7 @@ html,body{font-family:var(--font-body,'DM Sans',system-ui,sans-serif);background
 .tbar-lbl{font-size:0.65rem;color:var(--gray);width:18px;text-transform:uppercase;flex-shrink:0}
 .tbar-track{flex:1;height:3px;background:rgba(91,44,143,0.1);border-radius:2px;overflow:hidden}
 .tbar-fill{height:100%;border-radius:2px;background:var(--level-well);width:0%;transition:width 0.8s cubic-bezier(0.4,0,0.2,1), background-color 0.4s}
-.tbar-val{font-size:0.62rem;color:var(--dark);width:54px;text-align:right;flex-shrink:0;font-weight:600;text-transform:lowercase;letter-spacing:0.01em}
+.tbar-val{font-size:0.62rem;color:var(--dark);width:72px;text-align:right;flex-shrink:0;font-weight:600;text-transform:lowercase;letter-spacing:0.01em}
 .ticker-guidance{background:rgba(91,44,143,0.04);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.7rem;font-size:0.7rem;color:var(--gray);line-height:1.5;font-style:italic;margin-top:0.6rem}
 /* ── FOOTER ── */
 .demo-footer{text-align:center;padding:0.85rem 0 0;font-size:0.72rem;color:var(--gray-light)}
@@ -316,6 +363,15 @@ html,body{font-family:var(--font-body,'DM Sans',system-ui,sans-serif);background
       <div class="scene" id="scene">
         <!-- PART 1 -->
         <div id="p1" class="p-scene" style="display:none">
+          <!-- Revisit banner: shown only when Maya returns to Part 1
+               from the end of Part 3 (the runPart1(true) branch fades
+               this in for ~3.5s, then fades it out and starts the
+               revision animation). Hidden during the fresh Part 1 run. -->
+          <div class="revisit-banner-overlay" id="p1-revisit-banner">
+            <div class="revisit-banner">
+              Learner returns to refine their solution using feedback from Ms. Rivera and peers.
+            </div>
+          </div>
           <div class="scene-header">
             <div><div class="scene-title">Part 1 — Write Your Thinking</div><div class="scene-meta">Maya · Grade 8 Mathematics · Compound Interest</div></div>
             <button class="replay-btn" onclick="goTo(1)">↺ Replay</button>
@@ -364,7 +420,7 @@ html,body{font-family:var(--font-body,'DM Sans',system-ui,sans-serif);background
         <!-- PART 2 -->
         <div id="p2" class="p-scene" style="display:none">
           <div class="scene-header">
-            <div><div class="scene-title">Part 2 — Peers Think Out Loud</div><div class="scene-meta">Maya · peers narrate their reasoning, not just their answers</div></div>
+            <div><div class="scene-title">Part 2 — Review Peers Solutions</div><div class="scene-meta">Maya · peers narrate their reasoning, not just their answers</div></div>
             <button class="replay-btn" onclick="goTo(2)">↺ Replay</button>
           </div>
           
@@ -393,7 +449,7 @@ html,body{font-family:var(--font-body,'DM Sans',system-ui,sans-serif);background
         <!-- PART 3 -->
         <div id="p3" class="p-scene" style="display:none">
           <div class="scene-header">
-            <div><div class="scene-title">Part 3 — Peer Feedback to You</div><div class="scene-meta">Maya · reflecting on feedback received from peers</div></div>
+            <div><div class="scene-title">Part 3 — Peer Feedback to learners solution</div><div class="scene-meta">Maya · reflecting on feedback received from peers</div></div>
             <button class="replay-btn" onclick="goTo(3)">↺ Replay</button>
           </div>
           
@@ -804,17 +860,34 @@ function runPart1(isRevisit){
     revealRegion('p1-challenge-region', true);
     revealRegion('p1-text-region', true);
     revealRegion('ticker-region', true);
+
+    // Show the revisit banner first — a centered card explaining what's
+    // about to happen, with a delay long enough for the viewer to read it.
+    // Banner fades in, holds, then fades out before the typing begins.
+    const banner = document.getElementById('p1-revisit-banner');
+    if(banner) banner.classList.add('visible');
+
+    // Pre-fill the existing solution so the banner appears OVER the
+    // already-written first draft (sets the stage: "this is what was
+    // written; now they're returning to refine it").
     const el = document.getElementById('p1-text');
     el.innerHTML = revised + '<span class="typing-cursor" id="p1-cursor"></span>';
     setStatus('p1-status','p1-dot','Maya is updating her solution with new insights…',true);
     setTickerPart(1, SCORES.revised, 'Updating with new insights…', 'When you revise based on what you learned from peers, the Ticker shows your thinking developing.');
-    after(800, ()=>{
-      typeInto('p1-text','p1-cursor', revisitAddition, 22, ()=>{
-        setStatus('p1-status','p1-dot','Solution updated ✓ — observing your revised thinking',false);
-        after(600, ()=>{
-          setTickerPart(1, SCORES.revisit, 'Thinking developing further',
-            'Returning to revise after reading peer reasoning makes your analytical depth more visible.');
-          after(2800, ()=>{ goTo(4); });
+
+    // Banner read time: 3500ms is generous enough for the one sentence,
+    // not so long that the viewer wonders why nothing's happening.
+    after(3500, ()=>{
+      if(banner) banner.classList.remove('visible');
+      // Small gap after fade-out before typing begins
+      after(700, ()=>{
+        typeInto('p1-text','p1-cursor', revisitAddition, 22, ()=>{
+          setStatus('p1-status','p1-dot','Solution updated ✓ — observing your revised thinking',false);
+          after(600, ()=>{
+            setTickerPart(1, SCORES.revisit, 'Thinking developing further',
+              'Returning to revise after reading peer reasoning makes your analytical depth more visible.');
+            after(2800, ()=>{ goTo(4); });
+          });
         });
       });
     });
@@ -839,6 +912,9 @@ function runPart1(isRevisit){
   revealRegion('p1-ask-btn', false);
   revealRegion('p1-rivera', false);
   document.getElementById('p1-rivera-pill').classList.remove('visible');
+  // Hide the revisit banner if it was left visible from a prior cycle
+  const revisitBanner = document.getElementById('p1-revisit-banner');
+  if(revisitBanner) revisitBanner.classList.remove('visible');
   setSpotlight(null);
   // Clear challenge text so it can be typed fresh
   clearTyping('p1-challenge-text','p1-challenge-cursor');
