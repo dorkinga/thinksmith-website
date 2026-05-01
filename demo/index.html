@@ -105,13 +105,10 @@ html,body{font-family:var(--font-body,'DM Sans',system-ui,sans-serif);background
 .demo-wrap{width:100%;max-width:100%;padding:0.5rem calc((100vw - 1100px)/2 + 0px) 1.5rem;box-sizing:border-box}
 @media(max-width:1140px){.demo-wrap{padding:0.5rem 1.5rem 1.5rem}[style*="calc((100vw - 1100px)/2)"]{padding-left:1.5rem!important;padding-right:1.5rem!important}}
 /* ── TABS ── */
-.part-tabs{display:flex;background:white;border-radius:12px;border:1px solid var(--border);overflow:hidden;margin-bottom:1rem;box-shadow:0 2px 8px rgba(91,44,143,0.06)}
-.part-tab{flex:1;padding:0.55rem 0.4rem;text-align:center;font-size:0.72rem;color:var(--gray-light);cursor:pointer;transition:all 0.2s;border-right:1px solid var(--border);position:relative;user-select:none;font-weight:400}
-.part-tab:last-child{border-right:none}
-.part-tab.active{background:var(--purple);color:white;font-weight:500}
-.part-tab.done{color:var(--purple);font-weight:500}
-.part-tab.done::after{content:'✓';position:absolute;top:2px;right:4px;font-size:0.55rem;color:var(--purple)}
-.part-tab.active::after{display:none}
+/* ── PART TABS ──
+   Removed: the demo is now linear (sit-back-and-watch). No tab strip,
+   no navigation between parts. The runPart functions chain into each
+   other via goTo() calls at the end of each part. */
 .tab-num{display:block;font-size:0.58rem;opacity:0.65;margin-bottom:0.1rem}
 /* ── TWO-COLUMN LAYOUT ── */
 .demo-layout{display:grid;grid-template-columns:1fr 230px;gap:0.75rem;align-items:start}
@@ -134,6 +131,108 @@ html,body{font-family:var(--font-body,'DM Sans',system-ui,sans-serif);background
 .typing-area{border-radius:10px;border:1.5px solid var(--border);padding:0.75rem;min-height:90px;font-size:0.85rem;color:var(--dark);line-height:1.65;transition:background 0.6s,border-color 0.4s;position:relative}
 .typing-area.active-bg{background:var(--purple-pale);border-color:var(--purple-light)}
 .typing-area.revised-bg{background:#fff7e6;border-color:#f5c842}
+
+/* ── Spotlight system ─────────────────────────────────────────────────
+   Highlighter-pen yellow tint that moves between active regions during
+   each Part. Only the currently-active region carries .spotlight-on; a
+   matching label appears above that region naming what the learner is
+   doing right now. As the demo progresses, spotlight is toggled off the
+   previous region and onto the next one.
+
+   We use !important on the background because individual elements like
+   .challenge-box and .typing-area carry their own background colors that
+   would otherwise win the cascade. The transition is on background-color
+   and border-color, so the highlight fades in/out smoothly.
+   ──────────────────────────────────────────────────────────────────── */
+.spotlight-target{position:relative;transition:background-color 0.45s ease,border-color 0.45s ease,box-shadow 0.45s ease}
+.spotlight-target.spotlight-on{
+  background:#FFF59E !important;
+  border-color:#E8C547 !important;
+  box-shadow:0 0 0 1px #E8C547,0 4px 16px rgba(232,197,71,0.18);
+}
+/* When the Rivera panel is spotlighted, its inner children (rivera-head,
+   rivera-body, bubble-teacher) carry their own background colors that
+   would bleed through the yellow tint. Force them transparent while
+   spotlighted so the highlight reads as one continuous yellow surface. */
+.spotlight-target.spotlight-on .rivera-head,
+.spotlight-target.spotlight-on .rivera-body,
+.spotlight-target.spotlight-on .bubble-teacher{
+  background:transparent !important;
+}
+/* Label that sits above the active region. Bold + italic + purple per
+   the design ask, no leading dot. Hidden when its parent isn't active. */
+.spotlight-label{
+  display:none;
+  text-align:center;
+  font-style:italic;
+  font-weight:700;
+  font-size:0.9rem;
+  color:var(--purple);
+  margin-bottom:0.55rem;
+  letter-spacing:0.005em;
+  opacity:0;
+  transition:opacity 0.4s ease;
+}
+.spotlight-target.spotlight-on > .spotlight-label{
+  display:block;
+  opacity:1;
+}
+
+/* ── Sequential reveal ────────────────────────────────────────────────
+   Regions inside each Part start hidden and fade in as the animation
+   reaches them. This matches the new pacing: the page reveals itself
+   piece-by-piece, like a teaching slide deck, instead of showing the
+   whole interface at once.
+
+   Default state: hidden. JavaScript adds .revealed when the region's
+   step starts. The transition gives a soft fade-in rather than an
+   abrupt pop.
+
+   Note: this applies only to elements explicitly marked with
+   .reveal-on-cue; existing layout shell stays visible by default. */
+.reveal-on-cue{
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(6px);
+  transition:opacity 0.5s ease,transform 0.5s ease,visibility 0s linear 0.5s;
+}
+.reveal-on-cue.revealed{
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0);
+  transition:opacity 0.5s ease,transform 0.5s ease,visibility 0s linear 0s;
+}
+
+/* ── Compact Rivera state ─────────────────────────────────────────────
+   After Ms. Rivera finishes giving feedback and the viewer has had time
+   to read it, the full Rivera panel collapses down to a small "Ask Ms.
+   Rivera" pill button. This visually reminds the viewer that Rivera
+   remains available without keeping her full panel on screen as the
+   demo progresses to the next step. */
+.rivera-collapsed{
+  display:none !important;
+}
+.rivera-pill{
+  display:none;
+  align-items:center;
+  gap:0.5rem;
+  background:white;
+  border:1.5px solid var(--purple-light);
+  color:var(--purple);
+  font-size:0.78rem;
+  font-weight:600;
+  padding:0.4rem 0.85rem;
+  border-radius:100px;
+  margin:0.4rem 0;
+  cursor:default;
+}
+.rivera-pill.visible{display:inline-flex;}
+.rivera-pill .rivera-pill-avatar{
+  width:18px;height:18px;border-radius:50%;
+  background:var(--purple);color:white;
+  font-size:0.62rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
 .typing-cursor{display:inline-block;width:2px;height:1em;background:var(--purple);vertical-align:text-bottom;animation:blink 0.8s step-end infinite;margin-left:1px}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 /* ── RIVERA PANEL ── */
@@ -210,25 +309,7 @@ html,body{font-family:var(--font-body,'DM Sans',system-ui,sans-serif);background
 </style>
 </head>
 <body>
-<!-- Back to website bar -->
-<div style="background:var(--purple);padding:0.6rem max(1.5rem, calc((100vw - 1100px)/2));display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100">
-  <a href="https://thinksmith.ca" target="_blank" style="color:rgba(255,255,255,0.85);font-size:0.8rem;text-decoration:none;display:flex;align-items:center;gap:0.4rem;transition:color 0.2s" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.85)'">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-    thinksmith.ca ↗
-  </a>
-  <div style="font-family:var(--font-display,'Playfair Display',Georgia,serif);color:white;font-size:0.9rem;font-weight:700">ThinkSmith — Interactive Demo</div>
-  <a href="https://app.thinksmith.ca" style="color:rgba(255,255,255,0.85);font-size:0.78rem;text-decoration:none;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);padding:0.3rem 0.85rem;border-radius:100px;transition:background 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">
-    Try it free →
-  </a>
-</div>
 <div class="demo-wrap">
-  <!-- TABS -->
-  <div class="part-tabs">
-    <div class="part-tab active" id="tab-1" onclick="goTo(1)"><span class="tab-num">Part 1</span>My Thinking</div>
-    <div class="part-tab" id="tab-2" onclick="goTo(2)"><span class="tab-num">Part 2</span>Peers Think Out Loud</div>
-    <div class="part-tab" id="tab-3" onclick="goTo(3)"><span class="tab-num">Part 3</span>Feedback to You</div>
-    <div class="part-tab" id="tab-4" onclick="goTo(4)"><span class="tab-num">Portfolio</span>Your Thinking</div>
-  </div>
   <div class="demo-layout">
     <!-- LEFT: SCENE -->
     <div>
@@ -241,17 +322,41 @@ html,body{font-family:var(--font-body,'DM Sans',system-ui,sans-serif);background
           </div>
           
           <div class="scene-body">
-            <div class="challenge-box">
+            <!-- Challenge box: spotlight target #1, reveal step #1.
+                 Hidden until the animation reveals it. Text starts empty and
+                 is typed in, so the viewer watches the challenge appear
+                 character-by-character. Step label: "Learner reviews challenge". -->
+            <div class="challenge-box spotlight-target reveal-on-cue" id="p1-challenge-region">
+              <div class="spotlight-label" id="p1-challenge-label">Learner reviews challenge</div>
               <div class="challenge-label">Your challenge</div>
-              <div class="challenge-text">Why does compound interest grow faster over time than simple interest? Use an example to show your thinking.</div>
+              <div class="challenge-text" id="p1-challenge-text"><span class="typing-cursor" id="p1-challenge-cursor"></span></div>
             </div>
-            <div class="typing-area" id="p1-text"><span class="typing-cursor" id="p1-cursor"></span></div>
-            <button class="ask-rivera-btn" id="p1-ask-btn" onclick="triggerRivera1()">
+            <!-- Solution area: spotlight target #2 (and #5 on revision),
+                 reveal step #2. Step label changed from "Learner writes
+                 their solution" to "Learner enters their solution" per
+                 latest design. -->
+            <div class="typing-area spotlight-target reveal-on-cue" id="p1-text-region">
+              <div class="spotlight-label" id="p1-text-label">Learner enters their solution</div>
+              <div id="p1-text" style="min-height:90px"><span class="typing-cursor" id="p1-cursor"></span></div>
+            </div>
+            <!-- Ask Rivera button: hidden until step 4 (Rivera). -->
+            <button class="ask-rivera-btn reveal-on-cue" id="p1-ask-btn" onclick="triggerRivera1()">
               <span style="font-size:0.9rem">🎓</span> Ask Ms. Rivera for feedback on my work
             </button>
-            <div class="rivera-panel" id="p1-rivera">
+            <!-- Rivera panel: spotlight target #4, reveal step #4.
+                 After Rivera finishes speaking and the viewer has had time
+                 to read, this panel collapses (rivera-collapsed class) and
+                 the rivera-pill below takes its place as a small reminder
+                 that Rivera remains available. -->
+            <div class="rivera-panel spotlight-target reveal-on-cue" id="p1-rivera">
+              <div class="spotlight-label" id="p1-rivera-label">Learner asks Ms. Rivera to review their work</div>
               <div class="rivera-head"><div class="rivera-avatar">R</div><div><div class="rivera-name">Ms. Rivera</div><div class="rivera-role">AI Teacher · ThinkSmith</div></div></div>
               <div class="rivera-body"><div class="bubble-teacher" id="p1-rivera-msg"></div></div>
+            </div>
+            <!-- Compact reminder that appears after Rivera collapses. -->
+            <div class="rivera-pill" id="p1-rivera-pill">
+              <div class="rivera-pill-avatar">R</div>
+              <span>Ask Ms. Rivera</span>
             </div>
             <div class="status-bar"><div class="status-dot" id="p1-dot"></div><span id="p1-status">Waiting to begin…</span></div>
           </div>
@@ -343,7 +448,13 @@ html,body{font-family:var(--font-body,'DM Sans',system-ui,sans-serif);background
       </div><!-- /scene -->
     </div>
     <!-- RIGHT: TICKER -->
-    <div class="ticker">
+    <!-- The Ticker becomes a spotlight target during steps where the Ticker
+         is the focus of attention (e.g. "Ticker reacts to the learner's
+         thinking", "Ticker updates as thinking improves"). The label sits
+         above all the Ticker content; the yellow tint applies to the whole
+         right-rail card. -->
+    <div class="ticker spotlight-target reveal-on-cue" id="ticker-region">
+      <div class="spotlight-label" id="ticker-label">Ticker reacts to the learner's thinking</div>
       <div class="ticker-title">Your thinking, so far</div>
       <div class="ticker-level" id="tk-avg">—</div>
       <div class="ticker-live"><div class="ticker-dot"></div><span id="tk-live">Active</span></div>
@@ -457,6 +568,8 @@ function levelColor(level){
 }
 
 // ── Content strings — outer scope so all functions can access them ──
+// Challenge text used for the typed "Learner reads the challenge" step.
+var challengeText = "Why does compound interest grow faster over time than simple interest? Use an example to show your thinking.";
 var weak = "compound interest is when you get interest every year and it adds up more than simple interest because simple interest is always the same amount.";
 var revised = "Compound interest grows faster because each year you earn interest on both your original amount AND all the interest you've already earned — so the base keeps growing. With $100 at 5%: year 1 earns $5 (base = $105), year 2 earns $5.25 (base = $110.25). Simple interest always calculates from the original $100, so you only ever get $5/year. The compounding effect gets dramatic over decades.";
 var revisitAddition = "\n\nAfter seeing how Jordan worked through the formula in Part 2 — showing WHY the exponent matters — I want to add: the reason compound interest accelerates is that interest becomes principal. Every dollar of interest is now also earning interest. That is what the exponent in P(1+r)^t captures that the simple formula P(1+rt) does not.";
@@ -542,178 +655,75 @@ function typeInto(elId, cursorId, text, speed, cb){
   tick();
 }
 function clearTyping(elId,cursorId){ const el=document.getElementById(elId); if(el) el.innerHTML='<span class="typing-cursor" id="'+(cursorId||'')+'"></span>'; }
+
 // ══════════════════════════════════════
-// PART INTRO SEQUENCES
+// SPOTLIGHT
 // ══════════════════════════════════════
-const INTRO_SCRIPTS = {
-  1: {
-    badge: 'What you are about to see',
-    title: 'Part 1 — Learner’s Solution',
-    items: [
-      'Learner views the challenge',
-      'Learner enters their solution',
-      'Ticker observes how each competency is currently developing',
-      'Learner asks Ms. Rivera the teacher to read their work',
-      'Learner edits their solution based on Ms. Rivera’s guidance',
-      'Ticker competency levels shift as thinking develops',
-    ]
-  },
-  2: {
-    badge: 'What you are about to see',
-    title: 'Part 2 — Check out Peers’ Solutions',
-    note: 'Peers present their solutions by thinking out loud. This lets the learner see how each peer arrived at their answer and decide what to adopt, question, or challenge.',
-    items: [
-      'Learner reviews solutions from 3 peers',
-      'Learner provides feedback to each peer',
-      'Ticker observes how the learner’s feedback is developing',
-      'Learner asks Ms. Rivera a question',
-      'Learner adjusts their feedback to peers',
-    ]
-  },
-  3: {
-    badge: 'What you are about to see',
-    title: 'Part 3 — Check out Peers’ Feedback',
-    note: 'Peers present their solutions by thinking out loud. This lets the learner see how each peer arrived at their answer and decide what to adopt, question, or challenge.',
-    items: [
-      'Learner reviews feedback from 3 peers on their own solution',
-      'Learner responds to each peer’s feedback',
-      'Ticker observes how the learner’s responses are developing',
-      'Learner asks Ms. Rivera a question',
-      'Learner adjusts their responses',
-    ]
-  },
-  revisit: {
-    badge: 'What you are about to see',
-    title: 'Learner revisits their initial solution',
-    items: [
-      'Peer review prompts the learner to reconsider and revise their original solution, which in turn shifts the Ticker competency levels.',
-    ]
-  },
-  4: {
-    badge: 'What you are about to see',
-    title: 'Portfolio — Your Overall Thinking',
-    showFinal: true,
-    items: [
-      'Learner views the detail of their full thinking journey',
-      'Overall competency levels are observed from evidence across all three Parts',
-      'A personal thinking narrative is written about the learner specifically',
-    ]
+// Single-spotlight model: at most one region carries .spotlight-on at any
+// moment. setSpotlight() turns off all other targets and turns on the
+// requested one (with optional label-text override). Pass null/'' to turn
+// the spotlight off entirely.
+//
+// Why a single helper rather than per-region functions: the action moves
+// quickly between regions during a Part (challenge -> solution -> ticker
+// -> rivera -> solution -> ticker), and forcing every transition through
+// one function makes the timing easy to read in the Part runner.
+function setSpotlight(regionId, labelText){
+  // Turn off any currently-spotlighted region first so transitions never
+  // overlap (avoids two regions both glowing yellow during a fade).
+  document.querySelectorAll('.spotlight-target.spotlight-on').forEach(el=>{
+    el.classList.remove('spotlight-on');
+  });
+  if(!regionId) return;
+  const el = document.getElementById(regionId);
+  if(!el) return;
+  // Update the label text inside the region if provided. The label element
+  // is the first child .spotlight-label inside the region.
+  if(labelText){
+    const labelEl = el.querySelector('.spotlight-label');
+    if(labelEl) labelEl.textContent = labelText;
   }
-};
+  el.classList.add('spotlight-on');
+}
+
+// Reveal a hidden region (one carrying .reveal-on-cue). Idempotent — safe
+// to call repeatedly. Hides the region (resets to default) when called
+// with the second arg false.
+function revealRegion(regionId, show){
+  const el = document.getElementById(regionId);
+  if(!el) return;
+  if(show === false) el.classList.remove('revealed');
+  else el.classList.add('revealed');
+}
+
+// Reset all reveal-on-cue elements within a Part scope (or globally) back
+// to hidden. Used when restarting a Part so the sequential reveal can
+// play again from a clean state.
+function resetReveals(scopeId){
+  const root = scopeId ? document.getElementById(scopeId) : document;
+  if(!root) return;
+  root.querySelectorAll('.reveal-on-cue.revealed').forEach(el=>{
+    el.classList.remove('revealed');
+  });
+}
+// ══════════════════════════════════════
+// PART INTRO SEQUENCES — REMOVED
+// ══════════════════════════════════════
+// The "What you are about to see" intro overlay panels for Parts 1, 2, 3,
+// and the revisit transition have been removed. The demo now reveals each
+// region in-place with a yellow spotlight + bold italic heading; no full-
+// screen panel sits between parts.
+//
+// What's kept:
+//   - showFinalScreen() and closeFinalScreen() below — the closing "How
+//     ThinkSmith recognizes thinking" card still uses the same overlay
+//     element at the end of the demo.
+//   - clearIntroTimers() — kept as a no-op so the existing clearTimers()
+//     call site keeps working without further edits.
+
 var introTimers = [];
 function clearIntroTimers(){ introTimers.forEach(clearTimeout); introTimers=[]; }
-function showIntro(partNum, onDone){
-  clearIntroTimers();
-  const script = INTRO_SCRIPTS[partNum];
-  const overlay = document.getElementById('intro-overlay');
-  const badge = document.getElementById('intro-badge');
-  const sub = document.getElementById('intro-sub');
-  const track = document.getElementById('intro-track');
-  const panel = document.getElementById('intro-panel');
-  const finalEl = document.getElementById('intro-final');
-  if(!overlay || !badge || !sub || !track){ onDone(); return; }
-  if(!script){ onDone(); return; }
-  // Reset
-  if(finalEl){ finalEl.style.opacity='0'; finalEl.style.display='none'; }
-  if(panel){ panel.style.display='flex'; panel.style.opacity='1'; }
-  track.innerHTML = '';
-  overlay.style.transition = '';
-  overlay.style.opacity = '1';
-  overlay.style.display = 'flex';
-  // ── Step 1: Show only the badge ("What you are about to see") ──
-  badge.textContent = script.badge;
-  badge.style.opacity = '0';
-  badge.style.transform = 'translateY(8px)';
-  sub.style.opacity = '0';
-  sub.textContent = ''; // hide part title initially
-  introTimers.push(setTimeout(()=>{
-    badge.style.opacity = '1';
-    badge.style.transform = 'translateY(0)';
-  }, 200));
-  // ── Step 2: After 2s, show the bold part title ──
-  introTimers.push(setTimeout(()=>{
-    sub.style.opacity = '1';
-    sub.textContent = script.title;
-  }, 2000));
-  // ── Step 3: After another 1.5s, show ALL items at once ──
-  introTimers.push(setTimeout(()=>{
-    script.items.forEach((text)=>{
-      const div = document.createElement('div');
-      div.className = 'intro-item';
-      const dot = document.createElement('div');
-      dot.className = 'intro-dot';
-      const span = document.createElement('span');
-      span.textContent = text;
-      div.appendChild(dot);
-      div.appendChild(span);
-      div.style.opacity = '0';
-      div.style.transform = 'none';
-      track.appendChild(div);
-    });
-    // Add highlighted note if present
-    if(script.note){
-      const noteDiv = document.createElement('div');
-      noteDiv.style.cssText = [
-        'margin-top:1rem',
-        'padding:0.75rem 1rem',
-        'background:linear-gradient(135deg,#EDE8F7,#E8F4EE)',
-        'border-left:4px solid #5B2C8F',
-        'border-radius:0 10px 10px 0',
-        'font-size:0.95rem',
-        'line-height:1.6',
-        'color:#2a1a5e',
-        'font-style:italic',
-        'opacity:0',
-      ].join(';');
-      noteDiv.textContent = '✨ ' + script.note;
-      track.appendChild(noteDiv);
-      // Fade note in slightly after bullets
-      setTimeout(()=>{ noteDiv.style.opacity='1'; noteDiv.style.transition='opacity 0.5s ease'; }, 300);
-    }
-    // Fade bullets in together
-    requestAnimationFrame(()=>{ requestAnimationFrame(()=>{
-      track.querySelectorAll('.intro-item').forEach(el=>{ el.style.opacity='1'; });
-    }); });
-  }, 3500));
-  // ── Step 4: Hold long enough to read, then close ──
-  // Reading time: ~1.5s per line + 3s base
-  const noteBonus = script.note ? 8000 : 0; // extra 8s for parts with the highlighted note
-  const READ_TIME = 3500 + 3000 + Math.max(script.items.length * 1500, 4000) + 5000 + noteBonus;
-  const FADE_DURATION = 600;
-  if(script.showFinal){
-    introTimers.push(setTimeout(()=>{
-      overlay.style.transition = 'opacity '+FADE_DURATION+'ms ease';
-      overlay.style.opacity = '0';
-      introTimers.push(setTimeout(()=>{
-        overlay.style.display = 'none';
-        overlay.style.opacity = '1';
-        overlay.style.transition = '';
-        onDone();
-      }, FADE_DURATION));
-    }, READ_TIME));
-  } else {
-    introTimers.push(setTimeout(()=>{
-      overlay.style.transition = 'opacity '+FADE_DURATION+'ms ease';
-      overlay.style.opacity = '0';
-      introTimers.push(setTimeout(()=>{
-        overlay.style.display = 'none';
-        overlay.style.opacity = '1';
-        overlay.style.transition = '';
-        onDone();
-      }, FADE_DURATION));
-    }, READ_TIME));
-  }
-}
-// Show intro for a named key (e.g. 'revisit') then call onDone
-function showNamedIntro(key, onDone){
-  // Temporarily set partNum to key — reuse showIntro with string key
-  const script = INTRO_SCRIPTS[key];
-  if(!script){ onDone(); return; }
-  // Swap key into partNum slot temporarily
-  const orig = INTRO_SCRIPTS['_tmp'];
-  INTRO_SCRIPTS['_tmp'] = script;
-  showIntro('_tmp', ()=>{ delete INTRO_SCRIPTS['_tmp']; onDone(); });
-}
+
 function showFinalScreen(){
   const overlay = document.getElementById('intro-overlay');
   const panel = document.getElementById('intro-panel');
@@ -739,59 +749,62 @@ function showFinalScreen(){
   }); });
 }
 function closeFinalScreen(){
+  // Fade the overlay out, then navigate back to the ThinkSmith website
+  // (one folder up from the demo: ../index.html). Using a relative path
+  // so the demo works regardless of where it's deployed (e.g. /demo/
+  // under any host). The 400ms timeout matches the fade duration so the
+  // visual transition completes before the navigation happens.
   const overlay = document.getElementById('intro-overlay');
   if(overlay){
     overlay.style.transition = 'opacity 0.4s ease';
     overlay.style.opacity = '0';
     setTimeout(()=>{
-      overlay.style.display = 'none';
-      overlay.style.opacity = '1';
-      overlay.style.transition = '';
+      window.location.href = '../index.html';
     }, 400);
+  } else {
+    // Fallback: no overlay element found, just navigate directly
+    window.location.href = '../index.html';
   }
 }
 function goTo(n){
+  // Linear demo: hide all scenes, reset Rivera-triggered flags, show the
+  // requested scene, run its animation. No tab strip and no intro overlay
+  // anymore — those were removed when the demo became sit-back-and-watch.
   clearTimers();
   riveraTriggered1=false; riveraTriggered2=false; riveraTriggered3=false;
-  // Hide all scenes and reset tabs
   [1,2,3,4].forEach(i=>{
     const s=document.getElementById('p'+i); if(s) s.style.display='none';
-    const tab=document.getElementById('tab-'+i); tab.classList.remove('active','done');
-    if(i<n) tab.classList.add('done');
   });
-  document.getElementById('tab-'+n).classList.add('active');
-  // Hide all ask buttons
+  // Hide all ask buttons (they re-reveal during their part's reveal sequence)
   ['p1-ask-btn','p2-ask-btn','p3-ask-btn'].forEach(id=>{
     const el=document.getElementById(id); if(el){ el.classList.remove('visible','clicked'); }
   });
   const isRevisit = (n===1 && part1Done);
   current=n;
-  // Skip intro for revisit — the revisit intro was already shown by showNamedIntro
-  if(isRevisit){
-    document.getElementById('p'+n).style.display='block';
-    runPart1(true);
-    return;
-  }
-  // Show intro overlay, then reveal the scene and run the part
-  showIntro(n, ()=>{
-    document.getElementById('p'+n).style.display='block';
-    if(n===1) runPart1(false);
-    if(n===2) runPart2();
-    if(n===3) runPart3();
-    if(n===4) runPart4();
-  });
+  document.getElementById('p'+n).style.display='block';
+  if(n===1) runPart1(isRevisit);
+  if(n===2) runPart2();
+  if(n===3) runPart3();
+  if(n===4) runPart4();
 }
 // ══════════════════════
 // PART 1
 // ══════════════════════
 function runPart1(isRevisit){
+  // Clear typing targets, hide Rivera, idle the status bar.
   clearTyping('p1-text','p1-cursor');
   hideRivera('p1-rivera');
   setStatus('p1-status','p1-dot','Waiting to begin…',false);
   if(isRevisit){
-    // Student returning with new knowledge from Parts 2/3/4
+    // Student returning with new knowledge from Parts 2/3/4. The revisit
+    // sequence visually flows from Part 4 back into Part 1; we keep all
+    // regions revealed (they were on screen already) and skip the
+    // sequential-reveal pacing — just show Maya updating in place.
+    setSpotlight(null);
+    revealRegion('p1-challenge-region', true);
+    revealRegion('p1-text-region', true);
+    revealRegion('ticker-region', true);
     const el = document.getElementById('p1-text');
-    el.className='typing-area revised-bg';
     el.innerHTML = revised + '<span class="typing-cursor" id="p1-cursor"></span>';
     setStatus('p1-status','p1-dot','Maya is updating her solution with new insights…',true);
     setTickerPart(1, SCORES.revised, 'Updating with new insights…', 'When you revise based on what you learned from peers, the Ticker shows your thinking developing.');
@@ -801,60 +814,160 @@ function runPart1(isRevisit){
         after(600, ()=>{
           setTickerPart(1, SCORES.revisit, 'Thinking developing further',
             'Returning to revise after reading peer reasoning makes your analytical depth more visible.');
-          after(2800, ()=>{ goTo(4); }); // Now proceed to Part 4
+          after(2800, ()=>{ goTo(4); });
         });
       });
     });
     return;
   }
-  // Start Part 1 animation directly
-  (()=>{
-    setStatus('p1-status','p1-dot','Maya is writing her first attempt…',true);
-    document.getElementById('p1-text').classList.add('active-bg');
-    // Show ticker building as she writes
-    after(1200, ()=>{ setTickerPart(1,{ku:20,ct:12,cr:18,co:22,ap:10},'Observing as Maya writes…', null); });
-    after(2500, ()=>{ setTickerPart(1,{ku:35,ct:28,cr:32,co:38,ap:25},'Active', null); });
-    typeInto('p1-text','p1-cursor', weak, 35, ()=>{
-      setTickerPart(1, SCORES.initial, 'First draft observed', "You've described WHAT happens. Rivera's guidance will help you explain WHY.");
-      setStatus('p1-status','p1-dot','Initial thinking observed — Maya asks Ms. Rivera…',true);
-      // Show Ask Rivera button
-      after(1200, ()=>{
-        const btn = document.getElementById('p1-ask-btn');
-        btn.classList.add('visible');
-        // Auto-simulate click after pause
-        after(1800, ()=>{ if(!riveraTriggered1) triggerRivera1(); });
+  // ─── Fresh run ────────────────────────────────────────────────────
+  // Reset all reveals so the page starts with just the Part 1 heading
+  // bar visible. Each step below reveals one region in turn, holds the
+  // viewer's attention with a yellow spotlight + bold italic heading,
+  // then leaves the region visible (no longer spotlighted) as the next
+  // region appears below it.
+  //
+  // Timing constants (halved from the 5-second design per latest spec):
+  //   HOLD = 2500ms (post-typing read time)
+  //   PRE  = 1000ms (after a region appears, before its content starts
+  //                   so the viewer registers the new region first)
+  //   STAND_ALONE_HOLD = 2500ms (Part 1 heading alone before challenge)
+  resetReveals('p1');
+  revealRegion('ticker-region', false);          // hide ticker globally
+  revealRegion('p1-challenge-region', false);
+  revealRegion('p1-text-region', false);
+  revealRegion('p1-ask-btn', false);
+  revealRegion('p1-rivera', false);
+  document.getElementById('p1-rivera-pill').classList.remove('visible');
+  setSpotlight(null);
+  // Clear challenge text so it can be typed fresh
+  clearTyping('p1-challenge-text','p1-challenge-cursor');
+  // Clear ticker bars so they animate up from empty when revealed
+  setTickerPart(1, {ku:0,ct:0,cr:0,co:0,ap:0}, '', null);
+
+  const HOLD = 2500;
+  const PRE  = 1000;
+  const STAND_ALONE_HOLD = 2500;
+
+  // ── Step 0: Part 1 heading alone, no other content ──
+  // The scene-header (purple Part 1 bar) is part of the always-visible
+  // shell, not a reveal-on-cue region, so it shows as soon as Part 1's
+  // p1 scene becomes visible. We just hold here before revealing more.
+  after(STAND_ALONE_HOLD, ()=>{
+    // ── Step 1: Learner reviews challenge ──
+    revealRegion('p1-challenge-region', true);
+    setSpotlight('p1-challenge-region', 'Learner reviews challenge');
+    setStatus('p1-status','p1-dot','Maya is reading the challenge…',true);
+    after(PRE, ()=>{
+      typeInto('p1-challenge-text','p1-challenge-cursor', challengeText, 22, ()=>{
+        after(HOLD, ()=>{
+          // ── Step 2: Learner enters their solution ──
+          revealRegion('p1-text-region', true);
+          setSpotlight('p1-text-region', 'Learner enters their solution');
+          setStatus('p1-status','p1-dot','Maya is writing her first attempt…',true);
+          after(PRE, ()=>{
+            typeInto('p1-text','p1-cursor', weak, 35, ()=>{
+              after(HOLD, ()=>{
+                // ── Step 3: Ticker reacts to the learner's thinking ──
+                // Bars fill one at a time so the viewer's eye can track each
+                // competency individually: KU → CT → CR → CO → AP. Each bar
+                // takes ~1100ms to settle (the .tbar-fill CSS transition is
+                // 800ms; we add a 300ms gap on top so the eye registers the
+                // settle before the next bar starts moving).
+                revealRegion('ticker-region', true);
+                setSpotlight('ticker-region', "Ticker reacts to the learner's thinking");
+                setStatus('p1-status','p1-dot','Observing thinking…',true);
+                const target = SCORES.initial;
+                // Build progressively-revealed score objects: start from
+                // current (all zeros — we cleared at top of fresh run),
+                // and reveal one competency per step.
+                const sequence = [
+                  {ku:target.ku, ct:0,         cr:0,         co:0,         ap:0},
+                  {ku:target.ku, ct:target.ct, cr:0,         co:0,         ap:0},
+                  {ku:target.ku, ct:target.ct, cr:target.cr, co:0,         ap:0},
+                  {ku:target.ku, ct:target.ct, cr:target.cr, co:target.co, ap:0},
+                  {ku:target.ku, ct:target.ct, cr:target.cr, co:target.co, ap:target.ap},
+                ];
+                const STEP = 1100; // ms between competency reveals
+                sequence.forEach((scores, i)=>{
+                  after(STEP * (i+1), ()=>{
+                    const isLast = i === sequence.length - 1;
+                    setTickerPart(1, scores,
+                      isLast ? 'First draft observed' : null,
+                      isLast ? "You've described WHAT happens. Rivera's guidance will help you explain WHY." : null);
+                  });
+                });
+                // Total fill time = STEP * sequence.length. Then a hold so
+                // the viewer can read the level words and absorb the
+                // overall picture.
+                const fillDone = STEP * sequence.length;
+                after(fillDone + HOLD, ()=>{
+                  // ── Step 4: Learner asks Ms. Rivera to review their work ──
+                  revealRegion('p1-ask-btn', true);
+                  revealRegion('p1-rivera', true);
+                  setSpotlight('p1-rivera', 'Learner asks Ms. Rivera to review their work');
+                  setStatus('p1-status','p1-dot','Maya asks Ms. Rivera…',true);
+                  after(PRE, ()=>{ if(!riveraTriggered1) triggerRivera1(); });
+                });
+              });
+            });
+          });
+        });
       });
     });
-  })();
+  });
 }
+
 function triggerRivera1(){
   if(riveraTriggered1) return;
   riveraTriggered1=true;
   const btn = document.getElementById('p1-ask-btn');
   btn.classList.add('clicked');
   btn.innerHTML='<span style="font-size:0.9rem">🎓</span> Asking Ms. Rivera…';
+  // Rivera is already spotlighted from step 4. After she finishes
+  // speaking and the viewer has had time to read, the panel collapses
+  // and the small "Ask Ms. Rivera" pill takes its place.
   after(600, ()=>{
     showRivera('p1-rivera','p1-rivera-msg',
       "I'm reading this carefully… you've said compound interest 'adds up more' and simple interest 'is always the same amount' — I can see the instinct there. But I'm left asking: you've told me WHAT happens, and I'm not yet seeing WHY. What is it about how compound interest is calculated that makes the base keep growing?",
       null, null, ()=>{
-        setStatus('p1-status','p1-dot','Maya is updating her solution…',true);
-        after(2000, ()=>{
-          hideRivera('p1-rivera');
-          const textEl = document.getElementById('p1-text');
-          textEl.className='typing-area active-bg';
-          // Show the weak text still there, then add a revision note then retype improved
-          const weakText = textEl.innerHTML.replace(/<span.*?<\/span>/g,'').trim();
-          textEl.innerHTML = weakText + `<hr style="margin:0.5rem 0;border:none;border-top:1px dashed #bbb;"><em style="font-size:0.75rem;color:#8B83A3">Maya revising after Ms. Rivera's question…</em><br><br><span class="typing-cursor" id="p1-cursor"></span>`;
-          after(800, ()=>{
-            // Clear and type the full revised solution
-            textEl.innerHTML='<span class="typing-cursor" id="p1-cursor"></span>';
-            typeInto('p1-text','p1-cursor', revised, 24, ()=>{
-              setStatus('p1-status','p1-dot','Solution updated — observing revised thinking',false);
-              after(500, ()=>{
-                setTickerPart(1, SCORES.revised, 'Thinking developing',
-                  'Explaining WHY, not just WHAT, is what makes your thinking visible.');
-                part1Done = true;
-                after(2500, ()=>{ goTo(2); });
+        const HOLD = 2500;
+        // Read time on Rivera's feedback before collapsing
+        after(HOLD, ()=>{
+          // Collapse Rivera panel + ask button, show the pill in their place
+          const riveraEl = document.getElementById('p1-rivera');
+          const btnEl    = document.getElementById('p1-ask-btn');
+          riveraEl.classList.add('rivera-collapsed');
+          btnEl.classList.add('rivera-collapsed');
+          document.getElementById('p1-rivera-pill').classList.add('visible');
+          // ── Step 5: Learner revises based on Ms. Rivera's guidance ──
+          setSpotlight('p1-text-region', "Learner revises based on Ms. Rivera's guidance");
+          setStatus('p1-status','p1-dot','Maya is updating her solution…',true);
+          after(1000, ()=>{
+            const textEl = document.getElementById('p1-text');
+            // Briefly show the weak draft with a "Maya revising…" note
+            // before the revised text types in.
+            const weakOnly = textEl.innerHTML.replace(/<span.*?<\/span>/g,'').trim();
+            textEl.innerHTML = weakOnly + '<hr style="margin:0.5rem 0;border:none;border-top:1px dashed #bbb;"><em style="font-size:0.75rem;color:#8B83A3">Maya revising after Ms. Rivera\'s question…</em><br><br><span class="typing-cursor" id="p1-cursor"></span>';
+            after(800, ()=>{
+              textEl.innerHTML = '<span class="typing-cursor" id="p1-cursor"></span>';
+              typeInto('p1-text','p1-cursor', revised, 24, ()=>{
+                after(HOLD, ()=>{
+                  // ── Step 6: Ticker updates as thinking improves ──
+                  setSpotlight('ticker-region', 'Ticker updates as thinking improves');
+                  setStatus('p1-status','p1-dot','Solution updated — observing revised thinking',false);
+                  after(500, ()=>{
+                    setTickerPart(1, SCORES.revised, 'Thinking developing',
+                      'Explaining WHY, not just WHAT, is what makes your thinking visible.');
+                    part1Done = true;
+                    // End-state hold (Part 1 fully populated, no spotlight),
+                    // then transition to Part 2.
+                    after(HOLD, ()=>{
+                      setSpotlight(null);
+                      after(HOLD, ()=>{ goTo(2); });
+                    });
+                  });
+                });
               });
             });
           });
@@ -867,6 +980,13 @@ function triggerRivera1(){
 // PART 2
 // ══════════════════════
 function runPart2(){
+  // Clear any spotlight left from Part 1. Reveal Ticker (it was hidden
+  // by default for Part 1's reveal sequence). Note: we deliberately do
+  // NOT unwind Part 1's Rivera collapse — the pill that replaced her
+  // panel is the persistent visual record that "Rivera was consulted
+  // here," which is what the learner experience would show too.
+  setSpotlight(null);
+  revealRegion('ticker-region', true);
   hideRivera('p2-rivera');
   document.getElementById('p2-q-bubble').style.display='none';
   document.getElementById('p2-rivera-msg').textContent='';
@@ -922,6 +1042,8 @@ function triggerRivera2(){
 // PART 3
 // ══════════════════════
 function runPart3(){
+  setSpotlight(null);
+  revealRegion('ticker-region', true);
   hideRivera('p3-rivera');
   document.getElementById('p3-q-bubble').style.display='none';
   document.getElementById('p3-rivera-msg').textContent='';
@@ -969,8 +1091,8 @@ function triggerRivera3(){
           'Defending your claim with evidence makes your Critical Thinking more clearly visible.');
         setStatus('p3-status','p3-dot','Part 3 complete',false);
         after(3200, ()=>{
-          // Show revisit intro, then go to Part 1 for revision
-          showNamedIntro('revisit', ()=>{ goTo(1); });
+          // Move directly into the Part 1 revisit (no intro overlay anymore)
+          goTo(1);
         });
       }
     );
@@ -980,6 +1102,8 @@ function triggerRivera3(){
 // PART 4 — Portfolio snapshot
 // ══════════════════════
 function runPart4(){
+  setSpotlight(null);
+  revealRegion('ticker-region', true);
   setStatus('p4-status','p4-dot','Preparing your Portfolio…',true);
   const p4StarEl = document.getElementById('p4-star');
   const p4RingLvlEl = document.getElementById('p4-ring-level');
