@@ -1,1221 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ThinkSmith — A thinking platform you and your child use together</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ThinkSmith — homeschooling that builds thinking</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/dist/tabler-icons.min.css" />
 <style>
-  :root {
-    --black: #0F0E0D;
-    --off-white: #F7F5F0;
-    --warm-white: #FDFCF9;
-    --ink: #1C1B18;
-    --muted: #6B6860;
-    --accent: #1A6B4A;
-    --accent-light: #E8F2EC;
-    --accent-mid: #2D8F64;
-    --rule: #E2DDD5;
-    --stat-bg: #F0EDE6;
-
-    --level-emerging: #C9A848;
-    --level-developing: #6B8FB8;
-    --level-developing-well: #534AB7;
-    --level-strong: #1A6B4A;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--warm-white);
-    color: var(--ink);
-    font-size: 16px;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  /* NAV */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.25rem 4rem;
-    background: rgba(253, 252, 249, 0.92);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .logo {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.5rem;
-    color: var(--ink);
-    text-decoration: none;
-    letter-spacing: -0.02em;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 2.5rem;
-    list-style: none;
-  }
-
-  .nav-links a {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--muted);
-    text-decoration: none;
-    letter-spacing: 0.01em;
-    transition: color 0.2s;
-  }
-
-  .nav-links a:hover { color: var(--ink); }
-
-  .nav-cta {
-    background: var(--accent);
-    color: white !important;
-    padding: 0.5rem 1.25rem;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: background 0.2s;
-  }
-
-  .nav-cta:hover { background: #155a3e !important; color: white !important; }
-
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding-top: 5rem;
-  }
-
-  .hero-left {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 6rem 3rem 6rem 4rem;
-    border-right: 1px solid var(--rule);
-  }
-
-  .hero-eyebrow {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--accent);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-bottom: 1.5rem;
-  }
-
-  .hero-headline {
-    font-family: 'DM Serif Display', serif;
-    font-size: 3.5rem;
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    color: var(--ink);
-    margin-bottom: 2rem;
-  }
-
-  .hero-headline em {
-    font-style: italic;
-    color: var(--accent);
-  }
-
-  .hero-body {
-    font-size: 1.0625rem;
-    line-height: 1.65;
-    color: var(--muted);
-    margin-bottom: 2.5rem;
-    max-width: 32rem;
-  }
-
-  .hero-actions {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .btn-primary {
-    background: var(--accent);
-    color: white;
-    padding: 0.875rem 1.75rem;
-    border-radius: 4px;
-    font-size: 0.9375rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: background 0.2s;
-    display: inline-block;
-  }
-
-  .btn-primary:hover { background: #155a3e; }
-
-  .btn-ghost {
-    color: var(--ink);
-    padding: 0.875rem 1.75rem;
-    font-size: 0.9375rem;
-    font-weight: 500;
-    text-decoration: none;
-    border-bottom: 1px solid var(--ink);
-    transition: opacity 0.2s;
-  }
-
-  .btn-ghost:hover { opacity: 0.6; }
-
-  /* HERO RIGHT — proof column */
-  .hero-right {
-    background: var(--off-white);
-    padding: 6rem 4rem 6rem 3rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .hero-right-label {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--muted);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 2rem;
-  }
-
-  .stat-block { margin-bottom: 1rem; }
-
-  .stat-num {
-    font-family: 'DM Serif Display', serif;
-    font-size: 3.5rem;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    color: var(--accent);
-    margin-bottom: 0.5rem;
-  }
-
-  .stat-num span {
-    font-size: 1.75rem;
-    color: var(--muted);
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 400;
-  }
-
-  .stat-desc {
-    font-size: 0.9375rem;
-    color: var(--muted);
-    line-height: 1.55;
-  }
-
-  .stat-divider {
-    border: none;
-    border-top: 1px solid var(--rule);
-    margin: 1.5rem 0;
-  }
-
-  .stat-source {
-    font-size: 0.75rem;
-    color: var(--muted);
-    margin-top: 1.5rem;
-    line-height: 1.5;
-    font-style: italic;
-  }
-
-  /* SECTIONS — shared */
-  section { padding: 6rem 4rem; }
-
-  .section-label {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--accent);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 1.5rem;
-  }
-
-  .section-heading {
-    font-family: 'DM Serif Display', serif;
-    font-size: 2.5rem;
-    line-height: 1.15;
-    letter-spacing: -0.01em;
-    color: var(--ink);
-    margin-bottom: 1.5rem;
-    max-width: 56rem;
-  }
-
-  .section-body {
-    font-size: 1.0625rem;
-    line-height: 1.65;
-    color: var(--muted);
-    max-width: 48rem;
-    margin-bottom: 3rem;
-  }
-
-  /* ── WHO IT'S FOR (now second section) ── */
-  .who-section { background: var(--off-white); }
-
-  .who-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    margin-top: 3rem;
-    max-width: 64rem;
-  }
-
-  .who-card {
-    background: var(--warm-white);
-    padding: 2.5rem;
-    border-radius: 8px;
-    border: 1px solid var(--rule);
-  }
-
-  .who-tag {
-    font-size: 0.75rem;
-    color: var(--accent);
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-    display: block;
-  }
-
-  .who-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.375rem;
-    line-height: 1.2;
-    color: var(--ink);
-    margin-bottom: 1rem;
-    letter-spacing: -0.01em;
-  }
-
-  .who-body {
-    font-size: 0.9375rem;
-    line-height: 1.65;
-    color: var(--muted);
-  }
-
-  .tutors-note {
-    margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--rule);
-    font-size: 0.9375rem;
-    color: var(--muted);
-    max-width: 56rem;
-  }
-
-  .tutors-note a {
-    color: var(--accent);
-    text-decoration: underline;
-    font-weight: 500;
-  }
-
-  /* ── PEER FEEDBACK SPOTLIGHT ── */
-  .mechanic-section {
-    background: var(--ink);
-    color: var(--warm-white);
-    padding: 6rem 4rem;
-  }
-
-  .mechanic-section .section-label { color: var(--accent-mid); }
-  .mechanic-section .section-heading { color: var(--warm-white); }
-  .mechanic-section .section-body { color: rgba(255,255,255,0.65); }
-
-  .mechanic-insight {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    margin-top: 3rem;
-    max-width: 64rem;
-    align-items: start;
-  }
-
-  .mechanic-quote {
-    font-family: 'DM Serif Display', serif;
-    font-size: 2rem;
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-    color: var(--warm-white);
-    border-left: 3px solid var(--accent-mid);
-    padding-left: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .mechanic-quote em { color: var(--accent-mid); font-style: italic; }
-
-  .mechanic-explain {
-    font-size: 0.9375rem;
-    color: rgba(255,255,255,0.65);
-    line-height: 1.65;
-  }
-
-  .mechanic-steps {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-  }
-
-  .mechanic-step {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    padding: 1.25rem 1.5rem;
-  }
-
-  .mechanic-step-label {
-    font-size: 0.6875rem;
-    font-weight: 600;
-    color: var(--accent-mid);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 0.4rem;
-  }
-
-  .mechanic-step-text {
-    font-size: 0.9375rem;
-    color: rgba(255,255,255,0.8);
-    line-height: 1.5;
-  }
-
-  /* ── TOGETHER SECTION ── */
-  .together-section { background: var(--warm-white); }
-
-  .together-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem 4rem;
-    margin-top: 3rem;
-  }
-
-  .together-item {
-    border-top: 1px solid var(--ink);
-    padding-top: 1.5rem;
-  }
-
-  .together-num {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.5rem;
-    color: var(--accent);
-    margin-bottom: 0.75rem;
-  }
-
-  .together-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.5rem;
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-    margin-bottom: 1rem;
-    color: var(--ink);
-  }
-
-  .together-body {
-    font-size: 0.9375rem;
-    line-height: 1.6;
-    color: var(--muted);
-  }
-
-  .together-body strong {
-    color: var(--ink);
-    font-weight: 500;
-  }
-
-  /* ── HOW IT WORKS ── */
-  .how-section {
-    background: var(--off-white);
-    padding: 6rem 4rem;
-  }
-
-  .how-tracks {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    margin-top: 3rem;
-  }
-
-  .track-header {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.5rem;
-    color: var(--ink);
-    margin-bottom: 0.5rem;
-    letter-spacing: -0.01em;
-  }
-
-  .track-subhead {
-    font-size: 0.875rem;
-    color: var(--accent);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-bottom: 1.5rem;
-    font-weight: 500;
-  }
-
-  .track-step {
-    padding: 1.25rem 0;
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .track-step:last-child { border-bottom: none; }
-
-  .track-step-num {
-    font-size: 0.75rem;
-    color: var(--muted);
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-    letter-spacing: 0.04em;
-  }
-
-  .track-step-title {
-    font-size: 1.0625rem;
-    font-weight: 500;
-    color: var(--ink);
-    margin-bottom: 0.4rem;
-    line-height: 1.3;
-  }
-
-  .track-step-body {
-    font-size: 0.9375rem;
-    color: var(--muted);
-    line-height: 1.55;
-  }
-
-  /* AI peers reassurance callout */
-  .ai-note {
-    margin-top: 1rem;
-    background: var(--accent-light);
-    border-left: 3px solid var(--accent);
-    border-radius: 4px;
-    padding: 0.875rem 1rem;
-    font-size: 0.875rem;
-    color: var(--accent);
-    line-height: 1.5;
-  }
-
-  /* ── DASHBOARD MOCKUP ── */
-  .dashboard-section {
-    background: var(--warm-white);
-    padding: 6rem 4rem;
-  }
-
-  .dashboard-mockup-wrap {
-    margin-top: 3rem;
-    background: var(--off-white);
-    border: 1px solid var(--rule);
-    border-radius: 12px;
-    padding: 3rem 2.5rem;
-    max-width: 64rem;
-  }
-
-  .dashboard-mockup-caption {
-    margin-top: 2rem;
-    font-size: 0.875rem;
-    color: var(--muted);
-    line-height: 1.6;
-    font-style: italic;
-    max-width: 48rem;
-  }
-
-  /* ── PROOF STRIP ── */
-  .proof-strip {
-    background: var(--ink);
-    color: var(--warm-white);
-    padding: 5rem 4rem;
-  }
-
-  .proof-strip .section-label { color: var(--accent-mid); }
-  .proof-strip .section-heading { color: var(--warm-white); max-width: 56rem; }
-
-  .proof-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2rem;
-    margin-top: 3rem;
-  }
-
-  .proof-item {
-    border-top: 1px solid rgba(255,255,255,0.2);
-    padding-top: 1.5rem;
-  }
-
-  .proof-pct {
-    font-family: 'DM Serif Display', serif;
-    font-size: 2.75rem;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    color: var(--accent-mid);
-    margin-bottom: 0.75rem;
-  }
-
-  .proof-pct em { font-style: italic; }
-
-  .proof-label {
-    font-size: 0.875rem;
-    line-height: 1.5;
-    color: rgba(255,255,255,0.7);
-  }
-
-  .proof-source {
-    font-size: 0.8125rem;
-    color: rgba(255,255,255,0.5);
-    margin-top: 3rem;
-    font-style: italic;
-  }
-
-  /* ── CURRICULUM CALLOUT ── */
-  .curriculum-bar {
-    background: var(--accent-light);
-    border-top: 1px solid #c8e4d5;
-    border-bottom: 1px solid #c8e4d5;
-    padding: 1.25rem 4rem;
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    font-size: 0.9375rem;
-    color: var(--accent);
-  }
-
-  .curriculum-bar-label {
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--accent);
-    white-space: nowrap;
-  }
-
-  .curriculum-bar-divider {
-    width: 1px;
-    height: 1.25rem;
-    background: #c8e4d5;
-    flex-shrink: 0;
-  }
-
-  .curriculum-items {
-    display: flex;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    font-size: 0.875rem;
-    color: #155a3e;
-    font-weight: 500;
-  }
-
-  /* ── CTA ── */
-  .cta-section {
-    background: var(--off-white);
-    text-align: center;
-    padding: 7rem 4rem;
-  }
-
-  .cta-section .section-label,
-  .cta-section .section-heading,
-  .cta-section .section-body {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .cta-section .section-heading { max-width: 40rem; }
-  .cta-section .section-body { max-width: 36rem; }
-
-  .cta-actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 1rem;
-  }
-
-  /* ── FOOTER ── */
-  footer {
-    background: var(--ink);
-    color: rgba(255,255,255,0.7);
-    padding: 3rem 4rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    font-size: 0.875rem;
-  }
-
-  .footer-logo {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.25rem;
-    color: var(--warm-white);
-    text-decoration: none;
-  }
-
-  .footer-links {
-    display: flex;
-    gap: 2rem;
-    list-style: none;
-    flex-wrap: wrap;
-  }
-
-  .footer-links a, .footer-links span {
-    color: rgba(255,255,255,0.7);
-    text-decoration: none;
-    font-size: 0.875rem;
-  }
-
-  .footer-links a:hover { color: white; }
-
-  /* ── FADE-IN ON SCROLL ── */
-  .fade-in {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-
-  .fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* ── DASHBOARD MOCKUP STYLES ── */
-  .mockup-card {
-    background: white;
-    border: 1px solid var(--rule);
-    border-radius: 8px;
-    padding: 1.5rem 1.75rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-  }
-
-  .mockup-name {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--ink);
-    margin-bottom: 0.25rem;
-  }
-
-  .mockup-meta {
-    display: inline-block;
-    margin-left: 0.5rem;
-    font-size: 0.8125rem;
-    color: var(--muted);
-    font-weight: 400;
-  }
-
-  .mockup-ticker {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 1.25rem;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1.25rem;
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .mockup-tile {
-    flex: 1;
-    background: var(--off-white);
-    border: 1px solid var(--rule);
-    border-radius: 6px;
-    padding: 0.625rem 0.75rem;
-  }
-
-  .mockup-tile-name {
-    font-size: 0.6875rem;
-    font-weight: 600;
-    color: var(--muted);
-    margin-bottom: 0.25rem;
-  }
-
-  .mockup-tile-bar {
-    height: 4px;
-    background: #E5E2DA;
-    border-radius: 999px;
-    overflow: hidden;
-    margin-bottom: 0.4rem;
-  }
-
-  .mockup-tile-fill {
-    height: 100%;
-    border-radius: 999px;
-  }
-
-  .mockup-tile-level {
-    font-size: 0.625rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-
-  .mockup-synth-label {
-    font-size: 0.6875rem;
-    font-weight: 600;
-    color: var(--muted);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-  }
-
-  .mockup-synth-text {
-    font-size: 0.875rem;
-    line-height: 1.55;
-    color: var(--ink);
-    margin-bottom: 1.5rem;
-  }
-
-  .mockup-synth-text em {
-    font-style: normal;
-    background: var(--accent-light);
-    padding: 0.0625rem 0.3125rem;
-    border-radius: 3px;
-    color: var(--accent);
-    font-weight: 500;
-  }
-
-  .mockup-recent-label {
-    font-size: 0.6875rem;
-    font-weight: 600;
-    color: var(--muted);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-  }
-
-  .mockup-recent {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .mockup-activity {
-    flex: 1;
-    background: var(--off-white);
-    border: 1px solid var(--rule);
-    border-radius: 6px;
-    padding: 0.625rem 0.75rem;
-  }
-
-  .mockup-activity-date {
-    font-size: 0.625rem;
-    font-weight: 600;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    margin-bottom: 0.125rem;
-  }
-
-  .mockup-activity-subj {
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: var(--ink);
-    margin-bottom: 0.125rem;
-  }
-
-  .mockup-activity-prompt {
-    font-size: 0.6875rem;
-    color: var(--muted);
-    line-height: 1.4;
-    margin-bottom: 0.4rem;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-  }
-
-  .mockup-activity-status {
-    font-size: 0.625rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 900px) {
-    nav { padding: 1rem 1.5rem; }
-    .nav-links { gap: 1.25rem; }
-    section { padding: 3.5rem 1.5rem; }
-    .hero { grid-template-columns: 1fr; }
-    .hero-left, .hero-right { padding: 3.5rem 1.5rem; border-right: none; }
-    .hero-right { border-top: 1px solid var(--rule); }
-    .hero-headline { font-size: 2.25rem; }
-    .stat-num { font-size: 2.5rem; }
-    .section-heading { font-size: 1.75rem; }
-    .together-grid { grid-template-columns: 1fr; gap: 2rem; }
-    .how-tracks { grid-template-columns: 1fr; gap: 3rem; }
-    .how-section { padding: 3.5rem 1.5rem; }
-    .dashboard-section { padding: 3.5rem 1.5rem; }
-    .dashboard-mockup-wrap { padding: 1.5rem 1rem; }
-    .proof-strip { padding: 3.5rem 1.5rem; }
-    .proof-grid { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-    .who-grid { grid-template-columns: 1fr; }
-    .who-card { padding: 1.5rem; }
-    .mechanic-insight { grid-template-columns: 1fr; gap: 2.5rem; }
-    .mechanic-section { padding: 3.5rem 1.5rem; }
-    .curriculum-bar { padding: 1rem 1.5rem; flex-wrap: wrap; }
-    footer { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
+  :root{
+    --font-sans:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Helvetica,Arial,sans-serif;
+    --text-primary:#1f2430; --text-secondary:#5b6270; --text-muted:#9aa2ad;
+    --border:#e6e7ec; --border-strong:#d3d5dc;
+    --surface-1:#f6f7f9; --surface-2:#ffffff; --radius:8px;
+    /* Readiness model greens */
+    --r-line:#7cb342; --r-dot:#5f9b28; --r-standard:#9cc063;
+    --band-bg:#edf6e0; --band-text:#4f7a1f; --band-range:#8aac63;
+    --track:#eef0f2; --track-div:#e2e6ea;
+  }
+  html,body{margin:0}
+  body{background:var(--surface-2);font-family:var(--font-sans);color:var(--text-primary);-webkit-font-smoothing:antialiased}
+  h1,h3,p{margin:0}
+
+  /* ── Section 03 readiness widget (scoped) ─────────────────────── */
+  #rk03 .rk{margin-top:22px;border:0.5px solid var(--border);border-radius:14px;padding:20px 20px 18px;background:linear-gradient(180deg,#fdfefb,#fbfdf8)}
+  #rk03 .rk-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+  #rk03 .rk-head .t{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600}
+  #rk03 .rk-head .q{width:16px;height:16px;border-radius:50%;background:var(--band-bg);color:var(--band-text);font-size:10px;font-weight:700;display:grid;place-items:center}
+  #rk03 .rk-head .band-now{font-size:12px;font-weight:600;color:var(--band-text)}
+  #rk03 .bands{display:grid;grid-template-columns:repeat(5,1fr);border:0.5px solid var(--border);border-radius:8px;overflow:hidden;background:#fff}
+  #rk03 .band{padding:7px 6px;text-align:center;border-right:0.5px solid var(--border)}
+  #rk03 .band:last-child{border-right:0}
+  #rk03 .band .bn{font-size:11px;font-weight:600;color:#8b929c;line-height:1.2}
+  #rk03 .band .br{font-size:9.5px;color:#aab0b8;margin-top:1px}
+  #rk03 .band.active{background:var(--band-bg)}
+  #rk03 .band.active .bn{color:var(--band-text)}
+  #rk03 .band.active .br{color:var(--band-range)}
+  #rk03 .track{position:relative;height:44px;background:var(--track);border-radius:8px;margin-top:6px;overflow:hidden}
+  #rk03 .track .div{position:absolute;top:0;bottom:0;width:0.5px;background:var(--track-div)}
+  #rk03 .track .standard{position:absolute;top:6px;bottom:6px;border-left:1.5px dashed var(--r-standard)}
+  #rk03 .track .line{position:absolute;top:50%;height:4px;border-radius:3px;background:var(--r-line);transform:translateY(-50%);left:var(--start);width:0;transition:width 1.1s cubic-bezier(.22,.7,.2,1)}
+  #rk03 .track .dot{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;transform:translate(-50%,-50%);transition:left 1.1s cubic-bezier(.22,.7,.2,1)}
+  #rk03 .track .dot.start{left:var(--start);background:#fff;border:3px solid var(--r-line);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+  #rk03 .track .dot.now{left:var(--start);background:var(--r-dot);box-shadow:0 1px 3px rgba(95,155,40,.45)}
+  #rk03 .rk.in .track .line{width:calc(var(--now) - var(--start))}
+  #rk03 .rk.in .track .dot.now{left:var(--now)}
+  #rk03 .comp.in .track .line,#rk03 .comp.in .track .dot.now{transition-delay:calc(var(--i,0) * 85ms)}
+  #rk03 .rk.overall .track{height:52px}
+  #rk03 .rk.overall .band .bn{font-size:12px}
+  #rk03 #fullwrap{max-height:0;opacity:0;overflow:hidden;transition:max-height .55s ease,opacity .45s ease}
+  #rk03 #fullwrap.open{max-height:1400px;opacity:1}
+  #rk03 .divider{display:flex;align-items:center;gap:12px;margin:26px 0 4px}
+  #rk03 .divider span{font-size:11.5px;font-weight:600;color:var(--text-muted);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+  #rk03 .divider::before,#rk03 .divider::after{content:"";height:0.5px;background:var(--border);flex:1}
+  #rk03 .comp{margin-top:16px;padding:0;border:0;background:none}
+  #rk03 .comp .clabel{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:6px}
+  #rk03 .comp .clabel .cn{font-size:13.5px;font-weight:600;color:var(--text-primary)}
+  #rk03 .comp .clabel .cn small{font-weight:400;color:var(--text-muted);font-size:11px;margin-left:6px}
+  #rk03 .comp .clabel .cb{font-size:11.5px;font-weight:600;color:var(--band-text)}
+  #rk03 .comp .track{height:34px}
+  #rk03 .comp .band{padding:5px 4px}
+  #rk03 .comp .band .br{display:none}
+  #rk03 .phases{display:flex;align-items:center;justify-content:center;gap:9px;margin-top:22px}
+  #rk03 .phases .p{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-muted)}
+  #rk03 .phases .p .d{width:7px;height:7px;border-radius:50%;background:#d4d8de;transition:background .3s,width .3s}
+  #rk03 .phases .p.on .d{background:var(--r-line);width:18px;border-radius:4px}
+  #rk03 .phases .p.on{color:var(--text-secondary);font-weight:600}
+  #rk03 .phases .sep{color:#d4d8de}
+  #rk03 .legend{margin-top:16px;font-size:11.5px;color:var(--text-muted);line-height:1.6;display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center}
+  #rk03 .legend .k{display:inline-flex;align-items:center;gap:6px}
+  #rk03 .legend .d-start{width:12px;height:12px;border-radius:50%;background:#fff;border:2.5px solid var(--r-line)}
+  #rk03 .legend .d-now{width:12px;height:12px;border-radius:50%;background:var(--r-dot)}
+  #rk03 .legend .d-std{width:14px;border-top:1.5px dashed var(--r-standard);height:0}
+  @media (max-width:560px){
+    #rk03 .band .br{display:none}
+    #rk03 .comp .clabel .cn small{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){
+    #rk03 .track .line,#rk03 .track .dot.now{transition:none}
+    #rk03 #fullwrap{transition:none}
   }
 </style>
 </head>
 <body>
+<div style="font-family: var(--font-sans);">
 
-<nav>
-  <a href="#" class="logo">ThinkSmith</a>
-  <ul class="nav-links">
-    <li><a href="#who">Who it's for</a></li>
-    <li><a href="#together">What you do together</a></li>
-    <li><a href="#how">How it works</a></li>
-    <li><a href="#dashboard">What you'll see</a></li>
-    <li><a href="#research">The research</a></li>
-    <li><a href="https://app.thinksmith.ca/" class="nav-cta">Start free trial</a></li>
-  </ul>
-</nav>
-
-<!-- ═══════════════════════════════════════════════
-     HERO
-════════════════════════════════════════════════ -->
-<section class="hero">
-  <div class="hero-left">
-    <p class="hero-eyebrow">A thinking platform you and your child use together</p>
-    <h1 class="hero-headline">
-      Your child is bright.<br>
-      Their thinking just doesn't<br>
-      show up the way<br>
-      <em>school measures it.</em>
-    </h1>
-    <p class="hero-body">
-      ThinkSmith is built for children who understand deeply when given time, but who freeze on quizzes and check out on worksheets. The approach is backed by peer-reviewed research — and built so you, as a parent, are in the loop every step of the way.
-    </p>
-    <div class="hero-actions">
-      <a href="https://app.thinksmith.ca/" class="btn-primary">Start your free trial</a>
-      <a href="#who" class="btn-ghost">See if it's right for you →</a>
-    </div>
+<div style="display:flex; align-items:center; justify-content:space-between; padding: 14px 24px; border-bottom: 0.5px solid var(--border); background:var(--surface-2);">
+  <div style="font-weight:500; font-size:19px; color:#8C2DDF;">ThinkSmith</div>
+  <div style="display:flex; gap:22px; font-size:13px; color:var(--text-secondary);">
+    <span>How it works</span><span>For families</span><span>For programs</span><span>Pricing</span>
   </div>
-  <div class="hero-right">
-    <p class="hero-right-label">The results speak for themselves</p>
-    <div class="stat-block">
-      <div class="stat-num">27<span>.62%</span></div>
-      <div class="stat-desc">improvement in Calculus III final exams — including students who had previously <em>failed</em> the course. Same instructor. Different method.</div>
-    </div>
-    <hr class="stat-divider">
-    <div class="stat-block">
-      <div class="stat-num">17<span>.31%</span></div>
-      <div class="stat-desc">average improvement across 10 courses where the same instructors had previously taught by lecture.</div>
-    </div>
-    <hr class="stat-divider">
-    <div class="stat-block">
-      <div class="stat-num">1,742</div>
-      <div class="stat-desc">students across 22 courses in a peer-reviewed pilot study. Biology, Chemistry, Math, Engineering, Computer Science.</div>
-    </div>
-    <p class="stat-source">Peer-reviewed pilot study: Ubon Ratchathani University, Thailand. Richards, Inprasit & Wattanataweekul. Full paper available on our Research page.</p>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════════
-     CURRICULUM ALIGNMENT BAR
-════════════════════════════════════════════════ -->
-<div class="curriculum-bar fade-in">
-  <span class="curriculum-bar-label">Curriculum aligned</span>
-  <div class="curriculum-bar-divider"></div>
-  <div class="curriculum-items">
-    <span>ThinkSmith is fully curriculum&#8209;aligned, wherever you live. Upload your child&#8217;s syllabus or course outline, and ThinkSmith generates learning activities matched to it. The platform has been tested across multiple international K&#8211;12 frameworks. Assessments use a universal five&#8209;part model of thinking quality (Knowledge &amp; Understanding, Creative Thinking, Critical Thinking, Communication, Application) at four levels, so the same approach works across all subjects and all regions.</span>
+  <div style="display:flex; gap:8px;">
+    <button style="background:none; color:var(--text-primary); border:0.5px solid var(--border-strong); font-size:13px; padding:7px 14px; border-radius:var(--radius);">Log in</button>
+    <button style="background:#8C2DDF; color:#fff; border:none; font-size:13px; padding:7px 14px; border-radius:var(--radius);">Start free</button>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════
-     WHO IT'S FOR — now second, to get early nod
-════════════════════════════════════════════════ -->
-<section class="who-section fade-in" id="who">
-  <div class="section-label">Who it's for</div>
-  <h2 class="section-heading">For families who think education is a partnership, not a transaction.</h2>
-  <p class="section-body">ThinkSmith is designed for parents who are already paying attention — and children who deserve a way to learn that matches how they actually think.</p>
-
-  <div class="who-grid">
-    <div class="who-card">
-      <span class="who-tag">For homeschool families</span>
-      <div class="who-title">You're already in the loop. ThinkSmith is built for that.</div>
-      <div class="who-body">If you're homeschooling — or supplementing school — you're already managing how your child learns. ThinkSmith fits into that, not around it. The parent dashboard, the weekly observations, the visible thinking development — all of it assumes you're paying attention. Because if you weren't, you wouldn't be reading this.</div>
-    </div>
-    <div class="who-card">
-      <span class="who-tag">For parents of children who don't fit the rote-learner mold</span>
-      <div class="who-title">Bright children whose intelligence doesn't show up on tests.</div>
-      <div class="who-body">If your child understands deeply when given time but freezes on a quiz — if they hate worksheets but light up when asked to reason through a problem — ThinkSmith is built for them. Their kind of thinking has a place to develop and be seen. And you have a way to watch it happen.</div>
-    </div>
+<div style="background:#F8F1FC; padding: 3rem 24px 3.5rem; text-align:center;">
+  <div style="font-size:12px; font-weight:500; color:#62209C; background:#EEDBFA; display:inline-block; padding:4px 12px; border-radius:20px; margin-bottom:16px;">For homeschooling families &middot; any curriculum</div>
+  <h1 style="font-size:30px; font-weight:500; line-height:1.35; max-width:560px; margin:0 auto 14px;">Every homeschooler needs three things a classroom gives</h1>
+  <p style="font-size:16px; color:var(--text-secondary); max-width:500px; margin:0 auto 24px; line-height:1.6;">A teacher who responds to their thinking. Peers to learn from. A real record of progress. ThinkSmith brings all three home.</p>
+  <div style="display:flex; gap:10px; justify-content:center;">
+    <button style="background:#8C2DDF; color:#fff; border:none; font-size:14px; padding:11px 20px; border-radius:var(--radius);">Start free</button>
+    <button style="background:#fff; color:var(--text-primary); border:0.5px solid var(--border-strong); font-size:14px; padding:11px 20px; border-radius:var(--radius);">See how it works</button>
   </div>
-
-  <p class="tutors-note">
-    <strong style="color: var(--ink); font-weight: 500;">Partnering.</strong> We&#8217;re building partnerships with tutoring agencies who want their students to arrive prepared &mdash; so tutoring time goes to insight, not reconstruction. If your agency is interested in using ThinkSmith between sessions, we&#8217;d love to connect. <a href="mailto:Contact@thinksmith.ca">For partnering conversations &rarr; Contact@thinksmith.ca</a>
-  </p>
-</section>
-
-<!-- ═══════════════════════════════════════════════
-     PEER FEEDBACK MECHANIC SPOTLIGHT
-════════════════════════════════════════════════ -->
-<section class="mechanic-section fade-in" id="mechanic">
-  <div class="section-label">How children actually learn</div>
-  <h2 class="section-heading">The core insight: teaching others is the most powerful way to learn.</h2>
-  <p class="section-body">This isn't a new idea — researchers have studied it for decades. ThinkSmith is the first platform built entirely around it, at the scale of one child working from home.</p>
-
-  <div class="mechanic-insight">
-    <div>
-      <div class="mechanic-quote">
-        When your child <em>gives</em> feedback to peers, they learn more than when they receive it.
-      </div>
-      <p class="mechanic-explain">
-        The act of reading someone else's reasoning, evaluating it, and articulating what's strong or weak forces a level of cognitive engagement that passive learning — listening, watching, reading — never achieves. ThinkSmith structures every activity around this mechanism. Your child doesn't just answer questions. They evaluate peers, explain their reasoning, and reflect on what changed in their thinking.
-      </p>
-      <p class="mechanic-explain" style="margin-top: 1rem;">
-        The 17.31% exam improvement in the research wasn't produced by better teachers or harder content. The instructors, the courses, and the students were the same as previous years. The only variable was this method.
-      </p>
-    </div>
-    <div class="mechanic-steps">
-      <div class="mechanic-step">
-        <div class="mechanic-step-label">Step 1 — Engage</div>
-        <div class="mechanic-step-text">Your child writes their own solution to a real academic challenge — in their own words, not multiple choice.</div>
-      </div>
-      <div class="mechanic-step">
-        <div class="mechanic-step-label">Step 2 — Evaluate (the key step)</div>
-        <div class="mechanic-step-text">They read three peer attempts at the same challenge and write structured feedback to each. This is where the deep learning happens — evaluating others' reasoning sharpens their own.</div>
-      </div>
-      <div class="mechanic-step">
-        <div class="mechanic-step-label">Step 3 — Reflect</div>
-        <div class="mechanic-step-text">They receive feedback on their own work and write a reflection on what changed in their thinking. The closest thing to a one-on-one teacher conference at this scale.</div>
-      </div>
-      <div class="mechanic-step">
-        <div class="mechanic-step-label">About the AI peers</div>
-        <div class="mechanic-step-text">The "peers" your child evaluates are AI-generated — intentionally so. They're available on demand, always at the right difficulty level, and never hurt by honest feedback. This makes the mechanic work reliably for a single child learning at home.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════════
-     TOGETHER SECTION
-════════════════════════════════════════════════ -->
-<section class="together-section fade-in" id="together">
-  <div class="section-label">What you and your child do together</div>
-  <h2 class="section-heading">A tool you use with your child — not one you hand off and hope.</h2>
-  <p class="section-body">ThinkSmith was designed for parents who want to be in the loop, not on the sidelines. Each part of how it works has something for your child to do — and something for you to see, read, and act on.</p>
-
-  <div class="together-grid">
-    <div class="together-item">
-      <div class="together-num">01</div>
-      <div class="together-title">Your child engages with the material — really engages.</div>
-      <div class="together-body"><strong>For your child:</strong> they write about academic challenges in their own words, not multiple-choice tap-and-go. Real thinking, real writing.<br><br><strong>For you:</strong> you see their actual writing, observed across five competencies. Not a grade — a description of where their thinking is and where it's getting stronger.</div>
-    </div>
-    <div class="together-item">
-      <div class="together-num">02</div>
-      <div class="together-title">They learn how to think by evaluating how others think.</div>
-      <div class="together-body"><strong>For your child:</strong> they read three peer attempts at the same challenge and write feedback to each one. The act of evaluating other reasoning sharpens their own — this is the mechanism behind the research results.<br><br><strong>For you:</strong> you can see what your child noticed in others' work — a window into how they're learning to evaluate ideas.</div>
-    </div>
-    <div class="together-item">
-      <div class="together-num">03</div>
-      <div class="together-title">They receive feedback they can actually use.</div>
-      <div class="together-body"><strong>For your child:</strong> peer feedback addressed to their own work, plus structured reflection on what changed in their thinking. Not a red pen — a mirror.<br><br><strong>For you:</strong> you see how they responded to feedback. Did they engage? Did they shrug it off? This is meaningful signal you can use to guide what to discuss with them.</div>
-    </div>
-    <div class="together-item">
-      <div class="together-num">04</div>
-      <div class="together-title">Their thinking becomes visible — to them, and to you.</div>
-      <div class="together-body"><strong>For your child:</strong> a Thinking Outcome at the end of each activity. Five competencies — Knowledge, Critical Thinking, Creative Thinking, Communication, Application — described in developmental language, not letter grades.<br><br><strong>For you:</strong> a parent dashboard that shows their thinking developing across all their activities. You see the same competencies, the same evidence, plus weekly observations written for you.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════════
-     HOW IT WORKS — TWO TRACKS
-════════════════════════════════════════════════ -->
-<section class="how-section fade-in" id="how">
-  <div class="section-label">How it works</div>
-  <h2 class="section-heading">A typical activity, side by side.</h2>
-  <p class="section-body">What your child experiences, and what you see, in one activity. They work through it on their own — but you're never in the dark about what's happening.</p>
-
-  <div class="how-tracks">
-    <div>
-      <div class="track-subhead">Your child's experience</div>
-      <h3 class="track-header">A self-paced activity, about 30–45 minutes.</h3>
-      <div style="margin-top: 2rem;">
-        <div class="track-step">
-          <div class="track-step-num">STAGE 1</div>
-          <div class="track-step-title">Write their own solution</div>
-          <div class="track-step-body">They read the challenge and write their thinking in their own words. The platform observes what they write across five competencies in real time — they see the bars move as their writing develops.</div>
-        </div>
-        <div class="track-step">
-          <div class="track-step-num">STAGE 2</div>
-          <div class="track-step-title">Evaluate three peer attempts</div>
-          <div class="track-step-body">Three AI-generated peers — at varying quality levels — present their own reasoning. Your child writes constructive feedback to each. Evaluating others' thinking is where the deepest learning happens.</div>
-          <div class="ai-note">The peers are AI-generated so they're always available, always appropriately matched in quality, and never discouraged by honest criticism. It's what makes this method work for a single child learning at home.</div>
-        </div>
-        <div class="track-step">
-          <div class="track-step-num">STAGE 3</div>
-          <div class="track-step-title">Receive peer feedback</div>
-          <div class="track-step-body">Three peers respond to your child's solution. They reflect in writing on what changed in their thinking. The closest thing to a teacher conference at this scale.</div>
-        </div>
-        <div class="track-step">
-          <div class="track-step-num">STAGE 4</div>
-          <div class="track-step-title">See their Thinking Outcome</div>
-          <div class="track-step-body">A synthesis of their thinking across the activity — five-competency levels and a narrative of how their thinking developed. They keep going if they want; the next activity is theirs to choose.</div>
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <div class="track-subhead">What you see</div>
-      <h3 class="track-header">A dashboard built for the parent in the loop.</h3>
-      <div style="margin-top: 2rem;">
-        <div class="track-step">
-          <div class="track-step-num">DURING</div>
-          <div class="track-step-title">Your child's activity is private to them</div>
-          <div class="track-step-body">While they're writing, you don't peek over their shoulder. Their thinking happens without an audience — that's part of how they learn to think honestly. The dashboard shows you nothing in-progress.</div>
-        </div>
-        <div class="track-step">
-          <div class="track-step-num">AFTER</div>
-          <div class="track-step-title">A weekly observation, written for you</div>
-          <div class="track-step-body">When your child completes activities, the dashboard shows you what the platform observed — across five competencies, with specific examples from their actual writing. Honest, including when they rushed or didn't engage deeply.</div>
-        </div>
-        <div class="track-step">
-          <div class="track-step-num">OVER TIME</div>
-          <div class="track-step-title">You see their thinking develop</div>
-          <div class="track-step-body">Across weeks and months, you watch their five-competency rollup get stronger. Not "their grade went up" — something more honest: their thinking became more developed, more communicated, more applied.</div>
-        </div>
-        <div class="track-step">
-          <div class="track-step-num">WHEN IT MATTERS</div>
-          <div class="track-step-title">Conversations worth having</div>
-          <div class="track-step-body">Sometimes the dashboard names something specific: a recent activity where your child wrote unusually thoughtfully, or one where they rushed through. Things worth a conversation at dinner. Use the signal — or don't. The parent decides.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════════
-     DASHBOARD MOCKUP
-════════════════════════════════════════════════ -->
-<section class="dashboard-section fade-in" id="dashboard">
-  <div class="section-label">What you'll see as a parent</div>
-  <h2 class="section-heading">A dashboard built around what your child has been thinking — not what they've been clicking.</h2>
-  <p class="section-body">An at-a-glance view of how their thinking is developing across five competencies, plus weekly observations written for you, plus the ability to look at any specific activity in detail. Designed so a 30-second look tells you something useful.</p>
-
-  <div class="dashboard-mockup-wrap">
-    <div class="mockup-card">
-      <div>
-        <span class="mockup-name">Carl</span>
-        <span class="mockup-meta">Grade 8 · Ontario</span>
-      </div>
-
-      <div class="mockup-ticker">
-        <div class="mockup-tile">
-          <div class="mockup-tile-name">Knowledge</div>
-          <div class="mockup-tile-bar"><div class="mockup-tile-fill" style="width: 76%; background: var(--level-developing-well);"></div></div>
-          <div class="mockup-tile-level" style="color: var(--level-developing-well);">DEV. WELL</div>
-        </div>
-        <div class="mockup-tile">
-          <div class="mockup-tile-name">Creative</div>
-          <div class="mockup-tile-bar"><div class="mockup-tile-fill" style="width: 76%; background: var(--level-developing-well);"></div></div>
-          <div class="mockup-tile-level" style="color: var(--level-developing-well);">DEV. WELL</div>
-        </div>
-        <div class="mockup-tile">
-          <div class="mockup-tile-name">Critical</div>
-          <div class="mockup-tile-bar"><div class="mockup-tile-fill" style="width: 92%; background: var(--level-strong);"></div></div>
-          <div class="mockup-tile-level" style="color: var(--level-strong);">STRONG</div>
-        </div>
-        <div class="mockup-tile">
-          <div class="mockup-tile-name">Comm</div>
-          <div class="mockup-tile-bar"><div class="mockup-tile-fill" style="width: 76%; background: var(--level-developing-well);"></div></div>
-          <div class="mockup-tile-level" style="color: var(--level-developing-well);">DEV. WELL</div>
-        </div>
-        <div class="mockup-tile">
-          <div class="mockup-tile-name">Application</div>
-          <div class="mockup-tile-bar"><div class="mockup-tile-fill" style="width: 52%; background: var(--level-developing);"></div></div>
-          <div class="mockup-tile-level" style="color: var(--level-developing);">DEVELOPING</div>
-        </div>
-      </div>
-
-      <div class="mockup-synth-label">What the platform has observed</div>
-      <p class="mockup-synth-text">Carl completed three activities this week — two on the rivers of Asia and one on chemical bonds. His <em>Critical Thinking</em> stood out on the rivers work; he wrote about why the Mekong matters to the people who live near it, not just where it flows. On the bonds activity his thinking was thinner — he answered the questions but did not engage much with the underlying concepts. Worth knowing he spent under five minutes on the chemistry submission, which usually means rushing.</p>
-
-      <div class="mockup-recent-label">Recent activities</div>
-      <div class="mockup-recent">
-        <div class="mockup-activity">
-          <div class="mockup-activity-date">MAR 9</div>
-          <div class="mockup-activity-subj">Geography</div>
-          <div class="mockup-activity-prompt">Why does the Mekong River matter to the region around it?</div>
-          <div class="mockup-activity-status" style="color: var(--level-strong);">STRONG</div>
-        </div>
-        <div class="mockup-activity">
-          <div class="mockup-activity-date">MAR 7</div>
-          <div class="mockup-activity-subj">Geography</div>
-          <div class="mockup-activity-prompt">Compare the watersheds of the Yangtze and the Indus.</div>
-          <div class="mockup-activity-status" style="color: var(--level-developing-well);">DEV. WELL</div>
-        </div>
-        <div class="mockup-activity">
-          <div class="mockup-activity-date">MAR 5</div>
-          <div class="mockup-activity-subj">Chemistry</div>
-          <div class="mockup-activity-prompt">Explain ionic vs covalent bonding using a real-world example.</div>
-          <div class="mockup-activity-status" style="color: var(--level-developing);">DEVELOPING</div>
-        </div>
-      </div>
-    </div>
-
-    <p class="dashboard-mockup-caption">A view of your child's thinking, refreshed each time they complete an activity. The synthesis is honest — including when something didn't go well — because homeschool parents don't need flattery, they need signal. The dashboard never replaces your judgment; it gives you something to act on.</p>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════════
-     PROOF STRIP
-════════════════════════════════════════════════ -->
-<div class="proof-strip fade-in" id="research">
-  <div class="section-label">The research</div>
-  <h2 class="section-heading">The pedagogy was tested with 1,742 students across 22 courses. The results were consistent across subjects, instructors, and difficulty levels.</h2>
-
-  <div class="proof-grid">
-    <div class="proof-item">
-      <div class="proof-pct"><em>17.31%</em></div>
-      <div class="proof-label">Average final exam improvement across 10 courses where the same instructors had previously taught the same material by lecture</div>
-    </div>
-    <div class="proof-item">
-      <div class="proof-pct"><em>27.62%</em></div>
-      <div class="proof-label">Final exam improvement in Calculus III — including students who had previously failed the course</div>
-    </div>
-    <div class="proof-item">
-      <div class="proof-pct"><em>83%</em></div>
-      <div class="proof-label">Of students reported greater confidence in their own ability to learn</div>
-    </div>
-    <div class="proof-item">
-      <div class="proof-pct"><em>78%</em></div>
-      <div class="proof-label">Of students said they would enrol in other courses taught the same way</div>
-    </div>
-  </div>
-  <p class="proof-source" style="color: #ffffff; text-align: center;">Source: Peer-reviewed pilot study, Ubon Ratchathani University &mdash; 1,742 students, 22 courses, 6 disciplines.<br>Instructors held PhDs from international universities &mdash; instructional quality was top-tier.<br>The mechanism is a property of how humans learn, not of any specific population.<br>The variable being tested was the method, not instructor quality.<br><br><a href="WhyWeBuiltItThisWay.pdf" style="color: #ffffff; text-decoration: underline;">Read research: What ThinkSmith Is, and Why We Built It This Way &rarr;</a></p>
 </div>
 
-<!-- ═══════════════════════════════════════════════
-     CTA
-════════════════════════════════════════════════ -->
-<section class="cta-section fade-in">
-  <div class="section-label">Get started</div>
-  <h2 class="section-heading">Try it together for thirty days.</h2>
-  <p class="section-body">Your child works through their first activities. You see what the dashboard shows you. You decide whether it's the kind of thing you want to keep using. No credit card required. Cancel anytime.</p>
-  <div class="cta-actions">
-    <a href="https://app.thinksmith.ca/" class="btn-primary">Start free trial</a>
+<div style="padding: 2rem 24px; display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:14px; max-width:640px; margin:0 auto;">
+  <div style="background:#E1F5EE; border-radius:12px; padding:16px; text-align:center;">
+    <div style="font-size:22px; font-weight:500; color:#085041;">94%</div>
+    <div style="font-size:12px; color:#0F6E56;">developed stronger critical thinking</div>
   </div>
-</section>
-
-<!-- ═══════════════════════════════════════════════
-     MEET MS. RIVERA — a conversation, not a chatbot
-════════════════════════════════════════════════ -->
-<section class="cta-section fade-in" style="background: var(--off-white); color: var(--ink);">
-  <div class="section-label" style="color: var(--accent);">A conversation, not a chatbot</div>
-  <h2 class="section-heading" style="color: var(--ink);">Meet Ms. Rivera.</h2>
-  <p class="section-body" style="color: var(--muted);">Rivera is ThinkSmith&#8217;s AI learning coach &mdash; the coach your child would work with. She doesn&#8217;t grade your child&#8217;s work the way a teacher would. She watches how their thinking develops as they write, gives feedback, and helps them notice what&#8217;s missing.</p>
-  <p class="section-body" style="color: var(--muted);">Before you sign up, you can ask her anything about how she thinks about thinking. Ask her how she assesses critical thinking. Ask her what &#8220;emerging&#8221; means. Ask her why she asks questions instead of just answering them.</p>
-  <div class="cta-actions">
-    <span class="btn-ghost" style="opacity: 0.45; cursor: not-allowed; pointer-events: none; user-select: none;" aria-disabled="true">Ask Ms. Rivera a question &mdash; coming soon</span>
+  <div style="background:#E1F5EE; border-radius:12px; padding:16px; text-align:center;">
+    <div style="font-size:22px; font-weight:500; color:#085041;">96%</div>
+    <div style="font-size:12px; color:#0F6E56;">found coaching engaging</div>
   </div>
-</section>
+  <div style="background:#E1F5EE; border-radius:12px; padding:16px; text-align:center;">
+    <div style="font-size:22px; font-weight:500; color:#085041;">89%</div>
+    <div style="font-size:12px; color:#0F6E56;">built stronger teamwork skills</div>
+  </div>
+</div>
 
-<footer>
-  <a href="#" class="footer-logo">ThinkSmith</a>
-  <ul class="footer-links">
-    <li><a href="mailto:Contact@thinksmith.ca">For partnering conversations &rarr; Contact@thinksmith.ca</a></li>
-  </ul>
-  <span>© 2026 ThinkSmith. All rights reserved.</span>
-</footer>
+<div style="padding: 2.5rem 24px; background:var(--surface-1);">
+  <div style="max-width:640px; margin:0 auto;">
+    <div style="font-size:12px; font-weight:500; color:#62209C; text-align:center; margin-bottom:6px;">ONE PLATFORM, THE WHOLE JOURNEY</div>
+    <h2 style="font-size:20px; font-weight:500; text-align:center; margin-bottom:10px;">From first day to thinking readiness</h2>
+    <p style="font-size:14px; color:var(--text-secondary); text-align:center; max-width:480px; margin:0 auto 1.75rem; line-height:1.6;">Most tools hand you a worksheet and walk away. ThinkSmith stays with you the whole way.</p>
+
+    <div style="display:flex; flex-direction:column; gap:0;">
+
+      <div style="display:flex; gap:16px;">
+        <div style="display:flex; flex-direction:column; align-items:center;">
+          <div style="width:28px; height:28px; border-radius:50%; background:#8C2DDF; color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:500; flex-shrink:0;">1</div>
+          <div style="width:2px; flex:1; background:#E4D3F5; margin:4px 0;"></div>
+        </div>
+        <div style="padding-bottom:20px;">
+          <div style="font-weight:500; font-size:14.5px; margin-bottom:4px;">Register and set up</div>
+          <div style="font-size:13.5px; color:var(--text-secondary); line-height:1.55;">Create your child's account, tell us their grade, and build their courses from the real curriculum.</div>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:16px;">
+        <div style="display:flex; flex-direction:column; align-items:center;">
+          <div style="width:28px; height:28px; border-radius:50%; background:#8C2DDF; color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:500; flex-shrink:0;">2</div>
+          <div style="width:2px; flex:1; background:#E4D3F5; margin:4px 0;"></div>
+        </div>
+        <div style="padding-bottom:20px;">
+          <div style="font-weight:500; font-size:14.5px; margin-bottom:4px;">Work through real challenges</div>
+          <div style="font-size:13.5px; color:var(--text-secondary); line-height:1.55;">Each course is a sequence of written challenges &mdash; the thinking work that actually matters, not fill-in-the-blank.</div>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:16px;">
+        <div style="display:flex; flex-direction:column; align-items:center;">
+          <div style="width:28px; height:28px; border-radius:50%; background:#8C2DDF; color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:500; flex-shrink:0;">3</div>
+          <div style="width:2px; flex:1; background:#E4D3F5; margin:4px 0;"></div>
+        </div>
+        <div style="padding-bottom:20px;">
+          <div style="font-weight:500; font-size:14.5px; margin-bottom:4px;">A teacher who guides not answers</div>
+          <div style="font-size:13.5px; color:var(--text-secondary); line-height:1.55;">Ms. Rivera works alongside your child on every challenge, asking the questions that move their thinking forward.</div>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:16px;">
+        <div style="display:flex; flex-direction:column; align-items:center;">
+          <div style="width:28px; height:28px; border-radius:50%; background:#8C2DDF; color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:500; flex-shrink:0;">4</div>
+          <div style="width:2px; flex:1; background:#E4D3F5; margin:4px 0;"></div>
+        </div>
+        <div style="padding-bottom:20px;">
+          <div style="font-weight:500; font-size:14.5px; margin-bottom:4px;">Peers who push back</div>
+          <div style="font-size:13.5px; color:var(--text-secondary); line-height:1.55;">Your child reviews and responds to peer work, and gets feedback in return &mdash; the part that turns a solo worksheet into real reasoning.</div>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:16px;">
+        <div style="display:flex; flex-direction:column; align-items:center;">
+          <div style="width:28px; height:28px; border-radius:50%; background:#8C2DDF; color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:500; flex-shrink:0;">5</div>
+          <div style="width:2px; flex:1; background:#E4D3F5; margin:4px 0;"></div>
+        </div>
+        <div style="padding-bottom:20px;">
+          <div style="font-weight:500; font-size:14.5px; margin-bottom:4px;">See thinking grow</div>
+          <div style="font-size:13.5px; color:var(--text-secondary); line-height:1.55;">Every course and topic produces a Thinking Outcome &mdash; a clear, honest read of where your child's thinking sits and how far it's come.</div>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:16px;">
+        <div style="display:flex; flex-direction:column; align-items:center;">
+          <div style="width:28px; height:28px; border-radius:50%; background:#8C2DDF; color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:500; flex-shrink:0;">6</div>
+        </div>
+        <div>
+          <div style="font-weight:500; font-size:14.5px; margin-bottom:4px;">Watch the whole pathway</div>
+          <div style="font-size:13.5px; color:var(--text-secondary); line-height:1.55;">Track readiness across every course, see university- and college-preparation streams side by side, and know at a glance what's complete and what's next.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div style="padding: 2.5rem 24px;">
+  <h2 style="font-size:19px; font-weight:500; text-align:center; margin-bottom: 1.75rem;">Built around how homeschooling actually works</h2>
+  <div style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:14px; max-width:660px; margin:0 auto;">
+    <div style="background:var(--surface-1); border-radius:12px; padding:1.1rem;">
+      <i class="ti ti-users" style="font-size:22px; color:#8C2DDF;" aria-hidden="true"></i>
+      <div style="font-weight:500; font-size:14px; margin:10px 0 5px;">Parents with one or more kids</div>
+      <div style="font-size:13px; color:var(--text-secondary); line-height:1.5;">One dashboard for every child. Email or a simple 4-digit PIN for younger kids.</div>
+    </div>
+    <div style="background:var(--surface-1); border-radius:12px; padding:1.1rem;">
+      <i class="ti ti-user" style="font-size:22px; color:#8C2DDF;" aria-hidden="true"></i>
+      <div style="font-weight:500; font-size:14px; margin:10px 0 5px;">Independent teens</div>
+      <div style="font-size:13px; color:var(--text-secondary); line-height:1.5;">Older students register and run their own dashboard, no parent account needed.</div>
+    </div>
+    <div style="background:var(--surface-1); border-radius:12px; padding:1.1rem;">
+      <i class="ti ti-school" style="font-size:22px; color:#8C2DDF;" aria-hidden="true"></i>
+      <div style="font-weight:500; font-size:14px; margin:10px 0 5px;">Co-ops and umbrella programs</div>
+      <div style="font-size:13px; color:var(--text-secondary); line-height:1.5;">One shared way to see thinking growth across a group on different courses.</div>
+    </div>
+  </div>
+</div>
+
+<div style="padding: 1rem 24px 3rem; max-width:680px; margin:0 auto; display:flex; flex-direction:column; gap:3rem;">
+
+<div style="display:flex; gap:28px; align-items:center;">
+  <div style="flex:1.1;">
+    <div style="font-size:12px; font-weight:500; color:#62209C; margin-bottom:6px;">01 &middot; The thing homeschooling can't recreate alone</div>
+    <h3 style="font-size:18px; font-weight:500; margin:0 0 8px;">Peers to think alongside, even at a table of one</h3>
+    <p style="font-size:14px; color:var(--text-secondary); line-height:1.65; margin:0 0 10px;">The hardest thing to replace at home is a classroom of other kids solving the same problem differently than you did. ThinkSmith gives every child three peer solutions of genuinely varying quality to evaluate on every activity.</p>
+    <div style="font-size:12px; color:#0F6E56;">89% said the collaboration was stimulating and enriching</div>
+  </div>
+  <div style="width:230px; background:var(--surface-1); border-radius:12px; padding:12px; flex-shrink:0;">
+    <div style="display:flex; gap:6px; margin-bottom:8px;">
+      <span style="background:#8C2DDF; color:#fff; font-size:10px; padding:3px 8px; border-radius:20px;">Maya</span>
+      <span style="background:#fff; border:0.5px solid var(--border); font-size:10px; padding:3px 8px; border-radius:20px;">Ethan</span>
+      <span style="background:#fff; border:0.5px solid var(--border); font-size:10px; padding:3px 8px; border-radius:20px;">Riley</span>
+    </div>
+    <div style="background:#fff; border-radius:8px; padding:8px; font-size:10px; color:var(--text-secondary); line-height:1.5;">"I'm comparing the Industrial Revolution with the Digital Revolution because..."</div>
+  </div>
+</div>
+
+<div style="display:flex; gap:28px; align-items:center;">
+  <div style="width:230px; background:var(--surface-1); border-radius:12px; padding:12px; flex-shrink:0;">
+    <div style="font-size:10px; color:var(--text-muted); margin-bottom:4px;">Ms. Rivera</div>
+    <div style="background:#fff; border-radius:8px; padding:8px; font-size:10px; line-height:1.5;">"I can see you're still feeling stuck. Let's go simpler &mdash; pick one thing from class you remember anything about."</div>
+  </div>
+  <div style="flex:1.1;">
+    <div style="font-size:12px; font-weight:500; color:#62209C; margin-bottom:6px;">02 &middot; You don't have to be the expert in every subject</div>
+    <h3 style="font-size:18px; font-weight:500; margin:0 0 8px;">A teacher for every child, on every subject, any time (24/7)</h3>
+    <p style="font-size:14px; color:var(--text-secondary); line-height:1.65; margin:0 0 10px;">Ms. Rivera coaches through every piece of work &mdash; asking guiding questions, never giving the answer. You stay the parent; ThinkSmith carries the subject-by-subject coaching load.</p>
+    <div style="font-size:12px; color:#0F6E56;">96% found time with their coach engaging and rewarding</div>
+  </div>
+</div>
+
+
+<div id="rk03">
+  <div style="font-size:12px; font-weight:500; color:#62209C; margin-bottom:6px;">03 &middot; You're also the record-keeper</div>
+  <h3 style="font-size:18px; font-weight:500; margin:0 0 8px;">A real record of thinking growth, not a grade you made up</h3>
+  <p style="font-size:14px; color:var(--text-secondary); line-height:1.65; margin:0 0 4px;">Every state and province asks something different of homeschooling families. ThinkSmith tracks thinking against your actual readiness bands and shows the change from a course's first day to now &mdash; downloadable whenever a board or program asks for documentation.</p>
+
+  <div class="rk overall" data-start="54" data-now="86" data-standard="60">
+    <div class="rk-head">
+      <div class="t"><span>Thinking Outcome Readiness</span><span class="q">?</span></div>
+      <div class="band-now" data-bandslot></div>
+    </div>
+    <div class="bands" data-bands></div>
+    <div class="track" data-track></div>
+  </div>
+
+  <div id="fullwrap">
+    <div class="divider"><span>Full readiness — the five competencies</span></div>
+    <div id="comps"></div>
+  </div>
+
+  <div class="phases">
+    <span class="p" id="pA"><span class="d"></span> Thinking outcome</span>
+    <span class="sep">&rarr;</span>
+    <span class="p" id="pB"><span class="d"></span> Full readiness</span>
+  </div>
+
+  <div class="legend">
+    <span class="k"><span class="d-start"></span> Course start</span>
+    <span class="k"><span class="d-now"></span> Now</span>
+    <span class="k"><span class="d-std"></span> The standard (Proficient)</span>
+    <span>&middot; Readiness is judged on evidence, not marks.</span>
+  </div>
+</div>
+
+
+<div style="display:flex; gap:28px; align-items:center;">
+  <div style="width:230px; background:var(--surface-1); border-radius:12px; padding:12px; flex-shrink:0; text-align:center;">
+    <div style="width:60px; height:60px; border-radius:50%; border:4px solid #5DCAA5; display:flex; align-items:center; justify-content:center; margin:0 auto 6px; font-weight:500; font-size:17px; color:#085041;">75</div>
+    <div style="font-size:11px; font-weight:500; color:#0F6E56;">Strong</div>
+    <div style="font-size:9px; color:var(--text-muted);">132 activities assessed</div>
+  </div>
+  <div style="flex:1.1;">
+    <div style="font-size:12px; font-weight:500; color:#62209C; margin-bottom:6px;">04 &middot; Keep them in it, without the nagging</div>
+    <h3 style="font-size:18px; font-weight:500; margin:0 0 8px;">A loop that shows them getting better, in their own words</h3>
+    <p style="font-size:14px; color:var(--text-secondary); line-height:1.65; margin:0;">Write a solution, evaluate three peers, get feedback back, see a portfolio &mdash; about 20&ndash;30 minutes. Low first scores are expected, not a judgment, so kids revise and watch the number move.</p>
+  </div>
+</div>
+
+<div style="background:#3C2A6B; border-radius:12px; padding:1.5rem 1.75rem; color:#F1EDFB;">
+  <div style="font-size:12px; font-weight:500; color:#D9C4F2; margin-bottom:6px;">05 &middot; Verified, not generated</div>
+  <h3 style="font-size:18px; font-weight:500; margin:0 0 8px; color:#fff;">Matched to your real curriculum</h3>
+  <p style="font-size:14px; line-height:1.65; margin:0 0 10px;">Plenty of tools claim to cover "any curriculum." Most quietly generate it &mdash; and get it wrong. ThinkSmith does the opposite: we find the official curriculum document for your child's grade, confirm it's the current version, and build from it.</p>
+  <p style="font-size:14px; line-height:1.65; margin:0;">Right now that means Texas, Canada, and any other state, fully mapped and verified against the official curriculum. You can also use whatever curriculum you choose.</p>
+</div>
+
+</div>
+
+<div style="background:#F8F1FC; text-align:center; padding: 3rem 24px;">
+  <h3 style="font-size:19px; font-weight:500; margin-bottom:10px;">See what your child's thinking looks like</h3>
+  <p style="font-size:14px; color:var(--text-secondary); margin-bottom:18px;">Start free, any curriculum, grades K through 12.</p>
+  <button style="background:#8C2DDF; color:#fff; border:none; font-size:14px; padding:11px 22px; border-radius:var(--radius);">Start free</button>
+</div>
+
+<div style="padding: 2rem 24px; border-top:0.5px solid var(--border); display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:16px; font-size:12px;">
+  <div>
+    <div style="font-weight:500; color:#8C2DDF; margin-bottom:8px;">ThinkSmith</div>
+    <div style="color:var(--text-muted); line-height:1.7;">AI coaching that builds clarity, reasoning, and reflection.</div>
+  </div>
+  <div>
+    <div style="font-weight:500; margin-bottom:8px;">Product</div>
+    <div style="color:var(--text-secondary); line-height:1.9;">How it works<br/>For families<br/>For programs<br/>Pricing</div>
+  </div>
+  <div>
+    <div style="font-weight:500; margin-bottom:8px;">Company</div>
+    <div style="color:var(--text-secondary); line-height:1.9;">About us<br/>Research<br/>Blog</div>
+  </div>
+  <div>
+    <div style="font-weight:500; margin-bottom:8px;">Contact</div>
+    <div style="color:var(--text-secondary); line-height:1.9;">sales@thinksmith.ca<br/>www.thinksmith.ca</div>
+  </div>
+</div>
+
 
 <script>
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1 });
-document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  const BANDS=[{name:"Not yet",range:"<50%"},{name:"Emerging",range:"50–59%"},{name:"Developing",range:"60–69%"},{name:"Proficient",range:"70–79%"},{name:"Exemplary",range:"80+%"}];
+  const COMPS=[
+    {name:"Knowledge & Understanding",hint:"Grasping the content",start:58,now:88},
+    {name:"Creative Thinking",hint:"Generating ideas",start:46,now:74},
+    {name:"Critical Thinking",hint:"Analysing & reasoning",start:42,now:84},
+    {name:"Communication",hint:"Explaining clearly",start:40,now:58},
+    {name:"Application",hint:"Using it in context",start:44,now:78},
+  ];
+  const root=document.getElementById('rk03');
+  const bandIndex=v=>Math.max(0,Math.min(4,Math.floor(v/20)));
+  const bandName=v=>BANDS[bandIndex(v)].name;
+  const bandsHTML=n=>{const a=bandIndex(n);return BANDS.map((b,i)=>`<div class="band${i===a?' active':''}"><div class="bn">${b.name}</div><div class="br">${b.range}</div></div>`).join("");};
+  const trackHTML=std=>{let d="";for(let k=1;k<5;k++)d+=`<div class="div" style="left:${k*20}%"></div>`;return d+`<div class="standard" style="left:${std}%"></div><div class="line"></div><div class="dot start"></div><div class="dot now"></div>`;};
+  const overall=root.querySelector('.rk.overall');
+  const oS=+overall.dataset.start,oN=+overall.dataset.now,oStd=+overall.dataset.standard;
+  overall.style.setProperty('--start',oS+'%');overall.style.setProperty('--now',oN+'%');
+  overall.querySelector('[data-bands]').innerHTML=bandsHTML(oN);
+  overall.querySelector('[data-track]').innerHTML=trackHTML(oStd);
+  overall.querySelector('[data-bandslot]').textContent="Now "+bandName(oN);
+  root.querySelector('#comps').innerHTML=COMPS.map((c,i)=>`<div class="rk comp" style="--start:${c.start}%;--now:${c.now}%;--i:${i}"><div class="clabel"><div class="cn">${c.name}<small>${c.hint}</small></div><div class="cb">${bandName(c.now)}</div></div><div class="bands">${bandsHTML(c.now)}</div><div class="track">${trackHTML(60)}</div></div>`).join("");
+  const fullwrap=root.querySelector('#fullwrap'),comps=[...root.querySelectorAll('.comp')],pA=root.querySelector('#pA'),pB=root.querySelector('#pB');
+  const reflow=el=>{el.classList.remove('in');void el.offsetWidth;el.classList.add('in');};
+  let timers=[],running=false;
+  const clearT=()=>{timers.forEach(clearTimeout);timers=[];};
+  const at=(fn,ms)=>timers.push(setTimeout(fn,ms));
+  function phaseA(){fullwrap.classList.remove('open');comps.forEach(c=>c.classList.remove('in'));pA.classList.add('on');pB.classList.remove('on');reflow(overall);}
+  function phaseB(){fullwrap.classList.add('open');pA.classList.remove('on');pB.classList.add('on');requestAnimationFrame(()=>requestAnimationFrame(()=>comps.forEach(reflow)));}
+  function cycle(){if(!running)return;clearT();phaseA();at(phaseB,2900);at(cycle,7400);}
+  function start(){if(running)return;running=true;cycle();}
+  function stop(){running=false;clearT();}
+  root.addEventListener('mouseenter',()=>{running=false;clearT();});
+  root.addEventListener('mouseleave',()=>{if(!running){running=true;cycle();}});
+  if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting?start():stop()),{threshold:.3});io.observe(root);}else start();
 </script>
 </body>
 </html>
