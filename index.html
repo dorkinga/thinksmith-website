@@ -310,10 +310,123 @@
   <a href="https://app.thinksmith.ca/login" style="background:#8C2DDF; color:#fff; border:none; font-size:14px; padding:11px 22px; border-radius:var(--radius); text-decoration:none; display:inline-block;">Start free</a>
 </div>
 
-<div style="padding: 2rem 24px; border-top:0.5px solid var(--border); font-size:12px;">
-  <div style="font-weight:500; margin-bottom:8px;">Contact</div>
-  <div style="color:var(--text-secondary); line-height:1.9;">sales@thinksmith.ca</div>
+<div style="padding: 2rem 24px; border-top:0.5px solid var(--border); font-size:12px; text-align:center;">
+  <div style="display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:8px 20px; line-height:1.9;">
+    <a href="mailto:contact@thinksmith.ca" style="color:var(--text-secondary); text-decoration:none;">contact@thinksmith.ca</a>
+    <a href="#" id="sgOpen" style="color:#8C2DDF; text-decoration:none; font-weight:500;">Safeguarding</a>
+  </div>
 </div>
+
+<!-- ── Safeguarding modal ──────────────────────────────────────────────────
+     Public statement of what we disclose to child-protection authorities, and
+     what we hold. EDITING RULE: every sentence here must match what the system
+     actually does and what the database actually contains. If a field is added
+     or removed from collection, this text changes in the same commit. -->
+<div id="sgOverlay" role="dialog" aria-modal="true" aria-labelledby="sgTitle" hidden
+     style="position:fixed; inset:0; background:rgba(24,16,40,0.6); z-index:9999;
+            display:none; align-items:center; justify-content:center; padding:20px;">
+  <div id="sgPanel" style="background:#fff; border-radius:14px; max-width:640px; width:100%;
+              max-height:85vh; overflow-y:auto; padding:28px 30px; position:relative;
+              box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <button id="sgClose" aria-label="Close"
+            style="position:absolute; top:14px; right:16px; background:none; border:none;
+                   font-size:24px; line-height:1; color:#8A8296; cursor:pointer;">&times;</button>
+
+    <div style="font-size:12px; font-weight:500; color:#8C2DDF; margin-bottom:6px;">Safeguarding</div>
+    <h2 id="sgTitle" style="font-size:21px; font-weight:600; margin:0 0 16px; color:#1A1526;">
+      What we share if a child may be at risk
+    </h2>
+
+    <p style="font-size:14px; line-height:1.7; margin:0 0 14px; color:#3A3348;">
+      Every message a child writes is screened before our AI coach is allowed to reply. If that
+      screening finds content indicating self-harm or serious distress, the coach stops coaching,
+      points the child to a crisis service staffed by trained people &mdash; the 988 Suicide &amp;
+      Crisis Lifeline in the United States, or Kids Help Phone in Canada &mdash; and the disclosure
+      is raised with a trained member of our team who has completed child-protection orientation.
+    </p>
+
+    <p style="font-size:14px; line-height:1.7; margin:0 0 14px; color:#3A3348;">
+      Where a report to a child-protection authority is appropriate, we provide the learner's first
+      and last name, their grade and their province or state, together with the parent or guardian's
+      name and email address. Nothing further. We do not include a date of birth, a home address, or
+      a telephone number in a safety report. The purpose is narrow: to allow the authority to contact
+      the parent or guardian and assess immediate risk.
+    </p>
+
+    <p style="font-size:14px; line-height:1.7; margin:0 0 14px; color:#3A3348;">
+      We do not collect a child's date of birth, home address, or location data of any kind.
+      Families who subscribe do provide billing details to our payment processor, and those details
+      are used for payment only &mdash; they are never included in a safety report. We hold learner
+      records in Canada, and we do not sell or share family information or show advertising.
+    </p>
+
+    <p style="font-size:14px; line-height:1.7; margin:0 0 14px; color:#3A3348;">
+      Information is disclosed only where there are reasonable grounds to suspect that a child may
+      be in need of protection. In Ontario this duty arises under the Child, Youth and Family
+      Services Act, 2017, which requires a report to a Children's Aid Society and applies even where
+      information would otherwise be confidential. In Texas, reports are made to the Department of
+      Family and Protective Services under chapter 261 of the Texas Family Code.
+    </p>
+
+    <p style="font-size:14px; line-height:1.7; margin:0 0 4px; color:#3A3348;">
+      One deliberate limit: a child sometimes discloses something concerning a member of their own
+      household. In those cases we do not contact the family first. We report to the authority and
+      take direction from them, because a system that routed every disclosure straight back to a
+      parent account could place a child at greater risk.
+    </p>
+
+    <p style="font-size:12px; line-height:1.6; margin:18px 0 0; color:#6B6478; border-top:0.5px solid #E7E1EF; padding-top:14px;">
+      ThinkSmith is a learning tool, not a counselling service or a crisis line. If you believe a
+      child is in immediate danger, contact your local emergency services. Questions about this
+      policy: <a href="mailto:contact@thinksmith.ca" style="color:#8C2DDF;">contact@thinksmith.ca</a>
+    </p>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var overlay = document.getElementById('sgOverlay');
+    var panel   = document.getElementById('sgPanel');
+    var openBtn = document.getElementById('sgOpen');
+    var closeBtn= document.getElementById('sgClose');
+    var lastFocus = null;
+
+    // Visibility is driven by style.display, NOT by the `hidden` attribute:
+    // this element carries an inline style, and an inline display value wins
+    // over the user-agent rule that makes [hidden] display:none. Setting only
+    // `hidden` left the dialog open and unclosable. `hidden` is still kept in
+    // sync so assistive technology treats it correctly.
+    function isOpen() { return overlay.style.display !== 'none'; }
+
+    function open(e) {
+      if (e) e.preventDefault();
+      lastFocus = document.activeElement;
+      overlay.style.display = 'flex';
+      overlay.hidden = false;
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    }
+    function close() {
+      overlay.style.display = 'none';
+      overlay.hidden = true;
+      document.body.style.overflow = '';
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+
+    // Defensive: guarantee a closed start regardless of how the file is served
+    // (file://, cached copy, or a host that strips attributes).
+    close();
+
+    openBtn.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    // Backdrop click closes; a click inside the panel must not.
+    overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+    panel.addEventListener('click', function (e) { e.stopPropagation(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && isOpen()) close();
+    });
+  })();
+</script>
 
 
 <script>
