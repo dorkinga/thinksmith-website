@@ -362,7 +362,7 @@
       <a href="#research">The research</a>
       <a href="#pricing">Pricing</a>
     </div>
-    <a href="mailto:contact@thinksmith.ca?subject=ThinkSmith%20enquiry" class="btn ghost">Contact us</a>
+    <a href="#contact" class="btn ghost contact-open">Contact us</a>
   </div>
 </nav>
 
@@ -373,7 +373,7 @@
       <h1>You can teach every subject. You can't be twenty classmates.</h1>
       <p class="lede">A personal learning companion, a room full of peers, and a real record of progress — the three things a classroom gives that one parent, alone, can't recreate. Backed by peer-reviewed research, built so you're still in the loop every step of the way.</p>
       <div class="hero-ctas">
-        <a href="mailto:contact@thinksmith.ca?subject=ThinkSmith%20%E2%80%94%20founding%20family%20enquiry" class="btn">Contact us to get started →</a>
+        <a href="#contact" class="btn contact-open">Contact us to get started →</a>
       </div>
       <div class="hero-note">Now welcoming founding families · Grades K–12 · <a href="mailto:contact@thinksmith.ca" style="color:var(--teal-deep);">contact@thinksmith.ca</a></div>
     </div>
@@ -622,36 +622,8 @@
   <div class="wrap">
     <h2>Let's build this together.</h2>
     <p>The method behind ThinkSmith has been tested for years — 1,742 students, peer-reviewed results. This platform is new, and we're onboarding a small number of founding families directly with our team to get it right from day one.</p>
-    <a href="mailto:contact@thinksmith.ca?subject=ThinkSmith%20%E2%80%94%20founding%20family%20enquiry" class="btn">Contact us to get started →</a>
-    <p style="margin-top:14px;font-size:13.5px;">or leave us a message and we'll come back to you</p>
-
-    <!-- Not a <form>: submitted through fetch so the page never reloads, and so
-         a failure can be shown in place rather than dumping the visitor on a
-         blank endpoint response. -->
-    <div class="cform">
-      <div class="cfield">
-        <label for="cf-name">Your name <span class="req">*</span></label>
-        <input id="cf-name" type="text" autocomplete="name" maxlength="120" />
-      </div>
-      <div class="cfield">
-        <label for="cf-email">Your email <span class="req">*</span></label>
-        <input id="cf-email" type="email" autocomplete="email" maxlength="200" />
-      </div>
-      <div class="cfield">
-        <label for="cf-msg">Message <span class="req">*</span></label>
-        <textarea id="cf-msg" maxlength="4000" placeholder="Tell us about your family — ages, curriculum, what you're hoping for."></textarea>
-      </div>
-      <div class="hp" aria-hidden="true">
-        <label for="cf-web">Leave this field empty</label>
-        <input id="cf-web" type="text" tabindex="-1" autocomplete="off" />
-      </div>
-      <button id="cf-send" class="btn">Send message →</button>
-      <div class="cmsg" id="cf-msgbox" role="status" aria-live="polite"></div>
-      <p style="font-size:12.5px;color:var(--ink-soft);margin-top:14px;">
-        Prefer email? Write to
-        <a href="mailto:contact@thinksmith.ca" style="color:var(--teal-deep);">contact@thinksmith.ca</a>.
-      </p>
-    </div>
+    <a href="#contact" class="btn contact-open">Contact us to get started →</a>
+    <p style="margin-top:14px;font-size:13.5px;">No mail app needed &mdash; the form opens right here.</p>
   </div>
 </section>
 
@@ -714,6 +686,46 @@
 
     <div class="foot">Questions about safety or privacy?
       <a href="mailto:contact@thinksmith.ca">contact@thinksmith.ca</a></div>
+  </div>
+</div>
+
+<!-- ── Contact form ─────────────────────────────────────────────────────────
+     A dialog rather than a section at the foot of the page: a parent who
+     clicks "Contact us" expects to be asked something, not to be scrolled
+     somewhere. It also means every contact button on the page leads to the
+     same place. -->
+<div class="ovl" id="contactOvl" role="dialog" aria-modal="true" aria-labelledby="contactTitle">
+  <div class="modal narrow" id="contactModal">
+    <button class="x" id="contactClose" aria-label="Close">&times;</button>
+    <div class="eyebrow">Get in touch</div>
+    <h3 id="contactTitle">Tell us about your family</h3>
+    <p style="margin-bottom:18px;">We're onboarding a small number of founding families directly.
+      Send us a note and someone from our team will reply, usually within a working day.</p>
+
+    <div class="cform" id="cform">
+      <div class="cfield">
+        <label for="cf-name">Your full name <span class="req">*</span></label>
+        <input id="cf-name" type="text" autocomplete="name" maxlength="120" />
+      </div>
+      <div class="cfield">
+        <label for="cf-email">Your email address <span class="req">*</span></label>
+        <input id="cf-email" type="email" autocomplete="email" maxlength="200" />
+      </div>
+      <div class="cfield">
+        <label for="cf-msg">Why are you interested in ThinkSmith? <span class="req">*</span></label>
+        <textarea id="cf-msg" maxlength="4000" placeholder="Your children's ages, the curriculum you use, and what you're hoping ThinkSmith will help with."></textarea>
+      </div>
+      <div class="hp" aria-hidden="true">
+        <label for="cf-web">Leave this field empty</label>
+        <input id="cf-web" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+      <button id="cf-send" class="btn">Submit &rarr;</button>
+      <div class="cmsg" id="cf-msgbox" role="status" aria-live="polite"></div>
+      <p style="font-size:12.5px;color:var(--ink-soft);margin-top:16px;">
+        Goes straight to our team. Prefer email? Write to
+        <a href="mailto:contact@thinksmith.ca" style="color:var(--teal-deep);">contact@thinksmith.ca</a>.
+      </p>
+    </div>
   </div>
 </div>
 
@@ -830,6 +842,21 @@
   });
   var policy = wire("policyOvl", "policyModal", "policyOpen", "policyClose");
 
+  // Contact: several buttons, one dialog. wire() takes a single trigger id, so
+  // the extra triggers are attached here.
+  var contact = wire("contactOvl", "contactModal", "contactClose", "contactClose");
+  var contactOvl = document.getElementById("contactOvl");
+  function openContact(e) {
+    if (e) e.preventDefault();
+    contactOvl.style.display = "flex";
+    document.body.style.overflow = "hidden";
+    var f = document.getElementById("cf-name");
+    if (f) f.focus();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll(".contact-open"), function (b) {
+    b.addEventListener("click", openContact);
+  });
+
   // The research button opens a plain-language summary rather than the PDF
   // itself; the full paper is linked from inside it. The button's href still
   // points at the PDF, so anyone with JavaScript disabled reaches the paper.
@@ -912,6 +939,7 @@
     if (demo && demo.isOpen()) { silenceDemo(); demo.close(); }
     if (policy && policy.isOpen()) policy.close();
     if (paper && paper.isOpen()) paper.close();
+    if (contact && contact.isOpen()) contact.close();
   });
 })();
 </script>
