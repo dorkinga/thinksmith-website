@@ -305,6 +305,7 @@
   var playBtn = $("play"), prevBtn = $("prev"), nextBtn = $("next"), soundBtn = $("sound");
 
   var i = 0, playing = false, sound = false, timer = null, raf = null, t0 = 0;
+  var usingAudio = false;
   var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion:reduce)").matches;
 
   // Build the rail once.
@@ -328,13 +329,43 @@
   var compBars = compsEl.querySelectorAll(".bar i");
   var compVals = compsEl.querySelectorAll(".cn b");
 
-  function speak(text) {
-    if (!("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
-    if (!sound) return;
-    var u = new SpeechSynthesisUtterance(text);
-    u.rate = 0.97; u.pitch = 1.0;
-    window.speechSynthesis.speak(u);
+  // ── Narration ────────────────────────────────────────────────────────────
+  // Six pre-generated files: audio/stage-1.mp3 ... stage-6.mp3.
+  //
+  // Pre-generated deliberately, NOT synthesised at runtime. A TTS call from
+  // this page would publish an API key to every visitor, cost money on every
+  // play, and add latency before the first word. Files are free, instant and
+  // work offline.
+  //
+  // If a file is missing the demo does not break: onerror flips that stage to
+  // the fixed fallback timing, so the walkthrough still runs while narration
+  // is still being recorded. That also means swapping Polly for a human
+  // voiceover later is a file drop, not a code change.
+  var tracks = [], trackOk = [];
+  for (var a = 0; a < STAGES.length; a++) {
+    (function (k) {
+      var el = new Audio("audio/stage-" + (k + 1) + ".mp3");
+      el.preload = "auto";
+      trackOk[k] = null;                       // null = unknown yet
+      el.addEventListener("canplaythrough", function () { trackOk[k] = true; });
+      el.addEventListener("error", function () { trackOk[k] = false; });
+      el.addEventListener("ended", function () { if (playing) advance(); });
+      tracks[k] = el;
+    })(a);
+  }
+
+  function stopAudio() {
+    tracks.forEach(function (t) { try { t.pause(); t.currentTime = 0; } catch (e) {} });
+  }
+
+  function speak() {
+    stopAudio();
+    if (!sound) return false;
+    var t = tracks[i];
+    if (trackOk[i] === false) return false;    // no file: caller uses the timer
+    var p = t.play();
+    if (p && p.catch) p.catch(function () { trackOk[i] = false; });
+    return true;
   }
 
   function paintGrowth() {
@@ -358,24 +389,38 @@
       steps[k].className = "step" + (k < i ? " done" : k === i ? " now" : "");
     }
     paintGrowth();
-    speak(s.say);
   }
 
   function tick() {
     if (!playing) return;
-    var pct = Math.min(1, (Date.now() - t0) / HOLD[i]);
+    var pct;
+    var t = tracks[i];
+    // When narration is playing, the bar tracks the AUDIO, so the visuals and
+    // the voice cannot drift apart however long a take runs. Only when there
+    // is no audio does it fall back to the fixed hold.
+    if (usingAudio && t.duration && isFinite(t.duration)) {
+      pct = Math.min(1, t.currentTime / t.duration);
+    } else {
+      pct = Math.min(1, (Date.now() - t0) / HOLD[i]);
+    }
     progEl.style.width = (pct * 100) + "%";
     if (pct < 1) raf = requestAnimationFrame(tick);
+  }
+
+  function advance() {
+    if (i < STAGES.length - 1) { i++; render(); schedule(); }
+    else { stop(true); }
   }
 
   function schedule() {
     clearTimeout(timer); cancelAnimationFrame(raf);
     t0 = Date.now(); progEl.style.width = "0%";
+    usingAudio = speak();
     if (!reduced) raf = requestAnimationFrame(tick);
-    timer = setTimeout(function () {
-      if (i < STAGES.length - 1) { i++; render(); schedule(); }
-      else { stop(true); }
-    }, HOLD[i]);
+    // With audio, the 'ended' event advances the stage. The timer is only a
+    // safety net for a track that never fires 'ended' (a corrupt file, say).
+    var wait = usingAudio ? 120000 : HOLD[i];
+    timer = setTimeout(function () { advance(); }, wait);
   }
 
   function go(k) { stop(false); i = k; render(); }
@@ -388,7 +433,7 @@
   function stop(finished) {
     playing = false;
     clearTimeout(timer); cancelAnimationFrame(raf);
-    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+    stopAudio(); usingAudio = false;
     playBtn.textContent = finished ? "↻ Watch again" : "▶ Play demo";
     if (finished) { progEl.style.width = "100%"; }
   }
@@ -408,8 +453,10 @@
     sound = !sound;
     soundBtn.textContent = sound ? "🔊 Sound on" : "🔇 Sound off";
     soundBtn.setAttribute("aria-pressed", sound ? "true" : "false");
-    if (!sound && "speechSynthesis" in window) window.speechSynthesis.cancel();
-    else if (sound) speak(STAGES[i].say);
+    // Toggling mid-stage re-syncs: restart the stage so voice and visuals
+    // begin together rather than the audio starting halfway through.
+    if (!sound) { stopAudio(); usingAudio = false; }
+    else if (playing) { schedule(); }
   });
   document.addEventListener("keydown", function (e) {
     if (e.key === "ArrowRight") nextBtn.click();
