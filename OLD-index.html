@@ -260,27 +260,6 @@
   .final p{color:var(--ink-soft);margin-top:16px;font-size:16px;}
   .final .btn{margin-top:26px;}
 
-  /* CONTACT FORM */
-  .cform{max-width:560px;margin:26px auto 0;text-align:left;}
-  .cfield{margin-bottom:14px;}
-  .cfield label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;}
-  .cfield .req{color:#a8442a;}
-  .cform input,.cform textarea{
-    width:100%;font-family:'Inter',sans-serif;font-size:14.5px;color:var(--ink);
-    background:var(--white);border:1px solid var(--line);border-radius:var(--radius);
-    padding:11px 13px;
-  }
-  .cform textarea{min-height:128px;resize:vertical;}
-  .cform input:focus,.cform textarea:focus{outline:2px solid var(--teal);outline-offset:0;border-color:var(--teal);}
-  /* Honeypot: off-screen rather than display:none, because some bots skip
-     hidden inputs but not positioned ones. Never announced to screen readers. */
-  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
-  .cform .btn{border:none;cursor:pointer;font-family:'Inter',sans-serif;}
-  .cform .btn[disabled]{opacity:0.55;cursor:default;}
-  .cmsg{margin-top:14px;font-size:14px;border-radius:var(--radius);padding:12px 14px;display:none;}
-  .cmsg.ok{display:block;background:#e7f0ea;color:#1f4c40;}
-  .cmsg.bad{display:block;background:var(--amber-soft);color:#5c4109;}
-
   footer{padding:40px 0;text-align:center;font-size:13px;color:var(--ink-soft);}
 
   /* MODALS ─────────────────────────────────────────────────────────────
@@ -362,7 +341,7 @@
       <a href="#research">The research</a>
       <a href="#pricing">Pricing</a>
     </div>
-    <a href="mailto:contact@thinksmith.ca?subject=ThinkSmith%20enquiry" class="btn ghost">Contact us</a>
+    <a href="#" class="btn ghost">Contact us</a>
   </div>
 </nav>
 
@@ -373,9 +352,9 @@
       <h1>You can teach every subject. You can't be twenty classmates.</h1>
       <p class="lede">A personal learning companion, a room full of peers, and a real record of progress — the three things a classroom gives that one parent, alone, can't recreate. Backed by peer-reviewed research, built so you're still in the loop every step of the way.</p>
       <div class="hero-ctas">
-        <a href="mailto:contact@thinksmith.ca?subject=ThinkSmith%20%E2%80%94%20founding%20family%20enquiry" class="btn">Contact us to get started →</a>
+        <a href="#" class="btn">Contact us to get started →</a>
       </div>
-      <div class="hero-note">Now welcoming founding families · Grades K–12 · <a href="mailto:contact@thinksmith.ca" style="color:var(--teal-deep);">contact@thinksmith.ca</a></div>
+      <div class="hero-note">Now welcoming founding families · Grades K–12</div>
     </div>
     <div class="margin-card">
       <div class="tag">PEER FEEDBACK</div>
@@ -622,36 +601,7 @@
   <div class="wrap">
     <h2>Let's build this together.</h2>
     <p>The method behind ThinkSmith has been tested for years — 1,742 students, peer-reviewed results. This platform is new, and we're onboarding a small number of founding families directly with our team to get it right from day one.</p>
-    <a href="mailto:contact@thinksmith.ca?subject=ThinkSmith%20%E2%80%94%20founding%20family%20enquiry" class="btn">Contact us to get started →</a>
-    <p style="margin-top:14px;font-size:13.5px;">or leave us a message and we'll come back to you</p>
-
-    <!-- Not a <form>: submitted through fetch so the page never reloads, and so
-         a failure can be shown in place rather than dumping the visitor on a
-         blank endpoint response. -->
-    <div class="cform">
-      <div class="cfield">
-        <label for="cf-name">Your name <span class="req">*</span></label>
-        <input id="cf-name" type="text" autocomplete="name" maxlength="120" />
-      </div>
-      <div class="cfield">
-        <label for="cf-email">Your email <span class="req">*</span></label>
-        <input id="cf-email" type="email" autocomplete="email" maxlength="200" />
-      </div>
-      <div class="cfield">
-        <label for="cf-msg">Message <span class="req">*</span></label>
-        <textarea id="cf-msg" maxlength="4000" placeholder="Tell us about your family — ages, curriculum, what you're hoping for."></textarea>
-      </div>
-      <div class="hp" aria-hidden="true">
-        <label for="cf-web">Leave this field empty</label>
-        <input id="cf-web" type="text" tabindex="-1" autocomplete="off" />
-      </div>
-      <button id="cf-send" class="btn">Send message →</button>
-      <div class="cmsg" id="cf-msgbox" role="status" aria-live="polite"></div>
-      <p style="font-size:12.5px;color:var(--ink-soft);margin-top:14px;">
-        Prefer email? Write to
-        <a href="mailto:contact@thinksmith.ca" style="color:var(--teal-deep);">contact@thinksmith.ca</a>.
-      </p>
-    </div>
+    <a href="#" class="btn">Contact us to get started →</a>
   </div>
 </section>
 
@@ -847,65 +797,6 @@
   document.getElementById("demoOvl").addEventListener("click", function (e) {
     if (e.target === this) silenceDemo();
   });
-
-  // ── Contact form ─────────────────────────────────────────────────────────
-  // ENDPOINT: set this to your deployed function URL.
-  var CONTACT_ENDPOINT =
-    "https://kuqufawlxezaktjdecbr.supabase.co/functions/v1/contact-enquiry";
-
-  var cfSend = document.getElementById("cf-send");
-  if (cfSend) {
-    var loadedAt = Date.now();
-    var box = document.getElementById("cf-msgbox");
-    var show = function (kind, text) { box.className = "cmsg " + kind; box.textContent = text; };
-
-    cfSend.addEventListener("click", function () {
-      var name = document.getElementById("cf-name").value.trim();
-      var email = document.getElementById("cf-email").value.trim();
-      var msg = document.getElementById("cf-msg").value.trim();
-
-      // Checked here for a fast, friendly response; checked AGAIN on the server,
-      // because anything validated only in the browser is not validated.
-      if (!name || !email || !msg) {
-        show("bad", "Please fill in your name, email and message."); return;
-      }
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
-        show("bad", "That email address does not look right."); return;
-      }
-
-      cfSend.disabled = true;
-      cfSend.textContent = "Sending…";
-      show("", "");
-
-      fetch(CONTACT_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: name, email: email, message: msg,
-          source: "website:final-cta",
-          website: document.getElementById("cf-web").value,   // honeypot
-          elapsed: Math.round((Date.now() - loadedAt) / 1000)
-        })
-      })
-      .then(function (r) { return r.json(); })
-      .then(function (d) {
-        if (d && d.success) {
-          document.querySelector(".cform").innerHTML =
-            '<div class="cmsg ok" style="display:block;">Thank you — your message is with us, and ' +
-            'someone from the founding team will reply, usually within a working day. ' +
-            'Check your inbox for a confirmation.</div>';
-        } else {
-          cfSend.disabled = false; cfSend.textContent = "Send message →";
-          show("bad", (d && d.error) || "Something went wrong. Please email contact@thinksmith.ca.");
-        }
-      })
-      .catch(function () {
-        // Never leave someone staring at a dead button: give them the address.
-        cfSend.disabled = false; cfSend.textContent = "Send message →";
-        show("bad", "We could not send that just now. Please email contact@thinksmith.ca directly.");
-      });
-    });
-  }
 
   document.addEventListener("keydown", function (e) {
     if (e.key !== "Escape") return;
