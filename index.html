@@ -697,6 +697,7 @@
 <div class="ovl" id="contactOvl" role="dialog" aria-modal="true" aria-labelledby="contactTitle">
   <div class="modal narrow" id="contactModal">
     <button class="x" id="contactClose" aria-label="Close">&times;</button>
+    <div id="contactBody">
     <div class="eyebrow">Get in touch</div>
     <h3 id="contactTitle">Tell us about your family</h3>
     <p style="margin-bottom:18px;">We're onboarding a small number of founding families directly.
@@ -725,6 +726,7 @@
         Goes straight to our team. Prefer email? Write to
         <a href="mailto:contact@thinksmith.ca" style="color:var(--teal-deep);">contact@thinksmith.ca</a>.
       </p>
+    </div>
     </div>
   </div>
 </div>
@@ -879,6 +881,12 @@
   // ENDPOINT: set this to your deployed function URL.
   var CONTACT_ENDPOINT =
     "https://kuqufawlxezaktjdecbr.supabase.co/functions/v1/contact-enquiry";
+  // DEPLOY NOTE: this function must have JWT verification DISABLED. Supabase
+  // verifies a JWT on edge functions by default, and a public contact form has
+  // no signed-in user to supply one, so every submission returns 401 before the
+  // function code runs at all. The endpoint is protected instead by the
+  // honeypot field, the minimum time-on-form and the length caps inside the
+  // function \u2014 which is the right trade for a form that must accept strangers.
 
   var cfSend = document.getElementById("cf-send");
   if (cfSend) {
@@ -917,10 +925,12 @@
       .then(function (r) { return r.json(); })
       .then(function (d) {
         if (d && d.success) {
-          document.querySelector(".cform").innerHTML =
-            '<div class="cmsg ok" style="display:block;">Thank you — your message is with us, and ' +
-            'someone from the founding team will reply, usually within a working day. ' +
-            'Check your inbox for a confirmation.</div>';
+          document.getElementById("contactBody").innerHTML =
+            '<div class="eyebrow">Message sent</div>' +
+            '<h3>Thank you.</h3>' +
+            '<p style="margin-top:10px;">Your message is with us, and someone from the founding ' +
+            'team will reply — usually within a working day. We have sent a confirmation to your ' +
+            'inbox.</p>';
         } else {
           cfSend.disabled = false; cfSend.textContent = "Send message →";
           show("bad", (d && d.error) || "Something went wrong. Please email contact@thinksmith.ca.");
