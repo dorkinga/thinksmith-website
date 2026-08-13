@@ -147,7 +147,9 @@
   /* Solid green rather than the teal .btn: this is the one invitation on the
      page to WATCH rather than to buy or enquire, and it should not read as
      another version of the contact button. */
-  .btn.watch{background:#4f8a3d;border-color:#4f8a3d;color:var(--white);}
+  .btn.watch{background:#4f8a3d;border-color:#4f8a3d;color:var(--white);
+    display:inline-flex;flex-direction:column;align-items:center;gap:8px;}
+  .btn.watch img{height:44px;width:auto;display:block;}
   .btn.watch:hover{background:#5da349;border-color:#5da349;}
 
   /* THREE PILLARS */
@@ -416,7 +418,7 @@
     </div>
   </div>
   <div class="proof-source">Source: peer-reviewed pilot study, Ubon Ratchathani University — <a href="#research">read the full research →</a></div>
-  <div class="proof-cta"><a href="#how" id="demoOpen" class="btn watch">See how it works</a></div>
+  <div class="proof-cta"><a href="#how" id="demoOpen" class="btn watch"><img src="logo-silver.png" alt="" />Play ThinkSmith Demo</a></div>
 </section>
 
 <section class="pillars">
