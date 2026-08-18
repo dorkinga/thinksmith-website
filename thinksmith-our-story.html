@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our story — ThinkSmith</title>
+<meta name="description" content="ThinkSmith was built by someone who never learned the way school expected — and who later led a 1,742-student study proving there was a better way.">
+<style>
+  /* Design tokens, nav, buttons and footer are lifted from index.html so this
+     page is genuinely the same site rather than an approximation. If the
+     palette or type changes there, change it here too — they are duplicated,
+     not shared, because the site is static single-file pages. */
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
+
+  :root{
+    --paper: #FAF7F1;
+    --paper-dim: #F1ECE1;
+    --ink: #232323;
+    --ink-soft: #55524b;
+    --line: #ddd6c6;
+    --teal: #2f6f5e;
+    --teal-deep: #1f4c40;
+    --amber: #e2a13a;
+    --amber-soft: #f6e6c8;
+    --white: #fffdf9;
+    --radius: 6px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    line-height:1.08;
+    letter-spacing:-0.01em;
+    margin:0;
+  }
+  a{color:inherit;}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 28px;}
+  section{padding:88px 0;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--teal-deep);
+    font-weight:600;
+    margin-bottom:18px;
+  }
+
+  /* NAV — identical to index.html */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(250,247,241,0.9);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .navrow{
+    max-width:1100px;margin:0 auto;padding:18px 28px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .navactions{display:flex;gap:10px;align-items:center;}
+  .navrow .logo{font-family:'Fraunces',serif;font-weight:600;font-size:20px;
+    display:flex;align-items:center;gap:10px;}
+  /* alt is empty: the wordmark beside it already says the name, so a screen
+     reader announcing both would repeat itself. */
+  .navrow .logo img{height:44px;width:auto;display:block;}
+  .navlinks{display:flex;gap:28px;font-size:14px;color:var(--ink-soft);}
+  .navlinks a{text-decoration:none;}
+  .navlinks a:hover{color:var(--teal-deep);}
+  .navlinks a.current{color:var(--teal-deep);font-weight:600;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--teal-deep); color:var(--white);
+    padding:11px 20px; border-radius:var(--radius);
+    font-size:14.5px; font-weight:600; text-decoration:none;
+    border:1px solid var(--teal-deep);
+  }
+  .btn:hover{background:var(--teal);}
+  .btn.ghost{background:transparent;color:var(--teal-deep);border:1px solid var(--line);}
+  .btn.ghost:hover{border-color:var(--teal-deep);}
+
+  /* STORY */
+  .story-head{padding:76px 0 0;}
+  .story-head .wrap{max-width:760px;}
+  .story-head h1{font-size:42px;margin-bottom:18px;}
+  .story-head .lede{font-size:19px;color:var(--ink-soft);margin:0;}
+
+  .story-body{padding:44px 0 0;}
+  .story-body .wrap{max-width:760px;}
+
+  .byline{
+    display:flex;align-items:center;gap:18px;
+    padding-bottom:26px;border-bottom:1px solid var(--line);margin-bottom:34px;
+  }
+  /* Portrait. Fixed square with object-fit so any aspect ratio crops to a
+     circle rather than distorting — OurStory.png does not need to be square. */
+  .byline img{
+    width:76px;height:76px;border-radius:50%;
+    object-fit:cover;display:block;flex-shrink:0;
+    border:1px solid var(--line);
+  }
+  .byline .name{font-weight:600;font-size:16px;}
+  .byline .role{color:var(--ink-soft);font-size:14px;}
+
+  .story-body p{font-size:17.5px;margin:0 0 22px;}
+  .story-body p.pull{
+    font-family:'Fraunces',serif;
+    font-size:23px;line-height:1.35;
+    padding-left:22px;border-left:3px solid var(--amber);
+    margin:34px 0;color:var(--ink);
+  }
+  .story-body .sign-off{
+    margin-top:38px;font-family:'Fraunces',serif;
+    color:var(--ink-soft);font-size:16px;
+  }
+
+  /* BRIDGE back to the research section on the home page */
+  .bridge{padding:56px 0 0;}
+  .bridge .wrap{max-width:760px;}
+  .bridge-card{
+    background:var(--paper-dim);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:26px 28px;
+    display:flex;justify-content:space-between;align-items:center;
+    gap:20px;flex-wrap:wrap;
+  }
+  .bridge-card .stat{
+    font-family:'Fraunces',serif;font-size:28px;font-weight:600;
+    color:var(--teal-deep);line-height:1.1;
+  }
+  .bridge-card .stat-label{font-size:14px;color:var(--ink-soft);margin-top:4px;}
+  .bridge-card a{
+    text-decoration:none;font-weight:600;font-size:14.5px;
+    color:var(--teal-deep);border-bottom:2px solid var(--amber);
+    padding-bottom:2px;white-space:nowrap;
+  }
+
+  /* CTA */
+  .cta{padding:72px 0 88px;}
+  .cta .wrap{max-width:640px;text-align:center;}
+  .cta h2{font-size:30px;margin-bottom:12px;}
+  .cta p{color:var(--ink-soft);margin:0 0 26px;}
+
+  footer{padding:40px 0;text-align:center;font-size:13px;color:var(--ink-soft);}
+
+  @media (max-width:760px){
+    .navlinks{display:none;}
+    .story-head h1{font-size:32px;}
+    .bridge-card{flex-direction:column;align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="navrow">
+    <div class="logo"><a href="/" style="text-decoration:none;display:flex;align-items:center;gap:10px;"><img src="logo-silver.png" alt="" />ThinkSmith</a></div>
+    <div class="navlinks">
+      <a href="/#how">How it works</a>
+      <a href="/#who">Who it's for</a>
+      <a href="/#research">The research</a>
+      <a href="/our-story" class="current">Our story</a>
+      <a href="/#pricing">Pricing</a>
+    </div>
+    <div class="navactions">
+      <a href="https://app.thinksmith.ca/login" class="btn ghost">Log in</a>
+      <a href="/#contact" class="btn">Contact us to join our founding family trial &rarr;</a>
+    </div>
+  </div>
+</nav>
+
+<header class="story-head">
+  <div class="wrap">
+    <div class="eyebrow">Our story</div>
+    <h1>Built by someone who never learned the way school expected.</h1>
+    <p class="lede">ThinkSmith didn't start as a business plan. It started with a kid who was told he wasn't smart — and a researcher who later proved that wrong, for 1,742 students at a time.</p>
+  </div>
+</header>
+
+<section class="story-body">
+  <div class="wrap">
+
+    <div class="byline">
+      <img src="OurStory.png" alt="Leslie Richards" />
+      <div>
+        <div class="name">Leslie Richards</div>
+        <div class="role">Co-Founder &amp; Creator of ThinkSmith</div>
+      </div>
+    </div>
+
+    <p>I dropped out at 16 because school was built for rote learners. ThinkSmith is built for the rest of us.</p>
+
+    <p>I struggled with dyslexia, failed two grades, and spent years believing I wasn't smart. It wasn't true — I just didn't learn the way school expected. Most kids don't.</p>
+
+    <p class="pull">Later, I led a study with 1,742 university students that proved something life-changing: when learners engage with new ideas before instruction, their confidence and performance skyrocket.</p>
+
+    <p>Most children cannot absorb brand-new information during a lesson unless they have some prior foothold — and repetition alone doesn't fix that.</p>
+
+    <p>Homeschooling already gives your child the freedom to learn differently. ThinkSmith gives them the structure to thrive.</p>
+
+    <p class="sign-off">— Leslie Richards, Co-Founder &amp; Creator of ThinkSmith</p>
+
+  </div>
+</section>
+
+<section class="bridge">
+  <div class="wrap">
+    <div class="bridge-card">
+      <div>
+        <div class="stat">1,742 students</div>
+        <div class="stat-label">The peer-reviewed pilot study behind ThinkSmith's method</div>
+      </div>
+      <a href="/#research">See the full research &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="wrap">
+    <h2>Give your child the structure to thrive.</h2>
+    <p>Join the founding families building a better way to learn at home.</p>
+    <a class="btn" href="/#contact">Contact us to join our founding family trial &rarr;</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">© 2026 ThinkSmith. All rights reserved. · contact@thinksmith.ca</div>
+</footer>
+
+</body>
+</html>
