@@ -76,6 +76,7 @@
   .navactions{display:flex;gap:10px;align-items:center;}
   .navrow .logo{font-family:'Fraunces',serif;font-weight:600;font-size:20px;
     display:flex;align-items:center;gap:10px;}
+  .navrow .logo a{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;}
   /* alt is empty: the wordmark beside it already says the name, so a screen
      reader announcing both would repeat itself. */
   .navrow .logo img{height:44px;width:auto;display:block;}
@@ -428,7 +429,11 @@
 
 <nav>
   <div class="navrow">
-    <div class="logo"><img src="logo-silver.png" alt="" />ThinkSmith</div>
+    <!-- The wordmark is a link home (2026-08-18). href is index.html rather
+         than "/" so it works from a subpath or a file:// preview without
+         depending on server root config. The JS below intercepts it when the
+         story view is open so it swaps back without a reload. -->
+    <div class="logo"><a href="index.html" class="home-link"><img src="logo-silver.png" alt="" />ThinkSmith</a></div>
     <div class="navlinks">
       <a href="#how">How it works</a>
       <a href="#who">Who it's for</a>
@@ -1017,13 +1022,28 @@
 
   // Any other in-page anchor: come home first, then let the browser scroll.
   Array.prototype.forEach.call(
-    document.querySelectorAll('.navlinks a[href^="#"]:not(.story-open), .navrow .logo a'),
+    document.querySelectorAll('.navlinks a[href^="#"]:not(.story-open)'),
     function (a) {
       a.addEventListener("click", function () {
         if (storyEl && storyEl.style.display !== "none") showHome();
       });
     }
   );
+
+  // The wordmark. While the story view is open it swaps back in place rather
+  // than reloading index.html — same destination, no round trip. From the home
+  // view it is left alone, so it still works as an ordinary link (and as a
+  // middle-click / new-tab target) exactly as a visitor would expect.
+  Array.prototype.forEach.call(document.querySelectorAll(".home-link"), function (a) {
+    a.addEventListener("click", function (e) {
+      if (storyEl && storyEl.style.display !== "none") {
+        e.preventDefault();
+        showHome();
+        if (window.location.hash === "#our-story") history.pushState(null, "", "index.html");
+        window.scrollTo(0, 0);
+      }
+    });
+  });
 
   // The research link inside the story card behaves the same way.
   Array.prototype.forEach.call(document.querySelectorAll(".story-close-link"), function (a) {
