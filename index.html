@@ -428,21 +428,21 @@
        row, the section links wrapping onto a second. No hamburger, because five
        short links fit in two lines and a menu button would hide them behind an
        extra tap for no gain. */
-    .navrow{flex-wrap:wrap;row-gap:12px;padding:14px 20px;}
-    .navrow .logo{order:1;font-size:18px;}
-    .navactions{order:2;margin-left:auto;}
+    .navrow{flex-wrap:wrap;row-gap:10px;padding:12px 16px;gap:12px;}
+    .navrow .logo{order:1;font-size:17px;gap:8px;}
+    .navrow .logo img{height:32px;}
+    .navactions{order:2;margin-left:auto;gap:8px;}
+    .navactions .btn{padding:8px 12px;font-size:13px;}
+    /* Row two: the section links. They wrap within themselves rather than
+       being hidden — the original rule was `display:none`, which left phone
+       visitors with no way to reach How it works, Who it's for, The research
+       or Pricing at all. */
     .navlinks{
-      order:3;
-      width:100%;
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px 18px;
-      font-size:14px;
-      padding-top:10px;
-      border-top:1px solid var(--line);
+      order:3;width:100%;
+      display:flex;flex-wrap:wrap;
+      gap:8px 16px;font-size:13.5px;
+      padding-top:9px;border-top:1px solid var(--line);
     }
-    .navrow .logo img{height:36px;}
-    .navactions .btn{padding:9px 14px;font-size:13.5px;}
   }
   /* Very narrow phones: the CTA wording is long, so let it sit on its own row
      rather than squeezing the wordmark. */
@@ -470,7 +470,7 @@
     </div>
     <div class="navactions">
       <a href="https://app.thinksmith.ca/login" class="btn ghost">Log in</a>
-      <a href="#contact" class="btn contact-open">Join our founding family trial &rarr;</a>
+      <a href="#contact" class="btn contact-open">Join family trial &rarr;</a>
     </div>
   </div>
 </nav>
