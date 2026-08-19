@@ -421,7 +421,34 @@
     .pillar-grid, .who-grid, .trust-grid, .price-grid{grid-template-columns:1fr;}
     .bars{grid-template-columns:repeat(2,1fr);}
     .stage{grid-template-columns:1fr;gap:8px;}
-    .navlinks{display:none;}
+    /* MOBILE NAV (2026-08-18). This previously read `.navlinks{display:none}`,
+       which hid How it works / Who it's for / The research / Pricing on every
+       phone with no replacement — a visitor on mobile could reach nothing but
+       Log in and the CTA. The nav now stacks: wordmark and actions on the first
+       row, the section links wrapping onto a second. No hamburger, because five
+       short links fit in two lines and a menu button would hide them behind an
+       extra tap for no gain. */
+    .navrow{flex-wrap:wrap;row-gap:12px;padding:14px 20px;}
+    .navrow .logo{order:1;font-size:18px;}
+    .navactions{order:2;margin-left:auto;}
+    .navlinks{
+      order:3;
+      width:100%;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px 18px;
+      font-size:14px;
+      padding-top:10px;
+      border-top:1px solid var(--line);
+    }
+    .navrow .logo img{height:36px;}
+    .navactions .btn{padding:9px 14px;font-size:13.5px;}
+  }
+  /* Very narrow phones: the CTA wording is long, so let it sit on its own row
+     rather than squeezing the wordmark. */
+  @media (max-width:420px){
+    .navactions{width:100%;margin-left:0;}
+    .navactions .btn{flex:1;justify-content:center;}
   }
 </style>
 </head>
