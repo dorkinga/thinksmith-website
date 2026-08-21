@@ -76,6 +76,7 @@
   .navactions{display:flex;gap:10px;align-items:center;}
   .navrow .logo{font-family:'Fraunces',serif;font-weight:600;font-size:20px;
     display:flex;align-items:center;gap:10px;}
+  .navrow .logo a{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;}
   /* alt is empty: the wordmark beside it already says the name, so a screen
      reader announcing both would repeat itself. */
   .navrow .logo img{height:44px;width:auto;display:block;}
@@ -295,6 +296,67 @@
 
   footer{padding:40px 0;text-align:center;font-size:13px;color:var(--ink-soft);}
 
+  /* OUR STORY (2026-08-18) ─────────────────────────────────────────────── */
+  .story-head{padding:76px 0 0;}
+  .story-head .wrap{max-width:760px;}
+  .story-head h1{font-size:42px;margin-bottom:18px;}
+  .story-head .lede{font-size:19px;color:var(--ink-soft);margin:0;}
+  .story-body{padding:44px 0 0;}
+  .story-body .wrap{max-width:760px;}
+  /* Portrait shown FULL, not cropped to a circle: object-fit contain keeps the
+     whole photo visible inside the 200x300 box whatever its aspect ratio, so
+     nothing is cut off and nothing is stretched. */
+  .byline{
+    display:flex;align-items:center;gap:26px;
+    padding-bottom:26px;border-bottom:1px solid var(--line);margin-bottom:34px;
+  }
+  .byline img{
+    width:200px;height:300px;
+    object-fit:contain;object-position:center;
+    display:block;flex-shrink:0;
+    background:var(--paper-dim);
+    border:1px solid var(--line);border-radius:var(--radius);
+  }
+  .byline .name{font-weight:600;font-size:16px;}
+  .byline .role{color:var(--ink-soft);font-size:14px;}
+  .story-body p{font-size:17.5px;margin:0 0 22px;}
+  .story-body p.pull{
+    font-family:'Fraunces',serif;font-size:23px;line-height:1.35;
+    padding-left:22px;border-left:3px solid var(--amber);
+    margin:34px 0;color:var(--ink);
+  }
+  .story-body .sign-off{
+    margin-top:38px;font-family:'Fraunces',serif;
+    color:var(--ink-soft);font-size:16px;
+  }
+  .bridge{padding:56px 0 0;}
+  .bridge .wrap{max-width:760px;}
+  .bridge-card{
+    background:var(--paper-dim);border:1px solid var(--line);
+    border-radius:var(--radius);padding:26px 28px;
+    display:flex;justify-content:space-between;align-items:center;
+    gap:20px;flex-wrap:wrap;
+  }
+  .bridge-card .stat{
+    font-family:'Fraunces',serif;font-size:28px;font-weight:600;
+    color:var(--teal-deep);line-height:1.1;
+  }
+  .bridge-card .stat-label{font-size:14px;color:var(--ink-soft);margin-top:4px;}
+  .bridge-card a{
+    text-decoration:none;font-weight:600;font-size:14.5px;color:var(--teal-deep);
+    border-bottom:2px solid var(--amber);padding-bottom:2px;white-space:nowrap;
+  }
+  .story-cta{padding:72px 0 88px;}
+  .story-cta .wrap{max-width:640px;text-align:center;}
+  .story-cta h2{font-size:30px;margin-bottom:12px;}
+  .story-cta p{color:var(--ink-soft);margin:0 0 26px;}
+  .navlinks a.current{color:var(--teal-deep);font-weight:600;}
+  @media (max-width:760px){
+    .story-head h1{font-size:32px;}
+    .byline{flex-direction:column;align-items:flex-start;gap:16px;}
+    .bridge-card{flex-direction:column;align-items:flex-start;}
+  }
+
   /* MODALS ─────────────────────────────────────────────────────────────
      Two dialogs: the walkthrough and the full safeguarding policy. Visibility
      is driven by style.display rather than the [hidden] attribute — these
@@ -359,7 +421,34 @@
     .pillar-grid, .who-grid, .trust-grid, .price-grid{grid-template-columns:1fr;}
     .bars{grid-template-columns:repeat(2,1fr);}
     .stage{grid-template-columns:1fr;gap:8px;}
-    .navlinks{display:none;}
+    /* MOBILE NAV (2026-08-18). This previously read `.navlinks{display:none}`,
+       which hid How it works / Who it's for / The research / Pricing on every
+       phone with no replacement — a visitor on mobile could reach nothing but
+       Log in and the CTA. The nav now stacks: wordmark and actions on the first
+       row, the section links wrapping onto a second. No hamburger, because five
+       short links fit in two lines and a menu button would hide them behind an
+       extra tap for no gain. */
+    .navrow{flex-wrap:wrap;row-gap:10px;padding:12px 16px;gap:12px;}
+    .navrow .logo{order:1;font-size:17px;gap:8px;}
+    .navrow .logo img{height:32px;}
+    .navactions{order:2;margin-left:auto;gap:8px;}
+    .navactions .btn{padding:8px 12px;font-size:13px;}
+    /* Row two: the section links. They wrap within themselves rather than
+       being hidden — the original rule was `display:none`, which left phone
+       visitors with no way to reach How it works, Who it's for, The research
+       or Pricing at all. */
+    .navlinks{
+      order:3;width:100%;
+      display:flex;flex-wrap:wrap;
+      gap:8px 16px;font-size:13.5px;
+      padding-top:9px;border-top:1px solid var(--line);
+    }
+  }
+  /* Very narrow phones: the CTA wording is long, so let it sit on its own row
+     rather than squeezing the wordmark. */
+  @media (max-width:420px){
+    .navactions{width:100%;margin-left:0;}
+    .navactions .btn{flex:1;justify-content:center;}
   }
 </style>
 </head>
@@ -367,19 +456,29 @@
 
 <nav>
   <div class="navrow">
-    <div class="logo"><img src="logo-silver.png" alt="" />ThinkSmith</div>
+    <!-- The wordmark is a link home (2026-08-18). href is index.html rather
+         than "/" so it works from a subpath or a file:// preview without
+         depending on server root config. The JS below intercepts it when the
+         story view is open so it swaps back without a reload. -->
+    <div class="logo"><a href="index.html" class="home-link"><img src="logo-silver.png" alt="" />ThinkSmith</a></div>
     <div class="navlinks">
       <a href="#how">How it works</a>
       <a href="#who">Who it's for</a>
-      <a href="#research">The research</a>
+      <a href="#our-story" class="story-open">Our story</a>
+      <a href="#research">Research</a>
       <a href="#pricing">Pricing</a>
     </div>
     <div class="navactions">
       <a href="https://app.thinksmith.ca/login" class="btn ghost">Log in</a>
-      <a href="#contact" class="btn contact-open">Contact us to join our founding family trial &rarr;</a>
+      <a href="#contact" class="btn contact-open">Join family trial &rarr;</a>
     </div>
   </div>
 </nav>
+
+<!-- HOME CONTENT. Wrapped (2026-08-18) so "Our story" can swap the body
+     beneath the nav rather than navigating away — the header stays put and
+     the page does not reload. -->
+<div id="homeContent">
 
 <header class="hero">
   <div class="wrap">
@@ -633,10 +732,74 @@
   <div class="wrap">
     <h2>Let's build this together.</h2>
     <p>The method behind ThinkSmith has been tested for years — 1,742 students, peer-reviewed results. This platform is new, and we're onboarding a small number of founding families directly with our team to get it right from day one.</p>
-    <a href="#contact" class="btn contact-open">Contact us to join our founding family trial &rarr;</a>
+    <a href="#contact" class="btn contact-open">Join our founding family trial &rarr;</a>
     <p style="margin-top:14px;font-size:13.5px;">No mail app needed &mdash; the form opens right here.</p>
   </div>
 </section>
+
+</div><!-- /#homeContent -->
+
+<!-- ── OUR STORY ────────────────────────────────────────────────────────────
+     Shown in place of #homeContent when the nav link is used. Kept in this file
+     rather than a separate page so the sticky header never re-renders and the
+     modals stay wired. -->
+<div id="storyContent" style="display:none;">
+
+  <header class="story-head">
+    <div class="wrap">
+      <div class="eyebrow">Our story</div>
+      <h1>Built by someone who never learned the way school expected.</h1>
+      <p class="lede">ThinkSmith didn't start as a business plan. It started with a kid who was told he wasn't smart — and a researcher who later proved that wrong, for 1,742 students at a time.</p>
+    </div>
+  </header>
+
+  <section class="story-body">
+    <div class="wrap">
+
+      <div class="byline">
+        <img src="OurStory.png" alt="Leslie Richards" />
+        <div>
+          <div class="name">Leslie Richards</div>
+          <div class="role">Co-Founder &amp; Creator of ThinkSmith</div>
+        </div>
+      </div>
+
+      <p>I dropped out at 16 because school was built for rote learners. ThinkSmith is built for the rest of us.</p>
+
+      <p>I struggled with dyslexia, failed two grades, and spent years believing I wasn't smart. It wasn't true — I just didn't learn the way school expected. Most kids don't.</p>
+
+      <p class="pull">Later, I led a study with 1,742 university students that proved something life-changing: when learners engage with new ideas before instruction, their confidence and performance skyrocket.</p>
+
+      <p>Most children cannot absorb brand-new information during a lesson unless they have some prior foothold — and repetition alone doesn't fix that.</p>
+
+      <p>Homeschooling already gives your child the freedom to learn differently. ThinkSmith gives them the structure to thrive.</p>
+
+      <p class="sign-off">— Leslie Richards, Co-Founder &amp; Creator of ThinkSmith</p>
+
+    </div>
+  </section>
+
+  <section class="bridge">
+    <div class="wrap">
+      <div class="bridge-card">
+        <div>
+          <div class="stat">1,742 students</div>
+          <div class="stat-label">The peer-reviewed pilot study behind ThinkSmith's method</div>
+        </div>
+        <a href="#research" class="story-close-link">See the full research &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="story-cta">
+    <div class="wrap">
+      <h2>Give your child the structure to thrive.</h2>
+      <p>Join the founding families building a better way to learn at home.</p>
+      <a class="btn contact-open" href="#contact">Join our founding family trial &rarr;</a>
+    </div>
+  </section>
+
+</div><!-- /#storyContent -->
 
 <footer>
   <div class="wrap">© 2026 ThinkSmith. All rights reserved. · contact@thinksmith.ca</div>
@@ -844,6 +1007,81 @@
 <script>
 (function () {
   "use strict";
+
+  /* ── OUR STORY VIEW (2026-08-18) ───────────────────────────────────────
+     "Our story" swaps the body beneath the nav instead of navigating to a
+     separate page: the sticky header stays put, nothing reloads, and the
+     modals below stay wired because they never leave the DOM.
+
+     The hash is kept in sync (#our-story) so the view is linkable, the back
+     button works, and a direct link lands on the right view. Any other nav
+     link returns to the home body FIRST and then jumps to its anchor —
+     without that, clicking "Pricing" from the story would scroll a hidden
+     element and appear to do nothing. */
+  var homeEl = document.getElementById("homeContent");
+  var storyEl = document.getElementById("storyContent");
+  var storyLink = document.querySelector(".navlinks a.story-open");
+
+  function showStory(push) {
+    if (!homeEl || !storyEl) return;
+    homeEl.style.display = "none";
+    storyEl.style.display = "";
+    if (storyLink) storyLink.classList.add("current");
+    window.scrollTo(0, 0);
+    if (push && window.location.hash !== "#our-story") {
+      history.pushState(null, "", "#our-story");
+    }
+  }
+
+  function showHome() {
+    if (!homeEl || !storyEl) return;
+    storyEl.style.display = "none";
+    homeEl.style.display = "";
+    if (storyLink) storyLink.classList.remove("current");
+  }
+
+  if (storyLink) {
+    storyLink.addEventListener("click", function (e) {
+      e.preventDefault();
+      showStory(true);
+    });
+  }
+
+  // Any other in-page anchor: come home first, then let the browser scroll.
+  Array.prototype.forEach.call(
+    document.querySelectorAll('.navlinks a[href^="#"]:not(.story-open)'),
+    function (a) {
+      a.addEventListener("click", function () {
+        if (storyEl && storyEl.style.display !== "none") showHome();
+      });
+    }
+  );
+
+  // The wordmark. While the story view is open it swaps back in place rather
+  // than reloading index.html — same destination, no round trip. From the home
+  // view it is left alone, so it still works as an ordinary link (and as a
+  // middle-click / new-tab target) exactly as a visitor would expect.
+  Array.prototype.forEach.call(document.querySelectorAll(".home-link"), function (a) {
+    a.addEventListener("click", function (e) {
+      if (storyEl && storyEl.style.display !== "none") {
+        e.preventDefault();
+        showHome();
+        if (window.location.hash === "#our-story") history.pushState(null, "", "index.html");
+        window.scrollTo(0, 0);
+      }
+    });
+  });
+
+  // The research link inside the story card behaves the same way.
+  Array.prototype.forEach.call(document.querySelectorAll(".story-close-link"), function (a) {
+    a.addEventListener("click", function () { showHome(); });
+  });
+
+  window.addEventListener("hashchange", function () {
+    if (window.location.hash === "#our-story") showStory(false); else showHome();
+  });
+
+  if (window.location.hash === "#our-story") showStory(false);
 
   function wire(overlayId, panelId, openId, closeId, onOpen) {
     var ovl = document.getElementById(overlayId);

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Safety Plan — ThinkSmith</title>
+<meta name="description" content="How ThinkSmith identifies and reduces risk to children using an AI learning coach: screening, disclosure, escalation, human review and reporting.">
+<style>
+  /* Tokens lifted from index.html so this is the same site, not an approximation.
+     Duplicated rather than shared because the site is static single-file pages. */
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
+  :root{
+    --paper:#FAF7F1; --paper-dim:#F1ECE1; --ink:#232323; --ink-soft:#55524b;
+    --line:#ddd6c6; --teal:#2f6f5e; --teal-deep:#1f4c40; --amber:#e2a13a;
+    --amber-soft:#f6e6c8; --white:#fffdf9; --radius:6px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;line-height:1.15;letter-spacing:-0.01em;margin:0;}
+  a{color:var(--teal-deep);}
+  .wrap{max-width:820px;margin:0 auto;padding:0 28px;}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal-deep);font-weight:600;}
+
+  nav{position:sticky;top:0;z-index:50;background:rgba(250,247,241,0.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+  .navrow{max-width:1100px;margin:0 auto;padding:16px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .logo{font-family:'Fraunces',serif;font-weight:600;font-size:19px;}
+  .logo a{display:flex;align-items:center;gap:9px;text-decoration:none;color:inherit;}
+  .logo img{height:34px;width:auto;display:block;}
+  .backlink{font-size:14px;color:var(--ink-soft);text-decoration:none;}
+  .backlink:hover{color:var(--teal-deep);}
+
+  header.plan{padding:60px 0 0;}
+  header.plan h1{font-size:38px;margin:14px 0 14px;}
+  .meta{font-size:13px;color:var(--ink-soft);padding-bottom:26px;border-bottom:1px solid var(--line);}
+  .meta b{color:var(--ink);}
+
+  section.plan{padding:38px 0 0;}
+  section.plan h2{font-size:24px;margin:0 0 6px;}
+  section.plan h3{font-size:17px;margin:26px 0 6px;}
+  section.plan p{font-size:16.5px;margin:0 0 16px;}
+  section.plan ul{margin:0 0 16px;padding-left:22px;}
+  section.plan li{font-size:16.5px;margin-bottom:9px;}
+  .lead{font-size:18px;color:var(--ink-soft);}
+
+  .callout{background:var(--paper-dim);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin:22px 0;}
+  .callout p:last-child{margin-bottom:0;}
+  .urgent{background:var(--amber-soft);border-color:var(--amber);}
+
+  table{width:100%;border-collapse:collapse;margin:0 0 18px;font-size:15.5px;}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{font-size:12.5px;text-transform:uppercase;letter-spacing:0.05em;color:var(--ink-soft);font-weight:600;}
+
+  footer{margin-top:64px;padding:32px 0 48px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-soft);}
+
+  @media print{
+    nav,.backlink{display:none;}
+    body{background:#fff;}
+    .callout{break-inside:avoid;}
+  }
+  @media (max-width:640px){
+    header.plan h1{font-size:29px;}
+    section.plan h2{font-size:21px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="navrow">
+    <div class="logo"><a href="index.html"><img src="logo-silver.png" alt="" />ThinkSmith</a></div>
+    <a class="backlink" href="index.html">&larr; Back to ThinkSmith</a>
+  </div>
+</nav>
+
+<header class="plan">
+  <div class="wrap">
+    <div class="eyebrow">Digital Safety Plan</div>
+    <h1>How we keep children safe on ThinkSmith</h1>
+    <p class="lead">ThinkSmith is a learning platform where children work with an AI coach and AI classmates. This document sets out the risks we have identified, what we do about each of them, and how to reach us.</p>
+    <p class="meta">
+      <b>Published</b> 19 August 2026 &nbsp;·&nbsp; <b>Last reviewed</b> 19 August 2026 &nbsp;·&nbsp;
+      <b>Owner</b> ThinkSmith Multiplier Inc. &nbsp;·&nbsp; <b>Contact</b> <a href="mailto:contact@thinksmith.ca">contact@thinksmith.ca</a>
+    </p>
+  </div>
+</header>
+
+<section class="plan">
+  <div class="wrap">
+
+    <div class="callout urgent">
+      <p><b>ThinkSmith is not a crisis line.</b> It is an educational tool. If a child is in immediate danger, call your local emergency services. In Canada, Kids Help Phone is available 24/7 on <b>1-800-668-6868</b>. In the United States, the 988 Suicide &amp; Crisis Lifeline is available 24/7 on <b>988</b>.</p>
+    </div>
+
+    <h2>1. What ThinkSmith is</h2>
+    <p>Children work through challenges built from their provincial or state curriculum. An AI coach, Ms. Rivera, gives feedback on their thinking. Three AI classmates produce solutions the child critiques, and feedback on the child's own work.</p>
+    <p>There is no messaging between users, no public posting, no feed and no friending. A child cannot contact another child through ThinkSmith, and nothing a child writes is visible to anyone outside their own family and our review team. Most of the risks associated with social platforms do not arise here — the risks that do arise come from the AI itself, and that is what this plan addresses.</p>
+
+    <h2>2. Risks we have identified</h2>
+    <table>
+      <thead><tr><th>Risk</th><th>What we do</th></tr></thead>
+      <tbody>
+        <tr><td>A child discloses distress, self-harm or abuse while working</td><td>Every message is screened before the coach replies. Coaching stops; the child is directed to a human crisis service. Section 4.</td></tr>
+        <tr><td>The AI generates something harmful, even from an innocent question</td><td>Every generated response is screened before the child sees it. Flagged responses are discarded, not shown. Section 5.</td></tr>
+        <tr><td>A child believes the AI is a person</td><td>The coach and the classmates are identified as AI on screen and beside every name. Section 6.</td></tr>
+        <tr><td>The AI is shaped over time into something it should not be</td><td>No cross-session memory or profile is built. Section 7.</td></tr>
+        <tr><td>A child is given advice we are not qualified to give</td><td>Medical, legal, psychological and financial advice are blocked categories for the coach. Section 5.</td></tr>
+        <tr><td>Personal information is over-shared in a safety report</td><td>Reports are limited to what an authority needs to assess risk. Section 8.</td></tr>
+      </tbody>
+    </table>
+
+    <h2>3. Two layers of protection</h2>
+    <p><b>Tier 1 — the foundation.</b> Our AI runs on Claude, made by Anthropic. Anthropic's safety systems apply to everything the model produces. This protection is always on and does not depend on us.</p>
+    <p><b>Tier 2 — ThinkSmith.</b> The foundation layer cannot know what a good lesson looks like, or what Ms. Rivera is supposed to be. That is our responsibility, and it is where we concentrate our work. Sections 4 to 8 describe it.</p>
+
+    <h2>4. When a child may be at risk</h2>
+    <p>Every message a child writes is screened for distress <em>before</em> the coach is allowed to reply. Where the content indicates self-harm or serious distress:</p>
+    <ul>
+      <li><b>Coaching stops.</b> The coach does not answer the question. The child is directed to a crisis service staffed by trained people — Kids Help Phone in Canada, the 988 Suicide &amp; Crisis Lifeline in the United States — chosen to match where the child is.</li>
+      <li><b>A human is alerted.</b> The flag is escalated to a ThinkSmith team member who has completed child-protection orientation.</li>
+      <li><b>We report where the law requires it.</b> In Ontario this follows the duty to report under the <i>Child, Youth and Family Services Act</i>. Where a report is required, we notify the appropriate authority — a Children's Aid Society, or police where the risk is immediate.</li>
+    </ul>
+    <p>Flags are recorded permanently and cannot be deleted. Each one records who reviewed it, when, what was decided and whether a parent or authority was notified.</p>
+
+    <h2>5. Screening what the AI says</h2>
+    <p>Screening what a child writes is not enough on its own. A child can ask something entirely innocent and a model can still produce an answer we would not want shown. So every response is screened independently before it reaches the child — the coach's replies, the classmates' solutions, and the classmates' feedback.</p>
+    <p>A flagged response is <b>discarded and never displayed</b>. The child sees a neutral message inviting them to try again, and the incident is recorded for our team to review, including what was generated and why it was stopped.</p>
+    <p>Categories that stop a response: sexual content involving a minor; self-harm; hate; violence; violent extremism; intimate imagery shared without consent; and any claim by the AI to be a human being. For the coach specifically we also stop advice given as though from a licensed professional, anything designed to keep a child engaged against their interest, and content unsuitable for the child's age.</p>
+    <div class="callout">
+      <p><b>Why the AI classmates are held to a different standard.</b> They are <em>designed to make mistakes</em>. The whole point of the activity is that a child reads a flawed solution and works out what is wrong with it. So a classmate being incorrect, hesitant or muddled is the product working, not a failure — and we do not stop a response for it. We stop a classmate only on the categories above, where the harm has nothing to do with being wrong.</p>
+    </div>
+
+    <h2>6. Making clear the AI is not a person</h2>
+    <p>Ms. Rivera has a human name and speaks warmly. The classmates write like children, including hesitantly and imperfectly. A child could reasonably mistake either for a person, so we say plainly that they are not:</p>
+    <ul>
+      <li>&ldquo;Ms. Rivera is an AI coach, not a real person&rdquo; appears wherever a child can ask her for help.</li>
+      <li>&ldquo;[Names] are AI classmates, not real children&rdquo; appears above the classmates.</li>
+      <li>Every classmate's name carries an <b>AI</b> marker, so the disclosure is present at the moment a child is reading their work rather than only at the top of a page.</li>
+      <li>The AI is not permitted to claim to be human. A response doing so is stopped, as set out in section 5.</li>
+    </ul>
+
+    <h2>7. Memory and profiling</h2>
+    <p>Ms. Rivera has no memory of your child across their work. Within a single challenge she can see the last few exchanges about that one piece of work, so her coaching follows the conversation. Nothing carries between challenges.</p>
+    <p>She builds no profile, forms no impression over time, and cannot be gradually shaped by one child into something she is not. When a child submits the same work again, she reviews it fresh rather than judging them for asking twice.</p>
+    <p>She also works to fixed teaching rules — she guides thinking rather than supplying answers, and those rules are the same for every child, every time.</p>
+
+    <h2>8. What we share, and what we never share</h2>
+    <p>Where a report to a child-protection authority is required, we share only what an authority needs to assess immediate risk and contact a parent:</p>
+    <ul>
+      <li>The learner's full name and grade</li>
+      <li>Their province or state</li>
+      <li>The parent or guardian's name and email address</li>
+    </ul>
+    <p>We do <b>not</b> include a home address, date of birth, telephone number, location data or billing details in a safety report.</p>
+    <p>In rare cases where notifying a parent could itself place a child at risk — for example where the concern involves the household — we do not notify the parent, and the matter goes to the authority directly.</p>
+    <p>Learner records are held in Canada. We do not sell or share family information, and we show no advertising.</p>
+
+    <h2>9. Human review</h2>
+    <p>Conversations between a child and the coach are retained and read by ThinkSmith team members as part of ongoing quality and safety checks. Parents are told this before their child begins.</p>
+    <p>Two separate review queues exist. Child-safeguarding flags are reviewed for <em>urgency</em> — a possible risk to a child needs a person quickly. Flagged AI responses are reviewed for <em>pattern</em> — whether our screening is calibrated correctly, and whether it is stopping things it should not. Each review records who carried it out and when.</p>
+
+    <h2>10. Reporting a concern</h2>
+    <p>Anyone — a parent, a child, or anybody else — can raise a concern about content or conduct on ThinkSmith by emailing <a href="mailto:contact@thinksmith.ca">contact@thinksmith.ca</a>. We acknowledge every report and tell you what we have done.</p>
+    <p>If a child is in immediate danger, contact emergency services first. We are not a crisis service and cannot respond immediately.</p>
+
+    <h2>11. Reviewing this plan</h2>
+    <p>We review this plan at least annually, and whenever we make a significant change to how the AI works or what it can do. The date at the top records the last review. This layer of the system is the part we work on most, and this document will change as it does.</p>
+
+    <div class="callout">
+      <p><b>Questions about this plan?</b> Write to <a href="mailto:contact@thinksmith.ca">contact@thinksmith.ca</a> and we will answer.</p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">© 2026 ThinkSmith Multiplier Inc. · <a href="index.html">ThinkSmith</a> · contact@thinksmith.ca</div>
+</footer>
+
+</body>
+</html>
