@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ThinkSmith for Tutoring — the other 165 hours</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
+
+  :root{
+    --paper: #FAF7F1;
+    --paper-dim: #F1ECE1;
+    --ink: #232323;
+    --ink-soft: #55524b;
+    --line: #ddd6c6;
+    --teal: #2f6f5e;
+    --teal-deep: #1f4c40;
+    --amber: #e2a13a;
+    --amber-soft: #f6e6c8;
+    --white: #fffdf9;
+    --radius: 6px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    line-height:1.08;
+    letter-spacing:-0.01em;
+    margin:0;
+  }
+  .mono{
+    font-family:'JetBrains Mono',monospace;
+    font-weight:600;
+  }
+  a{color:inherit;}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 28px;}
+  section{padding:88px 0;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--teal-deep);
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:18px;
+  }
+  .eyebrow::before{
+    content:'';
+    width:22px;height:1px;background:var(--teal);
+  }
+
+  /* NAV */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(250,247,241,0.9);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .navrow{
+    max-width:1100px;margin:0 auto;padding:18px 28px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .navactions{display:flex;gap:10px;align-items:center;}
+  .navrow .logo{font-family:'Fraunces',serif;font-weight:600;font-size:20px;
+    display:flex;align-items:center;gap:10px;}
+  .navrow .logo a{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;}
+  /* alt is empty: the wordmark beside it already says the name, so a screen
+     reader announcing both would repeat itself. */
+  .navrow .logo img{height:44px;width:auto;display:block;}
+  .navlinks{display:flex;gap:28px;font-size:14px;color:var(--ink-soft);}
+  .navlinks a{text-decoration:none;}
+  .navlinks a:hover{color:var(--teal-deep);}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--teal-deep); color:var(--white);
+    padding:11px 20px; border-radius:var(--radius);
+    font-size:14.5px; font-weight:600; text-decoration:none;
+    border:1px solid var(--teal-deep);
+  }
+  .btn:hover{background:var(--teal);}
+  .btn.ghost{background:transparent;color:var(--teal-deep);border:1px solid var(--line);}
+  .btn.ghost:hover{border-color:var(--teal-deep);}
+
+  /* HERO */
+  .hero{padding:100px 0 60px;}
+  .hero .wrap{display:grid;grid-template-columns:1.15fr 0.85fr;gap:56px;align-items:start;}
+  .hero h1{font-size:50px;}
+  .hero p.lede{
+    margin-top:22px; font-size:18px; color:var(--ink-soft); max-width:46ch;
+  }
+  .hero-ctas{margin-top:30px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+  .hero-note{font-size:13px;color:var(--ink-soft);margin-top:10px;}
+
+  /* margin-note card, signature element */
+  .margin-card{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:22px 22px 20px;
+    position:relative;
+    box-shadow:0 1px 0 rgba(0,0,0,0.02);
+  }
+  .margin-card .tag{
+    position:absolute; top:-12px; left:18px;
+    background:var(--white); color:var(--teal-deep); border:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700;
+    padding:4px 10px; border-radius:20px; letter-spacing:0.04em;
+  }
+  .margin-card p{margin:6px 0 0; font-size:14.5px; color:var(--ink);}
+  .margin-card .from{font-size:12.5px;color:var(--ink-soft);margin-top:12px;}
+
+  /* PROOF STRIP */
+  .proof{
+    background:var(--paper);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:56px 0;
+  }
+  .proof .wrap{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:0;
+  }
+  .proof .cell{
+    padding:0 22px;
+    border-left:1px solid var(--line);
+  }
+  .proof .cell:first-child{border-left:none;padding-left:0;}
+  .proof .num{font-family:'JetBrains Mono',monospace; font-size:30px; font-weight:600; color:var(--teal-deep);}
+  .proof .label{font-size:13.5px; color:var(--ink-soft); margin-top:6px; line-height:1.4;}
+  .proof-source{
+    text-align:center; font-size:12.5px; color:var(--ink-soft);
+    padding:22px 0 0;
+  }
+  .proof-source a{color:var(--teal-deep);text-decoration:underline;}
+  .proof-cta{text-align:center;padding-top:20px;}
+  /* Solid green rather than the teal .btn: this is the one invitation on the
+     page to WATCH rather than to buy or enquire, and it should not read as
+     another version of the contact button. */
+  .btn.watch{background:#4f8a3d;border-color:#4f8a3d;color:var(--white);
+    display:inline-flex;flex-direction:column;align-items:center;gap:8px;}
+  .btn.watch img{height:44px;width:auto;display:block;}
+  .btn.watch:hover{background:#5da349;border-color:#5da349;}
+
+  /* THREE PILLARS */
+  .pillars{padding-top:90px;}
+  .pillars h2{font-size:34px;max-width:16ch;}
+  .pillar-grid{
+    margin-top:44px;
+    display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
+  }
+  .pillar{
+    background:var(--white); border:1px solid var(--line); border-radius:10px;
+    padding:28px 24px;
+  }
+  .pillar .num{font-family:'JetBrains Mono',monospace;color:var(--teal);font-size:13px;font-weight:700;}
+  .pillar h3{font-size:20px;margin-top:14px;}
+  .pillar p{font-size:14.5px;color:var(--ink-soft);margin-top:10px;}
+
+  /* WHO ITS FOR */
+  .who{background:var(--paper-dim);}
+  .who h2{font-size:34px;max-width:20ch;}
+  .who .sub{color:var(--ink-soft);max-width:56ch;margin-top:14px;font-size:16px;}
+  .who-grid{
+    margin-top:44px;
+    display:grid;grid-template-columns:repeat(2,1fr);gap:20px;
+  }
+  .who-card{
+    background:var(--white);border:1px solid var(--line);border-radius:10px;
+    padding:26px;
+  }
+  .who-card h4{font-family:'Fraunces',serif;font-size:19px;font-weight:600;}
+  .who-card p{font-size:14.5px;color:var(--ink-soft);margin-top:8px;}
+
+  /* HOW IT WORKS */
+  .how h2{font-size:34px;max-width:18ch;}
+  .stage-list{margin-top:48px;border-top:1px solid var(--line);}
+  .stage{
+    display:grid; grid-template-columns:120px 1fr;
+    gap:28px; padding:30px 0; border-bottom:1px solid var(--line);
+  }
+  .stage .stagenum{font-family:'JetBrains Mono',monospace;color:var(--teal);font-size:14px;font-weight:700;padding-top:3px;}
+  .stage h4{font-size:19px;font-family:'Fraunces',serif;font-weight:600;}
+  .stage p{font-size:14.5px;color:var(--ink-soft);margin-top:8px;max-width:60ch;}
+  .stage .callout{
+    display:inline-block;margin-top:10px;font-size:13px;
+    background:var(--amber-soft); color:#5c4109; padding:3px 10px;border-radius:20px;
+    font-weight:600;
+  }
+
+  /* DASHBOARD PREVIEW */
+  .dash{background:var(--paper-dim);}
+  .dash-panel{
+    margin-top:44px;
+    background:var(--white); border:1px solid var(--line); border-radius:10px;
+    padding:30px;
+    box-shadow:none;
+  }
+  .dash-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;}
+  .dash-head .who{background:none;padding:0;}
+  .dash-head h4{font-family:'Fraunces',serif;font-size:19px;}
+  .dash-head .grade{font-size:13px;color:var(--ink-soft);}
+  .bars{margin-top:22px;display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
+  .bar-col{display:flex;flex-direction:column;align-items:flex-start;gap:8px;}
+  .bar-track{width:100%;height:8px;background:var(--paper-dim);border-radius:6px;overflow:hidden;}
+  .bar-fill{height:100%;background:var(--teal);border-radius:6px;}
+  .bar-label{font-size:12px;color:var(--ink-soft);}
+  .bar-status{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--teal-deep);}
+  .dash-note{
+    margin-top:26px;padding-top:22px;border-top:1px solid var(--line);
+    font-size:14.5px;color:var(--ink-soft);
+  }
+  .dash-note b{color:var(--ink);}
+
+  /* CURRICULUM TRUST */
+  .trust h2{font-size:34px;max-width:20ch;}
+  .trust-grid{
+    margin-top:40px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;
+  }
+  .trust p{font-size:15.5px;color:var(--ink-soft);}
+  .region-tags{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;}
+  .region-tag{
+    font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;
+    background:var(--white);border:1px solid var(--line);padding:6px 12px;border-radius:20px;
+  }
+  .region-tag.live{border-color:var(--teal);color:var(--teal-deep);}
+
+  /* SAFEGUARDING STRIP */
+  .safe{
+    background:var(--white); border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  }
+  .safe .wrap{display:flex;gap:26px;align-items:flex-start;}
+  .safe .icon{
+    flex:none;width:44px;height:44px;border-radius:50%;
+    background:var(--teal-deep);color:var(--white);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Fraunces',serif;font-weight:600;font-size:18px;
+  }
+  .safe h4{font-size:17px;}
+  .safe p{font-size:14.5px;color:var(--ink-soft);margin-top:6px;max-width:64ch;}
+  .safe a{font-size:13.5px;color:var(--teal-deep);text-decoration:underline;white-space:nowrap;}
+
+  /* PRICING */
+  .pricing h2{font-size:34px;}
+  .price-grid{margin-top:40px;display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+  .price-card{
+    background:var(--white);border:1px solid var(--line);border-radius:12px;padding:30px;
+  }
+  .price-card .amt{font-family:'JetBrains Mono',monospace;font-size:36px;font-weight:600;}
+  .price-card .per{font-size:13px;color:var(--ink-soft);}
+  .price-card ul{list-style:none;padding:0;margin:18px 0 0;font-size:14px;color:var(--ink-soft);}
+  .price-card li{padding:6px 0;padding-left:20px;position:relative;}
+  .price-card li::before{content:'—';position:absolute;left:0;color:var(--teal);}
+  .price-flag{
+    font-size:12px;background:var(--paper-dim);color:var(--ink-soft);display:inline-block;
+    padding:3px 10px;border-radius:20px;font-weight:600;margin-bottom:14px;
+  }
+
+  /* FINAL CTA */
+  .final{background:var(--paper-dim);text-align:center;border-top:1px solid var(--line);}
+  .final h2{font-size:34px;max-width:20ch;margin:0 auto;color:var(--ink);}
+  .final p{color:var(--ink-soft);margin-top:16px;font-size:16px;}
+  .final .btn{margin-top:26px;}
+
+  /* CONTACT FORM */
+  .cform{max-width:560px;margin:26px auto 0;text-align:left;}
+  .cfield{margin-bottom:14px;}
+  .cfield label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;}
+  .cfield .req{color:#a8442a;}
+  .cform input,.cform textarea{
+    width:100%;font-family:'Inter',sans-serif;font-size:14.5px;color:var(--ink);
+    background:var(--white);border:1px solid var(--line);border-radius:var(--radius);
+    padding:11px 13px;
+  }
+  .cform textarea{min-height:128px;resize:vertical;}
+  .cform input:focus,.cform textarea:focus{outline:2px solid var(--teal);outline-offset:0;border-color:var(--teal);}
+  /* Honeypot: off-screen rather than display:none, because some bots skip
+     hidden inputs but not positioned ones. Never announced to screen readers. */
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
+  .cform .btn{border:none;cursor:pointer;font-family:'Inter',sans-serif;}
+  .cform .btn[disabled]{opacity:0.55;cursor:default;}
+  .cmsg{margin-top:14px;font-size:14px;border-radius:var(--radius);padding:12px 14px;display:none;}
+  .cmsg.ok{display:block;background:#e7f0ea;color:#1f4c40;}
+  .cmsg.bad{display:block;background:var(--amber-soft);color:#5c4109;}
+
+  footer{padding:40px 0;text-align:center;font-size:13px;color:var(--ink-soft);}
+
+  /* OUR STORY (2026-08-18) ─────────────────────────────────────────────── */
+  .story-head{padding:76px 0 0;}
+  .story-head .wrap{max-width:760px;}
+  .story-head h1{font-size:42px;margin-bottom:18px;}
+  .story-head .lede{font-size:19px;color:var(--ink-soft);margin:0;}
+  .story-body{padding:44px 0 0;}
+  .story-body .wrap{max-width:760px;}
+  /* Portrait shown FULL, not cropped to a circle: object-fit contain keeps the
+     whole photo visible inside the 200x300 box whatever its aspect ratio, so
+     nothing is cut off and nothing is stretched. */
+  .byline{
+    display:flex;align-items:center;gap:26px;
+    padding-bottom:26px;border-bottom:1px solid var(--line);margin-bottom:34px;
+  }
+  .byline img{
+    width:200px;height:300px;
+    object-fit:contain;object-position:center;
+    display:block;flex-shrink:0;
+    background:var(--paper-dim);
+    border:1px solid var(--line);border-radius:var(--radius);
+  }
+  .byline .name{font-weight:600;font-size:16px;}
+  .byline .role{color:var(--ink-soft);font-size:14px;}
+  .story-body p{font-size:17.5px;margin:0 0 22px;}
+  .story-body p.pull{
+    font-family:'Fraunces',serif;font-size:23px;line-height:1.35;
+    padding-left:22px;border-left:3px solid var(--amber);
+    margin:34px 0;color:var(--ink);
+  }
+  .story-body .sign-off{
+    margin-top:38px;font-family:'Fraunces',serif;
+    color:var(--ink-soft);font-size:16px;
+  }
+  .bridge{padding:56px 0 0;}
+  .bridge .wrap{max-width:760px;}
+  .bridge-card{
+    background:var(--paper-dim);border:1px solid var(--line);
+    border-radius:var(--radius);padding:26px 28px;
+    display:flex;justify-content:space-between;align-items:center;
+    gap:20px;flex-wrap:wrap;
+  }
+  .bridge-card .stat{
+    font-family:'Fraunces',serif;font-size:28px;font-weight:600;
+    color:var(--teal-deep);line-height:1.1;
+  }
+  .bridge-card .stat-label{font-size:14px;color:var(--ink-soft);margin-top:4px;}
+  .bridge-card a{
+    text-decoration:none;font-weight:600;font-size:14.5px;color:var(--teal-deep);
+    border-bottom:2px solid var(--amber);padding-bottom:2px;white-space:nowrap;
+  }
+  .story-cta{padding:72px 0 88px;}
+  .story-cta .wrap{max-width:640px;text-align:center;}
+  .story-cta h2{font-size:30px;margin-bottom:12px;}
+  .story-cta p{color:var(--ink-soft);margin:0 0 26px;}
+  .navlinks a.current{color:var(--teal-deep);font-weight:600;}
+  @media (max-width:760px){
+    .story-head h1{font-size:32px;}
+    .byline{flex-direction:column;align-items:flex-start;gap:16px;}
+    .bridge-card{flex-direction:column;align-items:flex-start;}
+  }
+
+  /* MODALS ─────────────────────────────────────────────────────────────
+     Two dialogs: the walkthrough and the full safeguarding policy. Visibility
+     is driven by style.display rather than the [hidden] attribute — these
+     elements carry inline styles, and an inline display value overrides the
+     user-agent rule that implements [hidden], which would leave the dialog
+     open and unclosable. */
+  .ovl{
+    position:fixed; inset:0; z-index:100; display:none;
+    background:rgba(35,35,35,0.55);
+    align-items:center; justify-content:center; padding:22px;
+  }
+  .modal{
+    background:var(--paper); border:1px solid var(--line); border-radius:12px;
+    width:100%; max-height:88vh; overflow-y:auto; position:relative;
+    box-shadow:0 24px 70px rgba(35,35,35,0.28);
+  }
+  .modal.narrow{max-width:680px; padding:34px 38px;}
+  .modal.wide{max-width:1180px; padding:20px;}
+  .modal .x{
+    position:absolute; top:12px; right:16px; z-index:2;
+    background:var(--white); border:1px solid var(--line); border-radius:50%;
+    width:30px; height:30px; line-height:1; font-size:19px; color:var(--ink-soft);
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .modal .x:hover{border-color:var(--teal-deep); color:var(--teal-deep);}
+  .modal h3{font-size:25px; margin-bottom:6px;}
+  .modal h5{
+    font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700;
+    letter-spacing:0.1em; text-transform:uppercase; color:var(--teal-deep);
+    margin:26px 0 8px;
+  }
+  .modal p{font-size:14.5px; color:var(--ink-soft); margin:9px 0 0; line-height:1.65;}
+  .modal ol,.modal ul{margin:10px 0 0; padding-left:20px; font-size:14.5px; color:var(--ink-soft);}
+  .modal li{padding:4px 0; line-height:1.6;}
+  .modal li b{color:var(--ink);}
+  .modal .urgent{
+    background:var(--amber-soft); border-radius:var(--radius);
+    padding:13px 16px; margin-top:14px; font-size:14px; color:#5c4109;
+  }
+  .modal .foot{
+    margin-top:26px; padding-top:16px; border-top:1px solid var(--line);
+    font-size:13px; color:var(--ink-soft);
+  }
+  .modal .foot a{color:var(--teal-deep);}
+  .stat-row{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:14px;}
+  .stat{background:var(--white); border:1px solid var(--line); border-radius:var(--radius); padding:14px;}
+  .stat .sv{font-family:'JetBrains Mono',monospace; font-size:24px; font-weight:600; color:var(--teal-deep);}
+  .stat .sl{font-size:12.5px; color:var(--ink-soft); margin-top:5px; line-height:1.45;}
+  .demo-frame{width:100%; height:660px; border:0; border-radius:8px; display:block;}
+  .demo-cap{
+    text-align:center; font-size:12.5px; color:var(--ink-soft); margin:10px 0 2px;
+  }
+  .demo-cap a{color:var(--teal-deep);}
+  @media (max-width:860px){
+    .modal.narrow{padding:28px 22px;}
+    .stat-row{grid-template-columns:1fr;}
+    .demo-frame{height:560px;}
+    .hero .wrap{grid-template-columns:1fr;}
+    .hero h1{font-size:36px;}
+    .proof .wrap{grid-template-columns:repeat(2,1fr);}
+    .proof .cell:nth-child(3){border-left:none;}
+    .pillar-grid, .who-grid, .trust-grid, .price-grid{grid-template-columns:1fr;}
+    .bars{grid-template-columns:repeat(2,1fr);}
+    .stage{grid-template-columns:1fr;gap:8px;}
+    /* MOBILE NAV (2026-08-18). This previously read `.navlinks{display:none}`,
+       which hid How it works / Who it's for / The research / Pricing on every
+       phone with no replacement — a visitor on mobile could reach nothing but
+       Log in and the CTA. The nav now stacks: wordmark and actions on the first
+       row, the section links wrapping onto a second. No hamburger, because five
+       short links fit in two lines and a menu button would hide them behind an
+       extra tap for no gain. */
+    .navrow{flex-wrap:wrap;row-gap:10px;padding:12px 16px;gap:12px;}
+    .navrow .logo{order:1;font-size:17px;gap:8px;}
+    .navrow .logo img{height:32px;}
+    .navactions{order:2;margin-left:auto;gap:8px;}
+    .navactions .btn{padding:8px 12px;font-size:13px;}
+    /* Row two: the section links. They wrap within themselves rather than
+       being hidden — the original rule was `display:none`, which left phone
+       visitors with no way to reach How it works, Who it's for, The research
+       or Pricing at all. */
+    .navlinks{
+      order:3;width:100%;
+      display:flex;flex-wrap:wrap;
+      gap:8px 16px;font-size:13.5px;
+      padding-top:9px;border-top:1px solid var(--line);
+    }
+  }
+  /* Very narrow phones: the CTA wording is long, so let it sit on its own row
+     rather than squeezing the wordmark. */
+  @media (max-width:420px){
+    .navactions{width:100%;margin-left:0;}
+    .navactions .btn{flex:1;justify-content:center;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="navrow">
+    <!-- The wordmark is a link home (2026-08-18). href is index.html rather
+         than "/" so it works from a subpath or a file:// preview without
+         depending on server root config. The JS below intercepts it when the
+         story view is open so it swaps back without a reload. -->
+    <div class="logo"><a href="index.html" class="home-link"><img src="logo-silver.png" alt="" />ThinkSmith</a></div>
+    <div class="navlinks">
+      <a href="#how">How it works</a>
+      <a href="#who">Who it's for</a>
+      <a href="#our-story" class="story-open">Our story</a>
+      <a href="#research">Research</a>
+      <a href="#partnership">Partnership</a>
+    </div>
+    <div class="navactions">
+      <a href="https://app.thinksmith.ca/login" class="btn ghost">Log in</a>
+      <a href="#contact" class="btn contact-open">Book a partner call &rarr;</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HOME CONTENT. Wrapped (2026-08-18) so "Our story" can swap the body
+     beneath the nav rather than navigating away — the header stays put and
+     the page does not reload. -->
+<div id="homeContent">
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">For tutoring businesses · Texas &amp; Ontario</div>
+      <h1>You own the hour. We hold the other 165.</h1>
+      <p class="lede">A student sees you one to three hours a week. ThinkSmith extends your instruction into the rest of it — structured thinking practice between sessions, and a weekly record you can hand the parent. You keep the relationship, the teaching and the billable hour. We make the work visible.</p>
+    </div>
+    <div class="margin-card">
+      <div class="tag">BETWEEN SESSIONS</div>
+      <p style="color:var(--ink-soft);font-size:13.5px;margin-top:2px;"><b style="color:var(--ink);">The challenge:</b> Your town can afford one project this year — repair the library roof, or build a skate park. Which should it choose, and why?</p>
+      <p style="margin-top:16px;"><b>The student writes:</b> "They should build the skate park because lots of kids have nothing to do after school, and the library is old anyway."</p>
+      <p style="margin-top:16px;"><b>Ms. Rivera:</b> "You've thought about who gains — kids with nowhere to go. Who might lose out if the roof isn't repaired, and how could you find out which group is larger?"</p>
+      <div class="from">— the coach never hands over the answer. Your student arrives at the next session having already done the thinking.</div>
+    </div>
+  </div>
+</header>
+
+<section class="proof">
+  <div class="wrap">
+    <div class="cell">
+      <div class="num">17.31%</div>
+      <div class="label">average final exam improvement, same instructors, same courses, only the method changed</div>
+    </div>
+    <div class="cell">
+      <div class="num">27.62%</div>
+      <div class="label">improvement in Calculus III — including students who had previously failed the course</div>
+    </div>
+    <div class="cell">
+      <div class="num">1,742</div>
+      <div class="label">students across 22 courses in a peer-reviewed pilot study</div>
+    </div>
+    <div class="cell">
+      <div class="num">83%</div>
+      <div class="label">of students reported greater confidence in their own ability to learn</div>
+    </div>
+  </div>
+  <div class="proof-source">Every sign in this category says &ldquo;proven results.&rdquo; This is what it looks like measured — peer-reviewed pilot study, Ubon Ratchathani University. <a href="#research">Read the full research →</a></div>
+  <div class="proof-cta"><a href="#how" id="demoOpen" class="btn watch"><img src="logo-silver.png" alt="" />Watch the walkthrough</a></div>
+</section>
+
+<section class="pillars">
+  <div class="wrap">
+    <div class="eyebrow">What a partnership gives you</div>
+    <h2>Three things a tutoring business cannot produce on its own.</h2>
+    <div class="pillar-grid">
+      <div class="pillar">
+        <div class="num">01</div>
+        <h3>Reach beyond the billable hour</h3>
+        <p>Your student works through structured challenges between sessions, with an AI coach that asks rather than answers. You are not staffing more time — your method is simply still working when you are not in the room.</p>
+      </div>
+      <div class="pillar">
+        <div class="num">02</div>
+        <h3>Evidence instead of a check-in call</h3>
+        <p>A weekly Thinking Outcome across five competencies — something concrete to put in a parent&rsquo;s hands. The renewal conversation stops being a matter of trust and becomes a matter of record.</p>
+      </div>
+      <div class="pillar">
+        <div class="num">03</div>
+        <h3>A claim your competitors cannot make</h3>
+        <p>&ldquo;Built on a peer-reviewed method shown to lift exam scores by 17%, tested across 1,742 students.&rdquo; In a market where every competitor says <em>proven results</em>, that sentence does work none of the others can.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="who" id="who">
+  <div class="wrap">
+    <div class="eyebrow">Who we partner with</div>
+    <h2>Built to amplify a tutoring practice, not to replace one.</h2>
+    <p class="sub">If your value is the relationship and the instruction, this protects both — and makes them legible to the person paying.</p>
+    <div class="who-grid">
+      <div class="who-card">
+        <h4>Independent tutors and small practices</h4>
+        <p>You are competing with franchises that have national marketing budgets. What you can offer that they cannot is evidence of reasoning rather than repetition — and a weekly record that makes your work visible to the parent paying for it.</p>
+      </div>
+      <div class="who-card">
+        <h4>Multi-location centres</h4>
+        <p>One standard across every location and every tutor, on a five-part model that reads the same in Austin as in San Antonio. Quality stops depending on which instructor a family happens to be assigned.</p>
+      </div>
+      <div class="who-card">
+        <h4>Programs built for depth, not drilling</h4>
+        <p>Repetition and pace is a crowded position, and somebody else already owns it. Students who understand deeply but stall under rote practice are a different buyer — and a largely unserved one.</p>
+      </div>
+      <div class="who-card">
+        <h4>Tutors serving homeschool families</h4>
+        <p>Texas K&ndash;12 is already mapped against the official documents, region by region. Students working from entirely different curricula still produce a Thinking Outcome you can read side by side.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <div class="wrap">
+    <div class="eyebrow">The method your students would be using</div>
+    <h2>The core insight: teaching others is the most powerful way to learn.</h2>
+    <p style="margin-top:16px;font-size:15.5px;color:var(--ink-soft);max-width:66ch;">This isn&rsquo;t a new idea — researchers have studied it for decades. ThinkSmith is the first platform built entirely around it, at the scale of one student working alone between sessions. The 17.31% exam improvement wasn&rsquo;t produced by better teachers or harder content. The instructors, courses and students were the same as previous years. The only variable was the method — which is precisely why it transfers into your practice rather than competing with it.</p>
+    <div class="stage-list">
+      <div class="stage">
+        <div class="stagenum">STAGE 1</div>
+        <div>
+          <h4>Engage</h4>
+          <p>The student writes their own solution to a real academic challenge, in their own words — not multiple choice, not fill-in-the-blank.</p>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stagenum">STAGE 2</div>
+        <div>
+          <h4>Evaluate — the key step</h4>
+          <p>They read three peer attempts at the same challenge and write structured feedback to each. This is where the deep learning happens — evaluating others' reasoning sharpens their own.</p>
+          <span class="callout">This is the step most platforms skip entirely</span>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stagenum">STAGE 3</div>
+        <div>
+          <h4>Reflect</h4>
+          <p>They receive feedback on their own work and write a reflection on what changed in their thinking — the closest thing to a one-on-one teacher conference at this scale.</p>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stagenum">STAGE 4</div>
+        <div>
+          <h4>See their Thinking Outcome</h4>
+          <p>A synthesis across five competencies and a narrative of how their thinking developed. This is the record that reaches you and the parent — and the thing your next session can start from.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="dash" id="dashboard">
+  <div class="wrap">
+    <div class="eyebrow">What you hand the parent</div>
+    <h2 style="font-size:34px;max-width:27ch;">The biggest driver of tutoring churn is a parent who cannot tell whether it is working.</h2>
+    <div class="dash-panel">
+      <div class="dash-head">
+        <div>
+          <h4>Carl</h4>
+          <div class="grade">Grade 8 · Ontario</div>
+        </div>
+        <div class="grade">Week of March 9</div>
+      </div>
+      <div class="bars">
+        <div class="bar-col">
+          <div class="bar-label">Knowledge</div>
+          <div class="bar-track"><div class="bar-fill" style="width:68%"></div></div>
+          <div class="bar-status">DEV. WELL</div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-label">Creative</div>
+          <div class="bar-track"><div class="bar-fill" style="width:64%"></div></div>
+          <div class="bar-status">DEV. WELL</div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-label">Critical</div>
+          <div class="bar-track"><div class="bar-fill" style="width:86%"></div></div>
+          <div class="bar-status">STRONG</div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-label">Communication</div>
+          <div class="bar-track"><div class="bar-fill" style="width:60%"></div></div>
+          <div class="bar-status">DEV. WELL</div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-label">Application</div>
+          <div class="bar-track"><div class="bar-fill" style="width:42%"></div></div>
+          <div class="bar-status">DEVELOPING</div>
+        </div>
+      </div>
+      <div class="dash-note">
+        <b>What the platform observed:</b> Carl completed three activities this week — two on the rivers of Asia and one on chemical bonds. His Critical Thinking stood out on the rivers work; he wrote about why the Mekong matters to the people who live near it, not just where it flows. On the bonds activity his thinking was thinner — worth knowing he spent under five minutes on that submission, which usually means rushing.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="trust">
+  <div class="wrap">
+    <div class="trust-grid">
+      <div>
+        <div class="eyebrow">Verified, not generated</div>
+        <h2>STAAR-aligned. Verified, not guessed.</h2>
+        <p style="margin-top:16px;">Plenty of AI tools claim to cover &ldquo;any curriculum.&rdquo; Most quietly generate it and get it wrong — which a Texas parent notices the first time a question looks nothing like the STAAR. ThinkSmith does the opposite: we locate the official curriculum document for the grade, confirm it is the current version, and build from it, region by region. We would rather map two regions properly than claim fifty.</p>
+        <div class="region-tags">
+          <span class="region-tag live">✓ Ontario, K–12</span>
+          <span class="region-tag live">✓ Texas, K–12</span>
+          <span class="region-tag">More regions in progress</span>
+        </div>
+      </div>
+      <div class="margin-card">
+        <div class="tag">CURRICULUM CHECK</div>
+        <p>Running your own program? Upload your syllabus, scope and sequence, or a course outline, and ThinkSmith builds activities matched to it directly — no waiting on region coverage, and your material stays yours.</p>
+        <div class="from">Every student assessed on the same five-part model — Knowledge &amp; Understanding, Creative Thinking, Critical Thinking, Communication, Application — at four developmental levels, across every subject, tutor and location.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="safe">
+  <div class="wrap">
+    <div class="icon">S</div>
+    <div>
+      <h4>What happens if a student may be at risk</h4>
+      <p>Students in your care would be writing on our platform, so this matters to you as much as to us. Every message a student writes is screened for signs of distress before the AI coach is allowed to reply, and a real team reviews what is flagged. The coach is labelled as AI everywhere a student sees it. If a report to a child-protection authority is ever appropriate, we disclose only a learner&rsquo;s name, grade and region, and their parent&rsquo;s name and email — never a date of birth, address or phone number. Learner records are held in Canada. We do not sell or share family information, and we show no advertising.</p>
+    </div>
+    <a href="#" id="policyOpen">Read full policy →</a>
+  </div>
+</section>
+
+<section class="pricing" id="partnership">
+  <div class="wrap">
+    <div class="eyebrow">Now opening partner conversations</div>
+    <h2>How a partnership works.</h2>
+    <div class="price-grid">
+      <div class="price-card">
+        <span class="price-flag">01 &middot; A pilot cohort</span>
+        <div class="amt" style="font-size:22px;line-height:1.35;">Start with a handful of your students</div>
+        <div class="per">No platform build-out, no change to how you run sessions</div>
+        <ul>
+          <li>We map your students&rsquo; grades and subjects to the curriculum</li>
+          <li>Your tutors keep teaching exactly as they do now</li>
+          <li>Students work through challenges between sessions</li>
+          <li>You see the Thinking Outcomes before anything is committed</li>
+        </ul>
+      </div>
+      <div class="price-card">
+        <span class="price-flag">02 &middot; Then decide</span>
+        <div class="amt" style="font-size:22px;line-height:1.35;">Terms set with our founding team</div>
+        <div class="per">Per-student licensing, shaped around how you already bill</div>
+        <ul>
+          <li>Pricing agreed directly &mdash; not a self-serve tier you have to fit</li>
+          <li>Your branding on the parent-facing report, where you want it</li>
+          <li>Texas and Ontario mapped now; other regions on request</li>
+          <li>Set up and supported by the people who built it</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:26px;font-size:14.5px;color:var(--ink-soft);max-width:70ch;">
+      We are deliberately taking on a small number of partners first. That is not scarcity
+      marketing &mdash; it is that we would rather get a handful of practices genuinely working
+      than sign fifty and serve none of them properly.
+    </p>
+  </div>
+</section>
+
+<section class="research" id="research">
+  <div class="wrap">
+    <div class="eyebrow">The research</div>
+    <h2 style="font-size:34px;max-width:24ch;">Tested with 1,742 students across 22 courses. Consistent across subjects, instructors, and difficulty levels.</h2>
+    <p style="margin-top:18px;font-size:15px;color:var(--ink-soft);max-width:70ch;">Source: peer-reviewed pilot study, Ubon Ratchathani University — 1,742 students, 22 courses, 6 disciplines. Instructors held PhDs from international universities; instructional quality was top-tier throughout. The variable being tested was the method, not instructor quality — the mechanism is a property of how humans learn, not of any specific population.</p>
+    <a href="ThinkSmithPilotStudy.pdf" id="paperOpen" class="btn ghost" style="margin-top:22px;">Read the full research paper →</a>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <h2>Let&rsquo;s talk about your students.</h2>
+    <p>The method behind ThinkSmith has been tested for years — 1,742 students, peer-reviewed results. The platform is new, and we are working directly with a small number of tutoring partners to get it right from the start. If the other 165 hours are a problem you recognise, we should talk.</p>
+    <a href="#contact" class="btn contact-open">Book a partner call &rarr;</a>
+    <p style="margin-top:14px;font-size:13.5px;">No mail app needed &mdash; the form opens right here.</p>
+  </div>
+</section>
+
+</div><!-- /#homeContent -->
+
+<!-- ── OUR STORY ────────────────────────────────────────────────────────────
+     Shown in place of #homeContent when the nav link is used. Kept in this file
+     rather than a separate page so the sticky header never re-renders and the
+     modals stay wired. -->
+<div id="storyContent" style="display:none;">
+
+  <header class="story-head">
+    <div class="wrap">
+      <div class="eyebrow">Our story</div>
+      <h1>Built by someone who never learned the way school expected.</h1>
+      <p class="lede">ThinkSmith didn't start as a business plan. It started with a kid who was told he wasn't smart — and a researcher who later proved that wrong, for 1,742 students at a time.</p>
+    </div>
+  </header>
+
+  <section class="story-body">
+    <div class="wrap">
+
+      <div class="byline">
+        <img src="OurStory.png" alt="Leslie Richards" />
+        <div>
+          <div class="name">Leslie Richards</div>
+          <div class="role">Co-Founder &amp; Creator of ThinkSmith</div>
+        </div>
+      </div>
+
+      <p>I dropped out at 16 because school was built for rote learners. ThinkSmith is built for the rest of us.</p>
+
+      <p>I struggled with dyslexia, failed two grades, and spent years believing I wasn't smart. It wasn't true — I just didn't learn the way school expected. Most kids don't.</p>
+
+      <p class="pull">Later, I led a study with 1,742 university students that proved something life-changing: when learners engage with new ideas before instruction, their confidence and performance skyrocket.</p>
+
+      <p>Most children cannot absorb brand-new information during a lesson unless they have some prior foothold — and repetition alone doesn't fix that.</p>
+
+      <p>A good tutor already gives a student the attention school could not. ThinkSmith gives that attention somewhere to keep working once the hour is over.</p>
+
+      <p class="sign-off">— Leslie Richards, Co-Founder &amp; Creator of ThinkSmith</p>
+
+    </div>
+  </section>
+
+  <section class="bridge">
+    <div class="wrap">
+      <div class="bridge-card">
+        <div>
+          <div class="stat">1,742 students</div>
+          <div class="stat-label">The peer-reviewed pilot study behind ThinkSmith's method</div>
+        </div>
+        <a href="#research" class="story-close-link">See the full research &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="story-cta">
+    <div class="wrap">
+      <h2>Give your students the structure to thrive.</h2>
+      <p>Built by someone who needed it, tested on 1,742 students, and now looking for the right tutoring partners.</p>
+      <a class="btn contact-open" href="#contact">Book a partner call &rarr;</a>
+    </div>
+  </section>
+
+</div><!-- /#storyContent -->
+
+<footer>
+  <div class="wrap">© 2026 ThinkSmith. All rights reserved. · <a href="safety-plan.html" style="color:inherit;">Digital Safety Plan</a> · contact@thinksmith.ca</div>
+</footer>
+
+<!-- ── Walkthrough ──────────────────────────────────────────────────────── -->
+<div class="ovl" id="demoOvl" role="dialog" aria-modal="true" aria-label="How ThinkSmith works">
+  <div class="modal wide" id="demoModal">
+    <button class="x" id="demoClose" aria-label="Close">&times;</button>
+    <!-- Loaded on first open, not on page load: the walkthrough carries audio
+         and would otherwise cost every visitor the download whether or not
+         they ever open it. -->
+    <iframe id="demoFrame" class="demo-frame" title="ThinkSmith walkthrough" src="about:blank"></iframe>
+    <p class="demo-cap">Press play to watch the whole journey, or step through it yourself.
+      <a href="thinksmith-demo.html" target="_blank" rel="noopener">Open in a new tab &rarr;</a></p>
+  </div>
+</div>
+
+<!-- ── Safeguarding policy ──────────────────────────────────────────────── -->
+<div class="ovl" id="policyOvl" role="dialog" aria-modal="true" aria-labelledby="policyTitle">
+  <div class="modal narrow" id="policyModal">
+    <button class="x" id="policyClose" aria-label="Close">&times;</button>
+    <div class="eyebrow">Safeguarding</div>
+    <h3 id="policyTitle">What we share if a child may be at risk</h3>
+
+    <div class="urgent">
+      ThinkSmith is an educational tool, not a crisis line or counselling service.
+      If a child is in immediate danger, please call your local emergency services.
+    </div>
+
+    <h5>How our safeguards work</h5>
+    <p>ThinkSmith runs on two layers of protection: the foundation provided by the AI model
+      itself, and the layer we build on top for our own classroom.</p>
+
+    <p><b>Tier 1 &mdash; Foundation.</b> Our AI coach is built on Claude, made by Anthropic.
+      Anthropic's own safety systems apply to everything the coach produces, preventing
+      harmful, illegal, or exploitative content at the source. This protection is always on
+      and does not depend on us.</p>
+
+    <p><b>Tier 2 &mdash; ThinkSmith.</b> The foundation layer cannot know what a good lesson
+      looks like, or what Ms. Rivera is supposed to be. That is our responsibility, and it is
+      where we concentrate our work.</p>
+    <ul>
+      <li><b>Every message a child writes is screened for signs of distress</b> before our
+        coach replies. If content indicates self-harm or serious distress, the coach does not
+        answer the question &mdash; see below.</li>
+      <li><b>Every response we generate is screened before a child sees it.</b> Screening what
+        a child writes is not enough on its own &mdash; a perfectly innocent question can still
+        produce an answer we would not want shown. So the coach's replies, and the work of the
+        AI classmates, are checked independently before they appear. Anything flagged is
+        discarded rather than displayed, and recorded for our team to review.</li>
+      <li><b>Ms. Rivera and the AI classmates are clearly identified as AI.</b> Ms. Rivera is an
+        AI coach, not a real person, and the classmates are not real children. This is stated on
+        screen and marked beside every name, so a child is never left to work it out.</li>
+      <li><b>A child can tell you something is wrong, in one tap.</b> Beside Ms. Rivera and beside
+        each classmate's work there is a link to report it to you. They don't have to explain why
+        or write anything, and nothing is locked or taken away because they used it. You are
+        emailed straight away with <b>exactly what they were looking at</b> — Ms. Rivera's words,
+        or the classmate's — and the child is shown plainly that you will see it.</li>
+      <li><b>Putting it right is our job, not yours.</b> Our team is told at the same moment you
+        are. You can't correct Ms. Rivera and we don't think you should have to try — if she said
+        something she shouldn't have, we fix it, and someone gets in touch to tell you what we
+        found.</li>
+      <li><b>Ms. Rivera has no memory of the student.</b> She sees the challenge in front of
+        her and, at most, the last few exchanges about that one piece of work. Nothing carries
+        between challenges. She builds no profile, forms no impression over time, and cannot
+        be gradually shaped by one child into something she is not. When a child submits the
+        same work again, she reviews it fresh rather than judging them for asking twice.</li>
+      <li><b>She works to fixed teaching rules.</b> She guides thinking rather than supplying
+        answers &mdash; that is the whole point of ThinkSmith &mdash; and those rules are the
+        same for every child, every time.</li>
+      <li><b>Every exchange is stored, and our team reviews them.</b> Conversations between a
+        child and the coach are retained and read by ThinkSmith team members as part of our
+        ongoing quality and safety checks.</li>
+    </ul>
+    <p>We are continuing to add to this layer. It is the part of the system we work on most.</p>
+
+    <h5>If a child may be at risk</h5>
+    <ol>
+      <li><b>Immediate support.</b> The coach stops coaching and directs the child to a
+        crisis service staffed by trained people &mdash; the 988 Suicide &amp; Crisis Lifeline
+        in the United States, or Kids Help Phone in Canada.</li>
+      <li><b>Human review.</b> The alert is escalated to a ThinkSmith team member who has
+        completed child-protection orientation.</li>
+      <li><b>Reporting.</b> Where a report to child-protection authorities is required by law,
+        we notify the appropriate agency.</li>
+    </ol>
+
+    <h5>What information is shared</h5>
+    <p>To allow an authority to assess immediate risk and contact a parent, we share only:</p>
+    <ul>
+      <li>The learner's full name and grade</li>
+      <li>Their province or state</li>
+      <li>The parent or guardian's name and email address</li>
+    </ul>
+    <p>We do not include a home address, date of birth, telephone number, location data or
+      billing details in a safety report.</p>
+
+    <h5>Household disclosures</h5>
+    <p>If a child discloses a concern involving someone in their own household, we report to
+      the authority without contacting the family first. A system that routed every disclosure
+      straight back to a parent account could place a child at greater risk.</p>
+
+    <p style="margin:18px 0 0;padding-top:16px;border-top:1px solid var(--line);font-size:14px;">
+      <a href="safety-plan.html" style="color:var(--teal-deep);font-weight:600;border-bottom:2px solid var(--amber);padding-bottom:2px;text-decoration:none;">Read our full Digital Safety Plan &rarr;</a>
+    </p>
+    <div class="foot">Questions about safety or privacy?
+      <a href="mailto:contact@thinksmith.ca">contact@thinksmith.ca</a></div>
+  </div>
+</div>
+
+<!-- ── Contact form ─────────────────────────────────────────────────────────
+     A dialog rather than a section at the foot of the page: a parent who
+     clicks "Contact us" expects to be asked something, not to be scrolled
+     somewhere. It also means every contact button on the page leads to the
+     same place. -->
+<div class="ovl" id="contactOvl" role="dialog" aria-modal="true" aria-labelledby="contactTitle">
+  <div class="modal narrow" id="contactModal">
+    <button class="x" id="contactClose" aria-label="Close">&times;</button>
+    <div id="contactBody">
+    <div class="eyebrow">Get in touch</div>
+    <h3 id="contactTitle">Tell us about your practice</h3>
+    <p style="margin-bottom:18px;">We are opening conversations with a small number of tutoring partners.
+      Send us a note and someone from our founding team will reply, usually within a working day.</p>
+
+    <div class="cform" id="cform">
+      <div class="cfield">
+        <label for="cf-name">Your full name <span class="req">*</span></label>
+        <input id="cf-name" type="text" autocomplete="name" maxlength="120" />
+      </div>
+      <div class="cfield">
+        <label for="cf-email">Your email address <span class="req">*</span></label>
+        <input id="cf-email" type="email" autocomplete="email" maxlength="200" />
+      </div>
+      <div class="cfield">
+        <label for="cf-msg">Tell us about your business <span class="req">*</span></label>
+        <textarea id="cf-msg" maxlength="4000" placeholder="Your business name and location, roughly how many students you work with, the grades and subjects you cover, and what you would want ThinkSmith to solve."></textarea>
+      </div>
+      <div class="hp" aria-hidden="true">
+        <label for="cf-web">Leave this field empty</label>
+        <input id="cf-web" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+      <button id="cf-send" class="btn">Submit &rarr;</button>
+      <div class="cmsg" id="cf-msgbox" role="status" aria-live="polite"></div>
+      <p style="font-size:12.5px;color:var(--ink-soft);margin-top:16px;">
+        Goes straight to our team. Prefer email? Write to
+        <a href="mailto:contact@thinksmith.ca" style="color:var(--teal-deep);">contact@thinksmith.ca</a>.
+      </p>
+    </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Research: parent summary ─────────────────────────────────────────── -->
+<div class="ovl" id="paperOvl" role="dialog" aria-modal="true" aria-labelledby="paperTitle">
+  <div class="modal narrow" id="paperModal">
+    <button class="x" id="paperClose" aria-label="Close">&times;</button>
+    <div class="eyebrow">The research &middot; summary</div>
+    <h3 id="paperTitle">How a 1,742-student university pilot proved that active thinking beats passive listening</h3>
+
+    <p>Every tutoring business is asked the same question by parents, and most cannot answer it
+      with anything but testimonials: does this actually work? Here is the study behind the
+      claim, in full, so you can judge it yourself before you repeat it to anyone.</p>
+    <p>In 2008&ndash;2009, ThinkSmith founder Leslie Richards co-led a university pilot study
+      involving 1,742 students across 22 courses in STEM, computer science and engineering at
+      Ubon Ratchathani University.</p>
+    <p>The goal was simple: engage students in new knowledge <em>before</em> the lecture. Instead
+      of sitting through passive hours of instruction, students used the ThinkSmith framework
+      &mdash; active problem-solving, reviewing peer ideas, and receiving structured feedback
+      ahead of the deep-dive discussion.</p>
+
+    <h5>The findings that matter commercially</h5>
+    <div class="stat-row">
+      <div class="stat"><div class="sv">17.3%</div><div class="sl">higher final exam scores, across the 1,256 students where a direct comparison against traditional instruction was possible</div></div>
+      <div class="stat"><div class="sv">44.8%</div><div class="sl">exam improvement in CAD &amp; Engineering &mdash; dropouts and failures fell from 10 to 3</div></div>
+      <div class="stat"><div class="sv">27.6%</div><div class="sl">higher final exam average in Calculus III, a retake course with a history of frequent failure</div></div>
+    </div>
+
+    <h5>Students gained confidence and took ownership</h5>
+    <p>Academic improvement only happens when a learner&rsquo;s mindset changes first. In a
+      post-study survey of 684 students:</p>
+    <ul>
+      <li><b>93.9%</b> found ThinkSmith more rewarding than sitting through lectures</li>
+      <li><b>92.9%</b> took greater personal responsibility for their own learning</li>
+      <li><b>93.9%</b> developed stronger critical thinking and problem-solving</li>
+      <li><b>83.7%</b> felt significantly more confident in their ability to learn difficult concepts</li>
+    </ul>
+
+    <h5>Peer feedback trained real-world collaboration</h5>
+    <ul>
+      <li><b>89.3%</b> found reviewing peer ideas stimulating and a richer learning experience</li>
+      <li><b>89.3%</b> reported a marked improvement in teamwork and communication</li>
+    </ul>
+
+    <h5>Why it works: the practice cycle</h5>
+    <p>Traditional instruction asks students to sit quietly while an instructor talks, leaving the
+      hardest part &mdash; applying the knowledge &mdash; for homework, when the learner is
+      isolated and frustrated. The pilot inverted that with a five-stage loop:</p>
+    <ol>
+      <li><b>Try it.</b> The student tackles an open-ended challenge alone, focusing on effort and
+        problem-solving rather than recall.</li>
+      <li><b>See peer ideas.</b> They read anonymous attempts from peers, sparking fresh
+        perspectives on the same problem.</li>
+      <li><b>Give and get feedback.</b> They write constructive feedback and receive it,
+        sharpening critical reasoning and self-correction.</li>
+      <li><b>Synthesise.</b> In the university pilot, small groups combined their ideas into a
+        stronger solution.</li>
+      <li><b>Guided mastery.</b> The mentor or parent steps in &mdash; not to lecture, but to
+        target the specific gaps the earlier stages revealed.</li>
+    </ol>
+
+    <h5>What this means for your students</h5>
+    <p>Whether in a university lecture hall, at a kitchen table or in the days between two
+      tutoring sessions, the core finding holds: students learn far more from what they reason
+      through themselves than from what they are told. That is not a claim about a product &mdash;
+      it is a property of how people learn, which is why it carries into your practice rather than
+      competing with it.</p>
+
+    <div class="foot">
+      <a href="ThinkSmithPilotStudy.pdf" target="_blank" rel="noopener"><b>Read the full pilot study (PDF) &rarr;</b></a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ── OUR STORY VIEW (2026-08-18) ───────────────────────────────────────
+     "Our story" swaps the body beneath the nav instead of navigating to a
+     separate page: the sticky header stays put, nothing reloads, and the
+     modals below stay wired because they never leave the DOM.
+
+     The hash is kept in sync (#our-story) so the view is linkable, the back
+     button works, and a direct link lands on the right view. Any other nav
+     link returns to the home body FIRST and then jumps to its anchor —
+     without that, clicking "Pricing" from the story would scroll a hidden
+     element and appear to do nothing. */
+  var homeEl = document.getElementById("homeContent");
+  var storyEl = document.getElementById("storyContent");
+  var storyLink = document.querySelector(".navlinks a.story-open");
+
+  function showStory(push) {
+    if (!homeEl || !storyEl) return;
+    homeEl.style.display = "none";
+    storyEl.style.display = "";
+    if (storyLink) storyLink.classList.add("current");
+    window.scrollTo(0, 0);
+    if (push && window.location.hash !== "#our-story") {
+      history.pushState(null, "", "#our-story");
+    }
+  }
+
+  function showHome() {
+    if (!homeEl || !storyEl) return;
+    storyEl.style.display = "none";
+    homeEl.style.display = "";
+    if (storyLink) storyLink.classList.remove("current");
+  }
+
+  if (storyLink) {
+    storyLink.addEventListener("click", function (e) {
+      e.preventDefault();
+      showStory(true);
+    });
+  }
+
+  // Any other in-page anchor: come home first, then let the browser scroll.
+  Array.prototype.forEach.call(
+    document.querySelectorAll('.navlinks a[href^="#"]:not(.story-open)'),
+    function (a) {
+      a.addEventListener("click", function () {
+        if (storyEl && storyEl.style.display !== "none") showHome();
+      });
+    }
+  );
+
+  // The wordmark. While the story view is open it swaps back in place rather
+  // than reloading index.html — same destination, no round trip. From the home
+  // view it is left alone, so it still works as an ordinary link (and as a
+  // middle-click / new-tab target) exactly as a visitor would expect.
+  Array.prototype.forEach.call(document.querySelectorAll(".home-link"), function (a) {
+    a.addEventListener("click", function (e) {
+      if (storyEl && storyEl.style.display !== "none") {
+        e.preventDefault();
+        showHome();
+        if (window.location.hash === "#our-story") history.pushState(null, "", "index.html");
+        window.scrollTo(0, 0);
+      }
+    });
+  });
+
+  // The research link inside the story card behaves the same way.
+  Array.prototype.forEach.call(document.querySelectorAll(".story-close-link"), function (a) {
+    a.addEventListener("click", function () { showHome(); });
+  });
+
+  window.addEventListener("hashchange", function () {
+    if (window.location.hash === "#our-story") showStory(false); else showHome();
+  });
+
+  if (window.location.hash === "#our-story") showStory(false);
+
+  function wire(overlayId, panelId, openId, closeId, onOpen) {
+    var ovl = document.getElementById(overlayId);
+    var panel = document.getElementById(panelId);
+    var openEl = document.getElementById(openId);
+    var closeEl = document.getElementById(closeId);
+    if (!ovl || !openEl) return null;
+    var lastFocus = null;
+
+    function open(e) {
+      if (e) e.preventDefault();
+      lastFocus = document.activeElement;
+      ovl.style.display = "flex";
+      document.body.style.overflow = "hidden";
+      if (onOpen) onOpen();
+      closeEl.focus();
+    }
+    function close() {
+      ovl.style.display = "none";
+      document.body.style.overflow = "";
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+
+    openEl.addEventListener("click", open);
+    closeEl.addEventListener("click", close);
+    ovl.addEventListener("click", function (e) { if (e.target === ovl) close(); });
+    panel.addEventListener("click", function (e) { e.stopPropagation(); });
+    close();                                   // guarantee a closed start
+    return { close: close, isOpen: function () { return ovl.style.display !== "none"; } };
+  }
+
+  var frame = document.getElementById("demoFrame");
+  var demo = wire("demoOvl", "demoModal", "demoOpen", "demoClose", function () {
+    if (frame.getAttribute("src") === "about:blank") {
+      frame.setAttribute("src", "thinksmith-demo.html");
+    }
+  });
+  var policy = wire("policyOvl", "policyModal", "policyOpen", "policyClose");
+
+  // Contact: several buttons, one dialog. wire() takes a single trigger id, so
+  // the extra triggers are attached here.
+  var contact = wire("contactOvl", "contactModal", "contactClose", "contactClose");
+  var contactOvl = document.getElementById("contactOvl");
+  function openContact(e) {
+    if (e) e.preventDefault();
+    contactOvl.style.display = "flex";
+    document.body.style.overflow = "hidden";
+    var f = document.getElementById("cf-name");
+    if (f) f.focus();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll(".contact-open"), function (b) {
+    b.addEventListener("click", openContact);
+  });
+
+  // The research button opens a plain-language summary rather than the PDF
+  // itself; the full paper is linked from inside it. The button's href still
+  // points at the PDF, so anyone with JavaScript disabled reaches the paper.
+  var paper = wire("paperOvl", "paperModal", "paperOpen", "paperClose");
+
+  // Closing the walkthrough must silence it. Reloading the iframe is the only
+  // reliable way to stop audio playing inside a document we do not control.
+  var demoClose = document.getElementById("demoClose");
+  function silenceDemo() {
+    if (frame.getAttribute("src") !== "about:blank") {
+      frame.setAttribute("src", "thinksmith-demo.html");
+    }
+  }
+  demoClose.addEventListener("click", silenceDemo);
+  document.getElementById("demoOvl").addEventListener("click", function (e) {
+    if (e.target === this) silenceDemo();
+  });
+
+  // ── Contact form ─────────────────────────────────────────────────────────
+  // ENDPOINT: set this to your deployed function URL.
+  var CONTACT_ENDPOINT =
+    "https://kuqufawlxezaktjdecbr.supabase.co/functions/v1/contact-enquiry";
+  // DEPLOY NOTE: this function must have JWT verification DISABLED. Supabase
+  // verifies a JWT on edge functions by default, and a public contact form has
+  // no signed-in user to supply one, so every submission returns 401 before the
+  // function code runs at all. The endpoint is protected instead by the
+  // honeypot field, the minimum time-on-form and the length caps inside the
+  // function \u2014 which is the right trade for a form that must accept strangers.
+
+  var cfSend = document.getElementById("cf-send");
+  if (cfSend) {
+    var loadedAt = Date.now();
+    var box = document.getElementById("cf-msgbox");
+    var show = function (kind, text) { box.className = "cmsg " + kind; box.textContent = text; };
+
+    cfSend.addEventListener("click", function () {
+      var name = document.getElementById("cf-name").value.trim();
+      var email = document.getElementById("cf-email").value.trim();
+      var msg = document.getElementById("cf-msg").value.trim();
+
+      // Checked here for a fast, friendly response; checked AGAIN on the server,
+      // because anything validated only in the browser is not validated.
+      if (!name || !email || !msg) {
+        show("bad", "Please fill in your name, email and message."); return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+        show("bad", "That email address does not look right."); return;
+      }
+
+      cfSend.disabled = true;
+      cfSend.textContent = "Sending…";
+      show("", "");
+
+      fetch(CONTACT_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name, email: email, message: msg,
+          source: "website:final-cta",
+          website: document.getElementById("cf-web").value,   // honeypot
+          elapsed: Math.round((Date.now() - loadedAt) / 1000)
+        })
+      })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.success) {
+          document.getElementById("contactBody").innerHTML =
+            '<div class="eyebrow">Message sent</div>' +
+            '<h3>Thank you.</h3>' +
+            '<p style="margin-top:10px;">Your message is with us, and someone from the founding ' +
+            'team will reply — usually within a working day. We have sent a confirmation to your ' +
+            'inbox.</p>';
+        } else {
+          cfSend.disabled = false; cfSend.textContent = "Send message →";
+          show("bad", (d && d.error) || "Something went wrong. Please email contact@thinksmith.ca.");
+        }
+      })
+      .catch(function () {
+        // Never leave someone staring at a dead button: give them the address.
+        cfSend.disabled = false; cfSend.textContent = "Send message →";
+        show("bad", "We could not send that just now. Please email contact@thinksmith.ca directly.");
+      });
+    });
+  }
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape") return;
+    if (demo && demo.isOpen()) { silenceDemo(); demo.close(); }
+    if (policy && policy.isOpen()) policy.close();
+    if (paper && paper.isOpen()) paper.close();
+    if (contact && contact.isOpen()) contact.close();
+  });
+})();
+</script>
+
+</body>
+</html>
