@@ -56,6 +56,12 @@ a{color:var(--purpledk)}
 .marker{position:absolute;top:50%;left:50%;width:20px;height:20px;border-radius:50%;background:var(--deep);border:3px solid #fff;box-shadow:0 0 0 2px var(--deep);transform:translate(-50%,-50%)}
 .outcome.locked{opacity:.5;filter:grayscale(1);pointer-events:none}
 .outcome.locked .marker{display:none}
+.fg{display:flex;gap:10px;align-items:flex-start;background:var(--wash);border:1px solid var(--soft);border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.5}
+.fg .who{flex:none;width:26px;height:26px;border-radius:50%;background:var(--deep);color:#fff;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+.next-step{display:flex;flex-direction:column;gap:12px}
+.next-step p{margin:0;font-size:16px;font-weight:600;color:var(--deep);text-align:center}
+.cont{width:100%;min-height:56px;border-radius:12px;border:2px solid var(--deep);background:#fff;color:var(--deep);font-size:17px;font-weight:600;cursor:pointer}
+.cont:hover{background:var(--wash)}
 .guide{background:var(--wash);border-radius:10px;padding:14px 16px;font-size:15px;line-height:1.55}
 .solh{margin:0;font-size:30px;font-weight:600;color:var(--purpledk)}
 .parts{display:flex;flex-direction:column;gap:14px;background:#fbf8fe;border:1px solid var(--line);border-radius:14px;padding:16px}
@@ -161,12 +167,16 @@ textarea:focus,input:focus{outline:2px solid var(--purple);outline-offset:1px}
     <h2 class="solh" id="sol-h">My Solution</h2>
     <div style="font-size:14px;font-weight:600;color:var(--purpledk)">What this challenge is asking — answer each part in its own box.</div>
     <div class="parts">
-      <div class="p"><label for="s1"><span class="num">1</span>Identify which climate factors combine to create dry conditions on the west sides of continents</label><textarea id="s1" class="sol"></textarea></div>
-      <div class="p"><label for="s2"><span class="num">2</span>Explain how these factors work together rather than separately to produce desert climates in these locations</label><textarea id="s2" class="sol"></textarea></div>
-      <div class="p"><label for="s3"><span class="num">3</span>Connect your explanation to why the east sides of continents typically do not have the same desert pattern</label><textarea id="s3" class="sol"></textarea></div>
+      <div class="p"><label for="s1"><span class="num">1</span>Identify which climate factors combine to create dry conditions on the west sides of continents</label><textarea id="s1" class="sol"></textarea><div class="fg" id="fg1" hidden aria-live="polite"></div></div>
+      <div class="p"><label for="s2"><span class="num">2</span>Explain how these factors work together rather than separately to produce desert climates in these locations</label><textarea id="s2" class="sol"></textarea><div class="fg" id="fg2" hidden aria-live="polite"></div></div>
+      <div class="p"><label for="s3"><span class="num">3</span>Connect your explanation to why the east sides of continents typically do not have the same desert pattern</label><textarea id="s3" class="sol"></textarea><div class="fg" id="fg3" hidden aria-live="polite"></div></div>
       <div class="status"><span id="words">0 words</span><span id="saved"></span></div>
     </div>
     <button class="go" id="go" disabled>Fill in all three parts to continue</button>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+      <div class="ainote">Ms. Rivera is an AI coach, not a real person.</div>
+      <button class="report" type="button"><span class="dot" aria-hidden="true"></span>Report AI to Parent</button>
+    </div>
   </section>
 
   <!-- ═══ THINKING OUTCOME (readiness) ═══ -->
@@ -177,11 +187,12 @@ textarea:focus,input:focus{outline:2px solid var(--purple);outline-offset:1px}
     <div class="hint" id="out-note">Opens after Ms. Rivera has looked at your work.</div>
     <div class="guide" id="guide" hidden aria-live="polite"></div>
     <a href="#" id="comp-link" tabindex="-1" style="font-size:14px;font-weight:600">View each competency</a>
-    <div id="aiblock" hidden style="display:flex;flex-direction:column;align-items:center;gap:4px;border-top:1px solid var(--line);padding-top:12px">
-      <div class="ainote">Ms. Rivera is an AI coach, not a real person.</div>
-      <button class="report" type="button"><span class="dot" aria-hidden="true"></span>Report AI to Parent</button>
-    </div>
   </section>
+
+  <div class="next-step" id="next-step" hidden>
+    <p>Edit your solution based on the guidance, or select Continue.</p>
+    <button class="cont" type="button">Continue to Part 2: View peer solutions</button>
+  </div>
 
 
 </div>
@@ -223,6 +234,7 @@ textarea:focus,input:focus{outline:2px solid var(--purple);outline-offset:1px}
 
   /* solution fields + the continue button */
   var fields = document.querySelectorAll(".sol");
+  var reviewed = false, editedSince = true;
   function update() {
     var words = 0, filled = 0;
     fields.forEach(function (f) {
@@ -230,15 +242,18 @@ textarea:focus,input:focus{outline:2px solid var(--purple);outline-offset:1px}
       if (t) { filled++; words += t.split(/\s+/).length; }
     });
     $("words").textContent = words + (words === 1 ? " word" : " words");
-    var ready = filled === fields.length;
+    var ready = filled === fields.length && editedSince;
     var go = $("go");
     go.disabled = !ready;
     go.classList.toggle("ready", ready);
-    go.textContent = ready ? "Ms. Rivera will now look at your work and provide guidance" : "Fill in all three parts to continue (" + filled + " of 3)";
+    if (filled < fields.length) go.textContent = "Fill in all three parts to continue (" + filled + " of 3)";
+    else if (!editedSince) go.textContent = "Guidance given. Edit your solution to ask Ms. Rivera again";
+    else go.textContent = reviewed ? "Select to allow Ms. Rivera to look at your edited work and provide guidance" : "Select to allow Ms. Rivera to look at your work and provide guidance";
   }
   var saveTimer = null;
   fields.forEach(function (f) {
     f.addEventListener("input", function () {
+      if (reviewed) editedSince = true;
       update();
       clearTimeout(saveTimer);
       saveTimer = setTimeout(function () { $("saved").textContent = "✓ Saved " + new Date().toLocaleTimeString(); }, 600);
@@ -253,14 +268,25 @@ textarea:focus,input:focus{outline:2px solid var(--purple);outline-offset:1px}
     oc.scrollIntoView({ behavior: "smooth", block: "start" });
     g.hidden = false;
     g.textContent = "Ms. Rivera is reading your work…";
-    $("go").disabled = true;
+    editedSince = false; update();
     setTimeout(function () {
-      g.innerHTML = "<strong>Ms. Rivera (sample guidance):</strong> You’ve named ocean currents, which is a strong start. In part 2, explain what a <em>cold</em> current does to the air above it. Then look at the Pressure belts layer: how could sinking air and a cold current work together to stop rain? Revise, then ask me to look again.";
+      g.innerHTML = "<strong>Ms. Rivera (sample guidance):</strong> A good start. You’ve spotted ocean currents. My notes on each part are under your answers above. Revise any part, then ask me to look again.";
+      var FG = [
+        "You named cold currents and sinking air, which is a good pair. Can you say <em>where</em> the air sinks? Switch on the Pressure belts layer and look at about 30° north and south.",
+        "Saying they “work together” is the right idea. Now show <em>how</em>: what does a cold current do to the air above it, and what does sinking air do to clouds? Link the two in one or two sentences.",
+        "Warm currents on the east side is a strong point. What does warm water do to the air above it, and how does that lead to rain? Compare it with the cold-current side."
+      ];
+      [1, 2, 3].forEach(function (i) {
+        var el = $("fg" + i);
+        el.innerHTML = '<span class="who" aria-hidden="true">R</span><span><strong>Ms. Rivera:</strong> ' + FG[i - 1] + "</span>";
+        el.hidden = false;
+      });
+      reviewed = true;
+      $("next-step").hidden = false;
       at = 2; scale();
       $("out-state").textContent = "after 1 review";
       $("out-note").textContent = "The dot moved after Ms. Rivera’s review. Revise and it can move again.";
-      $("aiblock").hidden = false;
-      $("go").disabled = false;
+      update();
     }, 1400);
   });
 })();
