@@ -83,6 +83,18 @@
   .mini{height:4px;border-radius:3px;background:var(--track);overflow:hidden}
   .mini i{display:block;height:100%;background:var(--grow);border-radius:3px}
 
+  /* ── Stage 2: illustrated challenge (deserts map) ─────────────
+     Four layers build up in order, no captions: deserts, then ocean
+     currents, then prevailing winds, then pressure belts. Pure CSS delays,
+     so they restart each time the stage is shown, with or without audio. */
+  .chq{font-size:16px;font-weight:600;line-height:1.35;color:var(--purple-deep);margin:0 0 10px}
+  .dmap{display:block;width:100%;max-width:520px;height:auto;margin:0 auto;background:#d8e9f5;border-radius:8px}
+  .dl{opacity:0;animation:dlin .9s ease forwards}
+  .dl.l1{animation-delay:.6s}.dl.l2{animation-delay:3.6s}.dl.l3{animation-delay:7s}.dl.l4{animation-delay:10.4s}
+  @keyframes dlin{to{opacity:1}}
+  .dflow{stroke-dasharray:14 6;animation:dflow 1.6s linear infinite}
+  @keyframes dflow{to{stroke-dashoffset:-40}}
+
   /* ── Stage 0: the intro ───────────────────────────────────── */
   .intro{height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:6px 0}
   .intro .brand{font-size:31px;font-weight:600;letter-spacing:-0.03em;color:var(--purple);line-height:1.1}
@@ -130,6 +142,7 @@
   }
   @media (prefers-reduced-motion:reduce){
     .fade{animation:none;opacity:1;transform:none}
+    .dl{animation:none;opacity:1}.dflow{animation:none}
     .bar i,.mini i,.bar-wrap i{transition:none}
   }
 </style>
@@ -217,12 +230,47 @@
       title: "Work through real challenges",
       say: "Each course is a sequence of written challenges \u2014 your child's thinking is what matters, not fill-in-the-blank. Your child engages in a real scenario that builds their confidence and thinking outcome one step at a time.",
       html:
-        '<div class="fade"><div class="lbl">Challenge \u00b7 Social Studies \u00b7 Grade 6</div></div>' +
-        '<p class="fade d1 prompt" style="margin:7px 0 0">Two accounts describe the same school decision \u2014 the principal\u2019s newsletter and a parent\u2019s post. Investigate what really happened.</p>' +
-        '<div class="fade d2" style="margin-top:13px"><div class="lbl">Answer each part in its own box</div></div>' +
-        '<div class="fade d3 req" style="margin-top:7px"><b>1</b><span>Write one specific question that would help uncover what happened.</span></div>' +
-        '<div class="fade d4 req" style="margin-top:7px"><b>2</b><span>Name two pieces of evidence you would look for, and why each helps.</span></div>' +
-        '<div class="fade d5 req" style="margin-top:7px"><b>3</b><span>Say what you can conclude \u2014 and what you still cannot be sure about.</span></div>'
+        // Illustrated challenge (21 Oct 2026): the question, then the model
+        // continent. Layers appear one after another and stay on.
+        '<p class="fade chq">Why do deserts form on the west sides of continents?</p>' +
+        '<svg class="fade d1 dmap" viewBox="0 0 760 460" role="img" aria-label="A model continent: deserts appear on its west side near 30 degrees north and south, then cold ocean currents, trade winds and high-pressure belts appear in turn">' +
+          '<defs>' +
+            '<marker id="dm-cold" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#1f6fb2"/></marker>' +
+            '<marker id="dm-warm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#c2410c"/></marker>' +
+            '<marker id="dm-wind" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#4b5563"/></marker>' +
+          '</defs>' +
+          '<path d="M300 50 C380 40 470 60 500 110 C530 160 560 190 540 240 C520 290 500 330 450 380 C410 420 360 425 330 395 C300 360 290 320 270 280 C250 240 230 200 245 150 C255 100 260 60 300 50 Z" fill="#b9d79a" stroke="#7da35a" stroke-width="2"/>' +
+          '<path d="M0 230H760" stroke="#3C2A6B" stroke-width="1.5" stroke-dasharray="2 6"/>' +
+          '<path d="M0 130H760M0 330H760" stroke="#5b6270" stroke-dasharray="8 6"/>' +
+          '<text x="12" y="224" font-size="14" font-weight="600" fill="#3C2A6B">Equator</text>' +
+          '<text x="12" y="124" font-size="14" fill="#374151">30\u00b0 N</text>' +
+          '<text x="12" y="324" font-size="14" fill="#374151">30\u00b0 S</text>' +
+          '<text x="130" y="448" font-size="15" font-weight="700" fill="#374151">WEST</text>' +
+          '<text x="590" y="448" font-size="15" font-weight="700" fill="#374151">EAST</text>' +
+          // 4 \u2014 pressure belts (appear LAST, but drawn first so they sit under the
+          // deserts, currents and winds, as in the makeover mock-up)
+          '<g class="dl l4">' +
+            '<rect x="0" y="112" width="760" height="36" fill="#8C2DDF" opacity=".16"/>' +
+            '<rect x="0" y="312" width="760" height="36" fill="#8C2DDF" opacity=".16"/>' +
+          '</g>' +
+          // 1 \u2014 deserts
+          '<g class="dl l1">' +
+            '<path d="M252 140 C262 120 300 118 315 135 C328 152 310 178 285 182 C262 186 246 162 252 140 Z" fill="#e3b86a" stroke="#b07400" stroke-width="1.5"/>' +
+            '<path d="M282 300 C292 282 330 284 340 302 C350 320 332 346 308 346 C286 346 274 320 282 300 Z" fill="#e3b86a" stroke="#b07400" stroke-width="1.5"/>' +
+          '</g>' +
+          // 2 \u2014 ocean currents (cold up the west coast, warm down the east)
+          '<g class="dl l2">' +
+            '<path class="dflow" d="M210 70 C200 120 205 170 225 205" fill="none" stroke="#1f6fb2" stroke-width="6" marker-end="url(#dm-cold)"/>' +
+            '<path class="dflow" d="M235 410 C220 360 225 300 240 255" fill="none" stroke="#1f6fb2" stroke-width="6" marker-end="url(#dm-cold)"/>' +
+            '<path class="dflow" d="M565 205 C580 160 570 110 545 70" fill="none" stroke="#c2410c" stroke-width="6" marker-end="url(#dm-warm)"/>' +
+            '<path class="dflow" d="M560 255 C575 300 540 360 500 410" fill="none" stroke="#c2410c" stroke-width="6" marker-end="url(#dm-warm)"/>' +
+          '</g>' +
+          // 3 \u2014 prevailing (trade) winds, east to west
+          '<g class="dl l3">' +
+            '<path class="dflow" d="M700 160 C560 175 400 190 120 205" fill="none" stroke="#4b5563" stroke-width="4" marker-end="url(#dm-wind)"/>' +
+            '<path class="dflow" d="M700 300 C560 285 400 270 120 255" fill="none" stroke="#4b5563" stroke-width="4" marker-end="url(#dm-wind)"/>' +
+          '</g>' +
+        '</svg>'
     },
     {
       title: "A personal learning companion",
