@@ -692,6 +692,7 @@
   // now that the #screen gate holds every animation at its first frame
   // until Play, so the repaint changes nothing the viewer can see.
   var painted = -1;
+  var unlocked = false;
 
   // Releases a stage's cued element \u2014 currently the intro's readiness line.
   function fireCue() {
@@ -774,9 +775,17 @@
     // never starting \u2014 in environments with no media support. Neither the catch
     // above nor the promise rejection sees that, so confirm shortly afterwards
     // that playback genuinely began, and drop to timer pacing if it did not.
+    // Phones can take well over 400 ms to spin up an embedded track;
+    // that is a slow start, not a failure, so wait longer and retry
+    // once before condemning the track to silent timer pacing.
     setTimeout(function () {
-      if (playing && i === k && t.paused) { trackOk[k] = false; useTimerPacing(k); }
-    }, 400);
+      if (playing && i === k && t.paused) {
+        try {
+          var p2 = t.play();
+          if (p2 && p2.catch) p2.catch(function () { trackOk[k] = false; useTimerPacing(k); });
+        } catch (e) { trackOk[k] = false; useTimerPacing(k); }
+      }
+    }, 2000);
     return true;
   }
 
@@ -932,6 +941,27 @@
 
   function play() {
     playing = true;
+    // Phones only let a sound start from a tap, and each stage has its
+    // own audio element: without this, later stages are refused when
+    // the demo tries to start them on its own (desktop browsers allow
+    // it, phones do not — the even/odd pattern of silent stages is the
+    // symptom). On the first Play tap, briefly start every other
+    // stage's track muted and pause it again, which unlocks them all
+    // for the rest of the session. The current stage's track is left
+    // alone: speak() starts it inside this same tap.
+    if (!unlocked) {
+      unlocked = true;
+      tracks.forEach(function (t, k) {
+        if (k === i) return;
+        try {
+          t.muted = true;
+          var pr = t.play();
+          var done = function () { try { t.pause(); t.currentTime = 0; } catch (e) {} t.muted = false; };
+          if (pr && pr.then) pr.then(done).catch(function () { t.muted = false; });
+          else done();
+        } catch (e) { t.muted = false; }
+      });
+    }
     playBtn.textContent = "❚❚ Pause";
     // Resuming after Pause continues the stage where it left off.
     // Otherwise repaint: the stage on screen was painted with its
