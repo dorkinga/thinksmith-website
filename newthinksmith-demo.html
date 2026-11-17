@@ -430,6 +430,10 @@
   @keyframes ride8{0%{left:-30%;opacity:0}1%{opacity:1}15.9%{left:2%}66.2%{left:2%}100%{left:108%;opacity:1}}
   .nk8{position:absolute;top:-14px;left:56%;font-size:10.5px;font-weight:700;letter-spacing:.06em;color:var(--purple);white-space:nowrap;opacity:0;animation:nkFlow8 1.7s ease-out forwards}
   @keyframes nkFlow8{0%{opacity:0;transform:translate(0,6px)}25%{opacity:.95}100%{opacity:0;transform:translate(-26px,-40px)}}
+  @media (max-width:640px){
+    .stage{padding:14px 10px 12px;min-height:0}
+    .ctl button{padding:7px 9px}
+  }
   @media (prefers-reduced-motion:reduce){
     .fade{animation:none;opacity:1;transform:none}
     .marshwrap *{animation:none !important}
@@ -749,6 +753,30 @@
     })(a);
   }
 
+  // The scenes are laid out for a desktop-width stage (~805 px of
+  // content). On a narrow screen — a phone — squeezing them to fit
+  // breaks the layout: in-flow panels wrap, overflow the fixed frame
+  // height and get clipped. Instead the scene is laid out at its
+  // design width and the whole scene scaled down to fit, so every
+  // position and proportion stays exactly as designed.
+  var DESIGN_W = 805;
+  function fitScreen() {
+    var root = screenEl.firstElementChild;
+    if (!root) return;
+    var s = (screenEl.clientWidth - 34) / DESIGN_W;
+    if (s >= 0.98) {
+      root.style.width = ""; root.style.height = ""; root.style.transform = "";
+      screenEl.style.height = "";
+      return;
+    }
+    root.style.width = DESIGN_W + "px";
+    if (root.classList && root.classList.contains("intro")) root.style.height = "424px";
+    root.style.transformOrigin = "0 0";
+    root.style.transform = "scale(" + s + ")";
+    screenEl.style.height = (424 * s) + "px";
+  }
+  window.addEventListener("resize", fitScreen);
+
   function stopAudio() {
     tracks.forEach(function (t) { try { t.pause(); t.currentTime = 0; } catch (e) {} });
   }
@@ -819,6 +847,7 @@
     countEl.textContent = isIntro ? "Intro" : i + " / " + (STAGES.length - 1);
     screenEl.innerHTML = s.html;
     painted = i;
+    fitScreen();
 
   }
 
