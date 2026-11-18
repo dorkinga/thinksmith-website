@@ -770,13 +770,18 @@
     // the fold. Shrink the scene a little more if that is what it
     // takes for the whole frame — controls included — to fit the
     // visible height (~150 px is everything around the screen).
-    var sH = (window.innerHeight - 150) / 424;
+    var sH = (window.innerHeight - 175) / 424;
     var s = Math.min(sW, sH);
     if (s >= 0.98) {
       root.style.width = ""; root.style.height = ""; root.style.transform = "";
-      screenEl.style.height = "";
+      screenEl.style.height = ""; screenEl.style.flex = "";
       return;
     }
+    // .screen is flex:1 in the stage's column layout, and a flex
+    // basis of 0% silently overrides any height — the box stayed tall
+    // on phones while the scene inside it shrank. Pin the flex off so
+    // the fitted height below actually governs the box.
+    screenEl.style.flex = "0 0 auto";
     root.style.width = DESIGN_W + "px";
     if (root.classList && root.classList.contains("intro")) root.style.height = "424px";
     root.style.transformOrigin = "0 0";
