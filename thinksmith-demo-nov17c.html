@@ -1092,11 +1092,20 @@
   document.addEventListener("fullscreenchange", refit);
   document.addEventListener("webkitfullscreenchange", refit);
 
+  // Next/Back after the demo has started (unlocked = Play pressed at
+  // least once) now starts the new stage playing straight away, so it
+  // never sits on a near-empty first frame. Before the first Play,
+  // navigation still only paints the stage, keeping the title-card
+  // opening Leslie specified (text only until Play).
   nextBtn.addEventListener("click", function () {
+    var started = unlocked;
     go(Math.min(STAGES.length - 1, i + 1));
+    if (started) play();
   });
   prevBtn.addEventListener("click", function () {
+    var started = unlocked;
     go(Math.max(0, i - 1));
+    if (started) play();
   });
   soundBtn.addEventListener("click", function () {
     sound = !sound;
