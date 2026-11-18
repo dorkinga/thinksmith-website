@@ -765,23 +765,7 @@
   // design width and the whole scene scaled down to fit, so every
   // position and proportion stays exactly as designed.
   var DESIGN_W = 805;
-  function fitScreen() {
-    var root = screenEl.firstElementChild;
-    if (!root) return;
-    var avail = screenEl.clientWidth - 34;
-    var sW = avail / DESIGN_W;
-    // Also fit the HEIGHT: on a phone held sideways the browser's own
-    // bars eat the top and bottom, and the demo's controls fall below
-    // the fold. Shrink the scene a little more if that is what it
-    // takes for the whole frame — controls included — to fit the
-    // visible height (~150 px is everything around the screen).
-    var sH = (window.innerHeight - 160) / 424;
-    var s = Math.min(sW, sH);
-    if (s >= 0.98) {
-      root.style.width = ""; root.style.height = ""; root.style.transform = ""; root.style.marginLeft = "";
-      screenEl.style.height = ""; screenEl.style.flex = "";
-      return;
-    }
+  function applyFit(root, avail, s) {
     // .screen is flex:1 in the stage's column layout, and a flex
     // basis of 0% silently overrides any height — the box stayed tall
     // on phones while the scene inside it shrank. Pin the flex off so
@@ -797,6 +781,31 @@
     var leftover = avail - DESIGN_W * s;
     root.style.marginLeft = leftover > 2 ? (leftover / 2) + "px" : "";
     screenEl.style.height = (424 * s) + "px";
+  }
+  function fitScreen() {
+    var root = screenEl.firstElementChild;
+    if (!root) return;
+    var avail = screenEl.clientWidth - 34;
+    var sW = avail / DESIGN_W;
+    if (sW >= 0.98 && screenEl.parentElement.offsetHeight <= window.innerHeight) {
+      root.style.width = ""; root.style.height = ""; root.style.transform = ""; root.style.marginLeft = "";
+      screenEl.style.height = ""; screenEl.style.flex = "";
+      return;
+    }
+    // Fit by measurement, not by a guessed allowance for the chrome
+    // around the screen: apply a first scale, measure how much the
+    // whole stage actually overflows (or underfills) the visible
+    // height by, and correct the scale by exactly that amount — the
+    // screen's height scales 1:1 with s, so one correction lands the
+    // frame edge-to-edge on this device, sideways or upright.
+    var s = Math.min(sW, (window.innerHeight - 60) / 424);
+    applyFit(root, avail, s);
+    var diff = window.innerHeight - 8 - screenEl.parentElement.offsetHeight;
+    if (Math.abs(diff) > 2) {
+      var s2 = s + diff / 424;
+      if (s2 > sW) s2 = sW;
+      if (s2 > 0.05 && Math.abs(s2 - s) > 0.001) applyFit(root, avail, s2);
+    }
   }
   // Turning the phone is the tricky case: some phone browsers
   // report the new size late, or never fire a plain resize, so the
