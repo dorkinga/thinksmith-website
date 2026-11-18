@@ -430,6 +430,10 @@
   @keyframes ride8{0%{left:-30%;opacity:0}1%{opacity:1}15.9%{left:2%}66.2%{left:2%}100%{left:108%;opacity:1}}
   .nk8{position:absolute;top:-14px;left:56%;font-size:10.5px;font-weight:700;letter-spacing:.06em;color:var(--purple);white-space:nowrap;opacity:0;animation:nkFlow8 1.7s ease-out forwards}
   @keyframes nkFlow8{0%{opacity:0;transform:translate(0,6px)}25%{opacity:.95}100%{opacity:0;transform:translate(-26px,-40px)}}
+  @media (max-height:500px){
+    .stage{padding:12px 14px 10px;min-height:0}
+    .ctl{margin-top:8px}
+  }
   @media (max-width:640px){
     .stage{padding:14px 10px 12px;min-height:0}
     .ctl button{padding:7px 9px}
@@ -761,29 +765,66 @@
   // design width and the whole scene scaled down to fit, so every
   // position and proportion stays exactly as designed.
   var DESIGN_W = 805;
-  function fitScreen() {
-    var root = screenEl.firstElementChild;
-    if (!root) return;
-    var sW = (screenEl.clientWidth - 34) / DESIGN_W;
-    // Also fit the HEIGHT: on a phone held sideways the browser's own
-    // bars eat the top and bottom, and the demo's controls fall below
-    // the fold. Shrink the scene a little more if that is what it
-    // takes for the whole frame — controls included — to fit the
-    // visible height (~150 px is everything around the screen).
-    var sH = (window.innerHeight - 150) / 424;
-    var s = Math.min(sW, sH);
-    if (s >= 0.98) {
-      root.style.width = ""; root.style.height = ""; root.style.transform = "";
-      screenEl.style.height = "";
-      return;
-    }
+  function applyFit(root, avail, s) {
+    // .screen is flex:1 in the stage's column layout, and a flex
+    // basis of 0% silently overrides any height — the box stayed tall
+    // on phones while the scene inside it shrank. Pin the flex off so
+    // the fitted height below actually governs the box.
+    screenEl.style.flex = "0 0 auto";
     root.style.width = DESIGN_W + "px";
     if (root.classList && root.classList.contains("intro")) root.style.height = "424px";
     root.style.transformOrigin = "0 0";
     root.style.transform = "scale(" + s + ")";
+    // When the height drove the scale (landscape phones), the scaled
+    // scene is narrower than the box — centre it rather than leaving
+    // the spare room all on the right.
+    var leftover = avail - DESIGN_W * s;
+    root.style.marginLeft = leftover > 2 ? (leftover / 2) + "px" : "";
     screenEl.style.height = (424 * s) + "px";
   }
-  window.addEventListener("resize", fitScreen);
+  function fitScreen() {
+    var root = screenEl.firstElementChild;
+    if (!root) return;
+    var avail = screenEl.clientWidth - 34;
+    var sW = avail / DESIGN_W;
+    var stage = screenEl.parentElement;
+    if (sW >= 0.98 && stage.offsetHeight <= window.innerHeight) {
+      root.style.width = ""; root.style.height = ""; root.style.transform = ""; root.style.marginLeft = "";
+      screenEl.style.height = ""; screenEl.style.flex = "";
+      return;
+    }
+    // Height fit: measure everything around the screen directly —
+    // the stage's padding plus the other rows' heights and margins —
+    // and give the screen what is left of the visible height.
+    // (Measuring the stage as a whole does not work: its CSS
+    // min-height inflates it on sideways phones and poisons the sum.)
+    var chrome = 33; // the screen's own padding + border
+    var cs = window.getComputedStyle(stage);
+    chrome += parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+    for (var k = 0; k < stage.children.length; k++) {
+      var el = stage.children[k];
+      if (el === screenEl) continue;
+      var ecs = window.getComputedStyle(el);
+      if (ecs.display === "none") continue;
+      chrome += el.offsetHeight + parseFloat(ecs.marginTop) + parseFloat(ecs.marginBottom);
+    }
+    var s = Math.min(sW, (window.innerHeight - chrome) / 424);
+    if (s > 0.05) applyFit(root, avail, s);
+  }
+  // Turning the phone is the tricky case: some phone browsers
+  // report the new size late, or never fire a plain resize, so the
+  // demo kept its portrait sizing sideways. Refit on every signal
+  // that can mean "the window changed", and always take a second
+  // pass ~300 ms later once the phone has settled into the new size.
+  var refitTimer = null;
+  function refit() {
+    fitScreen();
+    clearTimeout(refitTimer);
+    refitTimer = setTimeout(fitScreen, 300);
+  }
+  window.addEventListener("resize", refit);
+  window.addEventListener("orientationchange", refit);
+  if (window.visualViewport) window.visualViewport.addEventListener("resize", refit);
 
   function stopAudio() {
     tracks.forEach(function (t) { try { t.pause(); t.currentTime = 0; } catch (e) {} });
@@ -1048,8 +1089,8 @@
       }
     } catch (e) {}
   });
-  document.addEventListener("fullscreenchange", fitScreen);
-  document.addEventListener("webkitfullscreenchange", fitScreen);
+  document.addEventListener("fullscreenchange", refit);
+  document.addEventListener("webkitfullscreenchange", refit);
 
   nextBtn.addEventListener("click", function () {
     go(Math.min(STAGES.length - 1, i + 1));
