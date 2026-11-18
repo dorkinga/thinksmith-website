@@ -477,6 +477,7 @@
         <button id="prev">Back</button>
         <button id="next">Next</button>
         <button id="sound" aria-pressed="true">🔊 Sound on</button>
+        <button id="fs">⛶ Full screen</button>
         <div class="spacer"></div>
         <span class="count" id="count">1 / 6</span>
       </div>
@@ -763,7 +764,14 @@
   function fitScreen() {
     var root = screenEl.firstElementChild;
     if (!root) return;
-    var s = (screenEl.clientWidth - 34) / DESIGN_W;
+    var sW = (screenEl.clientWidth - 34) / DESIGN_W;
+    // Also fit the HEIGHT: on a phone held sideways the browser's own
+    // bars eat the top and bottom, and the demo's controls fall below
+    // the fold. Shrink the scene a little more if that is what it
+    // takes for the whole frame — controls included — to fit the
+    // visible height (~150 px is everything around the screen).
+    var sH = (window.innerHeight - 150) / 424;
+    var s = Math.min(sW, sH);
     if (s >= 0.98) {
       root.style.width = ""; root.style.height = ""; root.style.transform = "";
       screenEl.style.height = "";
@@ -1022,6 +1030,27 @@
     if (i === STAGES.length - 1 && progEl.style.width === "100%") { i = 0; }
     play();
   });
+  // Full screen: hides the browser's own bars (the address bar at
+  // the top) so the demo gets the whole display. Offered only where
+  // the browser supports it — iPhone Safari does not for a page like
+  // this, so the button hides itself there and the height fit above
+  // still keeps the controls on screen.
+  var fsBtn = document.getElementById("fs");
+  var frameEl = document.querySelector(".frame");
+  var fsSupported = !!(frameEl && (frameEl.requestFullscreen || frameEl.webkitRequestFullscreen) && (document.fullscreenEnabled || document.webkitFullscreenEnabled));
+  if (!fsSupported) { fsBtn.style.display = "none"; }
+  else fsBtn.addEventListener("click", function () {
+    try {
+      if (document.fullscreenElement || document.webkitFullscreenElement) {
+        (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+      } else {
+        (frameEl.requestFullscreen || frameEl.webkitRequestFullscreen).call(frameEl);
+      }
+    } catch (e) {}
+  });
+  document.addEventListener("fullscreenchange", fitScreen);
+  document.addEventListener("webkitfullscreenchange", fitScreen);
+
   nextBtn.addEventListener("click", function () {
     go(Math.min(STAGES.length - 1, i + 1));
   });
