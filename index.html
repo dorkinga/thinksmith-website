@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ThinkSmith — homeschooling that builds thinking</title>
+<title>ThinkSmith — homeschooling that starts with a challenge, not a lesson</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
 
@@ -83,6 +83,18 @@
   .navlinks{display:flex;gap:28px;font-size:14px;color:var(--ink-soft);}
   .navlinks a{text-decoration:none;}
   .navlinks a:hover{color:var(--teal-deep);}
+  /* Two-row menu at every width (Leslie, 2026-11-19): wordmark and buttons on
+     the first row, the section links on their own line beneath. On one row the
+     links wrapped onto two lines each ("How it / works"). */
+  .navrow{flex-wrap:wrap;row-gap:12px;padding-bottom:12px;}
+  .navrow .logo{order:1;}
+  .navactions{order:2;margin-left:auto;}
+  .navlinks{order:3;width:100%;flex-wrap:wrap;gap:8px 28px;font-size:15px;
+    padding-top:11px;border-top:1px solid var(--line);}
+  .navlinks a{white-space:nowrap;}
+  /* Menu jumps stop with each section just below the two-row menu. */
+  section[id]{scroll-margin-top:110px;}
+  #demo{scroll-margin-top:135px;}
   .btn{
     display:inline-flex;align-items:center;gap:8px;
     background:var(--teal-deep); color:var(--white);
@@ -96,13 +108,19 @@
 
   /* HERO */
   .hero{padding:100px 0 60px;}
-  .hero .wrap{display:grid;grid-template-columns:1.15fr 0.85fr;gap:56px;align-items:start;}
+  .hero .wrap{display:block;}
   .hero h1{font-size:50px;}
   .hero p.lede{
-    margin-top:22px; font-size:18px; color:var(--ink-soft); max-width:46ch;
+    margin-top:22px; font-size:18px; color:var(--ink-soft); max-width:none;
   }
   .hero-ctas{margin-top:30px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
   .hero-note{font-size:13px;color:var(--ink-soft);margin-top:10px;}
+  .hero-flow{margin-top:26px;border-top:1px solid var(--line);padding-top:18px;display:grid;gap:10px;}
+  .hero-flow .hf{font-size:14px;color:var(--ink-soft);line-height:1.5;}
+  .hero-flow .hf b{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:2px;}
+  .hero-flow .hf.ts{color:var(--ink);font-weight:600;}
+  .hero-flow .hf.ts b{color:var(--teal-deep);}
+
 
   /* margin-note card, signature element */
   .margin-card{
@@ -154,8 +172,9 @@
   .btn.watch:hover{background:#5da349;border-color:#5da349;}
 
   /* THREE PILLARS */
-  .pillars{padding-top:90px;}
-  .pillars h2{font-size:34px;max-width:16ch;}
+  .pillars{padding-top:20px;}
+  .pillars h2{font-size:34px;text-align:center;margin:0 auto;}
+  .demo-inline{margin-top:18px;}
   .pillar-grid{
     margin-top:44px;
     display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
@@ -405,7 +424,7 @@
   .stat{background:var(--white); border:1px solid var(--line); border-radius:var(--radius); padding:14px;}
   .stat .sv{font-family:'JetBrains Mono',monospace; font-size:24px; font-weight:600; color:var(--teal-deep);}
   .stat .sl{font-size:12.5px; color:var(--ink-soft); margin-top:5px; line-height:1.45;}
-  .demo-frame{width:100%; height:660px; border:0; border-radius:8px; display:block;}
+  .demo-frame{width:100%; height:600px; border:0; border-radius:8px; display:block;}
   .demo-cap{
     text-align:center; font-size:12.5px; color:var(--ink-soft); margin:10px 0 2px;
   }
@@ -413,8 +432,7 @@
   @media (max-width:860px){
     .modal.narrow{padding:28px 22px;}
     .stat-row{grid-template-columns:1fr;}
-    .demo-frame{height:560px;}
-    .hero .wrap{grid-template-columns:1fr;}
+    .demo-frame{height:440px;}
     .hero h1{font-size:36px;}
     .proof .wrap{grid-template-columns:repeat(2,1fr);}
     .proof .cell:nth-child(3){border-left:none;}
@@ -429,6 +447,8 @@
        short links fit in two lines and a menu button would hide them behind an
        extra tap for no gain. */
     .navrow{flex-wrap:wrap;row-gap:10px;padding:12px 16px;gap:12px;}
+    section[id]{scroll-margin-top:170px;}
+    #demo{scroll-margin-top:195px;}
     .navrow .logo{order:1;font-size:17px;gap:8px;}
     .navrow .logo img{height:32px;}
     .navactions{order:2;margin-left:auto;gap:8px;}
@@ -450,6 +470,43 @@
     .navactions{width:100%;margin-left:0;}
     .navactions .btn{flex:1;justify-content:center;}
   }
+
+  /* WHY THE ORDER MATTERS */
+  .why h2{font-size:34px;max-width:22ch;}
+  .why .sub{color:var(--ink-soft);max-width:64ch;margin-top:14px;font-size:16px;}
+  .why-grid{margin-top:40px;display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .why-card{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:26px;}
+  .why-card .num{font-family:'JetBrains Mono',monospace;color:var(--teal);font-size:13px;font-weight:700;}
+  .why-card h3{font-size:20px;margin-top:12px;}
+  .why-card p{font-size:14.5px;color:var(--ink-soft);margin-top:10px;}
+  .why-card .ev{margin-top:14px;font-size:13px;font-weight:600;background:var(--amber-soft);color:#5c4109;display:inline-block;padding:4px 11px;border-radius:20px;}
+  .why-close{margin-top:26px;font-size:16px;color:var(--ink-soft);max-width:64ch;}
+  .why-close b{color:var(--ink);}
+  @media (max-width:860px){ .why-grid{grid-template-columns:1fr;} }
+
+  /* THE DIFFERENCE — comparison section */
+  .diff{background:var(--white);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .diff h2{font-size:34px;max-width:24ch;}
+  .diff .sub{color:var(--ink-soft);max-width:62ch;margin-top:14px;font-size:16px;}
+  .flow{margin-top:36px;display:grid;gap:14px;}
+  .flow-row{border:1px solid var(--line);border-radius:10px;padding:20px 22px;background:var(--paper);}
+  .flow-row.ts{background:var(--teal-deep);border-color:var(--teal-deep);color:var(--white);}
+  .flow-label{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);}
+  .flow-row.ts .flow-label{color:var(--amber-soft);}
+  .flow-steps{margin-top:12px;font-family:'Fraunces',serif;font-size:20px;font-weight:600;line-height:1.35;}
+  .flow-steps .arr{color:var(--teal);padding:0 4px;}
+  .flow-row.ts .flow-steps .arr{color:var(--amber);}
+  .flow-note{margin-top:8px;font-size:14px;color:var(--ink-soft);}
+  .flow-row.ts .flow-note{color:rgba(255,253,249,0.85);}
+  .diff-grid{margin-top:28px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .diff-card{border:1px solid var(--line);border-radius:10px;padding:24px;background:var(--paper);}
+  .diff-card h4{font-family:'Fraunces',serif;font-size:18px;font-weight:600;}
+  .diff-card .starts{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--teal-deep);margin-top:4px;}
+  .diff-card p{font-size:14.5px;color:var(--ink-soft);margin-top:10px;}
+  .diff-card p b{color:var(--ink);}
+  .diff-close{margin-top:28px;background:var(--amber-soft);border-radius:10px;padding:22px 24px;font-size:15.5px;color:#5c4109;}
+  .diff-close b{color:var(--ink);}
+  @media (max-width:860px){ .diff-grid{grid-template-columns:1fr;} .flow-steps{font-size:17px;} }
 </style>
 </head>
 <body>
@@ -462,7 +519,9 @@
          story view is open so it swaps back without a reload. -->
     <div class="logo"><a href="index.html" class="home-link"><img src="logo-silver.png" alt="" />ThinkSmith</a></div>
     <div class="navlinks">
-      <a href="#how">How it works</a>
+      <a href="#demo">How it works</a>
+      <a href="#why">Why it works</a>
+      <a href="#difference">The difference</a>
       <a href="#who">Who it's for</a>
       <a href="#our-story" class="story-open">Our story</a>
       <a href="#research">Research</a>
@@ -484,64 +543,128 @@
   <div class="wrap">
     <div>
       <div class="eyebrow">For homeschool families · any curriculum</div>
-      <h1>You can teach every subject. You can't be twenty classmates.</h1>
-      <p class="lede">A personal learning companion, a room full of peers, and a real record of progress — the three things a classroom gives that one parent, alone, can't recreate. Backed by peer-reviewed research, built so you're still in the loop every step of the way.</p>
-    </div>
-    <div class="margin-card">
-      <div class="tag">A REAL EXCHANGE</div>
-      <p style="color:var(--ink-soft);font-size:13.5px;margin-top:2px;"><b style="color:var(--ink);">The challenge:</b> Your town can afford one project this year — repair the library roof, or build a skate park. Which should it choose, and why?</p>
-      <p style="margin-top:16px;"><b>Your child writes:</b> "They should build the skate park because lots of kids have nothing to do after school, and the library is old anyway."</p>
-      <p style="margin-top:16px;"><b>Ms. Rivera:</b> "You've thought about who gains — kids with nowhere to go. Who might lose out if the roof isn't repaired, and how could you find out which group is larger?"</p>
-      <div class="from">— she never hands over the answer; she asks the question that moves the thinking</div>
+      <h1>Most learning starts with a lesson. ThinkSmith starts with a reason to learn.</h1>
+      <p class="lede">Every other model starts with knowledge &mdash; here&rsquo;s the lesson, memorise it, then we&rsquo;ll test if you can use it. ThinkSmith starts <em>before</em> knowledge. Your child tackles a real-life challenge first, then learns what they need to solve it, with a 24/7 AI coach beside them. Then they teach it &mdash; by judging three peers&rsquo; solutions. That&rsquo;s when it sticks, and that&rsquo;s what their Thinking Outcome shows you.</p>
     </div>
   </div>
 </header>
+
+<section class="pillars" id="demo">
+  <div class="wrap">
+    <div class="eyebrow">How it works</div>
+    <!-- The walkthrough, shown at its opening frame; nothing plays until the visitor presses Play. -->
+    <iframe class="demo-frame demo-inline" src="thinksmith-demo.html" title="ThinkSmith walkthrough" loading="lazy" allow="fullscreen" allowfullscreen></iframe>
+  </div>
+</section>
+
+<section class="diff" id="difference">
+  <div class="wrap">
+    <div class="eyebrow">The difference, in 10 seconds</div>
+    <h2>Why a lecture doesn&rsquo;t stick &mdash; and what happens when the challenge comes first.</h2>
+    <p class="sub">Most learners arrive unprepared and can&rsquo;t absorb brand-new knowledge just by listening to it once. Re-teaching it in a video, slides, or a worksheet doesn&rsquo;t fix that &mdash; it&rsquo;s the same information in another format, still with no foothold to land on. ThinkSmith changes the order, not just the format.</p>
+
+    <div class="flow">
+      <div class="flow-row">
+        <div class="flow-label">Other models</div>
+        <div class="flow-steps">Lesson <span class="arr">&rarr;</span> Memorise <span class="arr">&rarr;</span> Assignment <span class="arr">&rarr;</span> Exam</div>
+        <div class="flow-note">The learner arrives unprepared and is expected to absorb brand-new knowledge by listening. If it doesn&rsquo;t stick, the same lesson is presented again in another format &mdash; and hope carries the rest.</div>
+      </div>
+      <div class="flow-row ts">
+        <div class="flow-label">ThinkSmith</div>
+        <div class="flow-steps">Real-life challenge <span class="arr">&rarr;</span> Learn what you need <span class="arr">&rarr;</span> Teach 3 peers <span class="arr">&rarr;</span> Thinking Outcome</div>
+        <div class="flow-note">The challenge creates the preparation. By the time new knowledge arrives, your child has already tried, already has questions, and already has a place in their mind to put it &mdash; with a 24/7 AI coach beside them at every step.</div>
+      </div>
+    </div>
+
+    <div class="diff-grid">
+      <div class="diff-card">
+        <h4>Traditional lecture</h4>
+        <div class="starts">Starts with: the teacher talking</div>
+        <p>Most learners cannot memorise and interpret a lecture full of brand-new knowledge. They get little from it, then struggle on the assignment and the exam. <b>The knowledge had nowhere to land.</b></p>
+      </div>
+      <div class="diff-card">
+        <h4>Video &amp; self-paced lessons</h4>
+        <div class="starts">Starts with: the knowledge</div>
+        <p>Same lesson, different format &mdash; useful material, still presented before the learner needs it. ThinkSmith links to Khan Academy tutorials too, but <b>in the middle, not at the start</b>: to solve a challenge your child has already attempted. It&rsquo;s a link, not a partnership &mdash; Khan Academy is a free resource anyone can link to.</p>
+      </div>
+      <div class="diff-card">
+        <h4>Group &amp; Socratic discussion</h4>
+        <div class="starts">Starts with: discussion</div>
+        <p>A team is only as strong as its weakest link. If most learners arrive unprepared, most cannot contribute. In ThinkSmith there is <b>no weakest link and no free ride</b> &mdash; the 3 peers are AI, always prepared, and your child must judge their reasoning themselves.</p>
+      </div>
+    </div>
+
+    <div class="diff-close"><b>You don&rsquo;t have to send your child in prepared.</b> The challenge makes them prepared &mdash; then they learn it, use it, and teach it. That&rsquo;s when it sticks, and that&rsquo;s what their Thinking Outcome shows you.</div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <div class="wrap">
+    <div class="eyebrow">How children actually learn</div>
+    <h2>First the challenge. Then the knowledge. Then teach it.</h2>
+    <p style="margin-top:16px;font-size:15.5px;color:var(--ink-soft);max-width:66ch;">The order is the insight — and teaching others is where it locks in. Researchers have studied both for decades; ThinkSmith is the first platform built entirely around them, at the scale of one child working from home. The 17.31% exam improvement wasn't produced by better teachers or harder content. For the ten courses that could be compared directly, the instructors and courses were the same as in their previous, lecture-centred offerings — the students were new cohorts, and the only variable was this method.</p>
+    <div class="stage-list">
+      <div class="stage">
+        <div class="stagenum">STAGE 1</div>
+        <div>
+          <h4>Challenge first</h4>
+          <p>Before any lesson, your child writes their own solution to a real-life challenge, in their own words — not multiple choice, not fill-in-the-blank. They are not expected to get it right. The attempt creates the foothold — and the questions — that the new knowledge will answer.</p>
+          <span class="callout">No lesson first — this is the step other models leave to chance</span>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stagenum">STAGE 2</div>
+        <div>
+          <h4>Learn what you need</h4>
+          <p>Now the new knowledge arrives — often as a link to a free Khan Academy tutorial — at the moment your child needs it to improve their solution, so it lands on a question they're already asking, not on a blank slate. The pilot study called this exactly what it is: foundational knowledge acquired <em>“on a need-to-know basis.”</em> Ms. Rivera, their 24/7 personal AI coach, is beside them throughout: guiding their thinking, never supplying the answer.</p>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stagenum">STAGE 3</div>
+        <div>
+          <h4>Teach 3 peers — the key step</h4>
+          <p>Your child takes the teacher's role, reading three AI peers' attempts at the same challenge and writing constructive feedback to each. There is no weakest link and no free ride — the peers are always prepared, at genuinely varying quality, and judging their reasoning forces your child to rethink their own.</p>
+          <span class="callout">This is the step most platforms skip entirely</span>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stagenum">STAGE 4</div>
+        <div>
+          <h4>Reflect</h4>
+          <p>They receive feedback on their own work and write a reflection on what changed in their thinking — the closest thing to a one-on-one teacher conference at this scale.</p>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stagenum">STAGE 5</div>
+        <div>
+          <h4>See their Thinking Outcome</h4>
+          <p>A synthesis across five competencies and a narrative of how their thinking developed that activity — and a clear read on whether they're ready to move on. They keep going if they want — the next challenge is theirs to choose.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section class="proof">
   <div class="wrap">
     <div class="cell">
       <div class="num">17.31%</div>
-      <div class="label">average final exam improvement, same instructors, same courses, only the method changed</div>
+      <div class="label">average final exam improvement across the 10 courses that could be compared directly — same instructors, same courses, only the method changed</div>
     </div>
     <div class="cell">
       <div class="num">27.62%</div>
-      <div class="label">improvement in Calculus III — including students who had previously failed the course</div>
+      <div class="label">improvement in Calculus III, a retake course for students who had previously failed it — failures fell from eight to one</div>
     </div>
     <div class="cell">
       <div class="num">1,742</div>
-      <div class="label">students across 22 courses in a peer-reviewed pilot study</div>
+      <div class="label">students across 22 courses in the Ubon Ratchathani University pilot study</div>
     </div>
     <div class="cell">
-      <div class="num">83%</div>
-      <div class="label">of students reported greater confidence in their own ability to learn</div>
+      <div class="num">83.7%</div>
+      <div class="label">of surveyed students reported greater confidence in their own ability to learn</div>
     </div>
   </div>
-  <div class="proof-source">Source: peer-reviewed pilot study, Ubon Ratchathani University — <a href="#research">read the full research →</a></div>
-  <div class="proof-cta"><a href="#how" id="demoOpen" class="btn watch"><img src="logo-silver.png" alt="" />Play ThinkSmith Demo</a></div>
-</section>
-
-<section class="pillars">
-  <div class="wrap">
-    <div class="eyebrow">One platform, the whole journey</div>
-    <h2>Every homeschooler needs three things a classroom gives.</h2>
-    <div class="pillar-grid">
-      <div class="pillar">
-        <div class="num">01</div>
-        <h3>A personal learning companion</h3>
-        <p>Ms. Rivera works alongside your child on every challenge — asking the questions that move their thinking forward, never handing them the answer.</p>
-      </div>
-      <div class="pillar">
-        <div class="num">02</div>
-        <h3>Peers to learn from</h3>
-        <p>Even at a table of one, your child evaluates three peer solutions of genuinely varying quality on every activity — the part that turns a solo worksheet into real reasoning.</p>
-      </div>
-      <div class="pillar">
-        <div class="num">03</div>
-        <h3>A real record of progress</h3>
-        <p>Every course produces a Thinking Outcome — a clear, honest read of where your child's thinking sits and how far it's come. Downloadable whenever a board asks.</p>
-      </div>
-    </div>
-  </div>
+  <div class="proof-source">Source: pilot study, Ubon Ratchathani University (Richards, Inprasit &amp; Wattanataweekul, 2009) — <a href="#research">read the full research →</a></div>
 </section>
 
 <section class="who" id="who">
@@ -551,8 +674,8 @@
     <p class="sub">ThinkSmith fits into how homeschooling actually works — not around it.</p>
     <div class="who-grid">
       <div class="who-card">
-        <h4>Bright kids who don't fit the rote-learner mold</h4>
-        <p>If your child understands deeply when given time but freezes on a quiz — if they hate worksheets but light up when asked to reason through a problem — their kind of thinking has a place to develop and be seen here.</p>
+        <h4>Bright kids who don't fit the instant memorization mold</h4>
+        <p>If a lesson-first approach leaves your child behind — if they can't absorb new knowledge by listening, freeze on a quiz, but light up when asked to reason through a real problem first — their kind of thinking has a place to develop and be seen here. ThinkSmith starts where they are strong: with the challenge.</p>
       </div>
       <div class="who-card">
         <h4>Parents with one or more kids</h4>
@@ -564,48 +687,44 @@
       </div>
       <div class="who-card">
         <h4>Co-ops and umbrella programs</h4>
-        <p>One shared way to see thinking growth across a group of kids working on entirely different courses — built for how homeschool communities actually operate.</p>
+        <p>One shared way to see thinking growth across a group of kids working on entirely different courses — and because every child works through their own challenge and teaches their own AI peers, no child's learning depends on how prepared the rest of the group arrived.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section class="how" id="how">
+<section class="why" id="why">
   <div class="wrap">
-    <div class="eyebrow">How children actually learn</div>
-    <h2>The core insight: teaching others is the most powerful way to learn.</h2>
-    <p style="margin-top:16px;font-size:15.5px;color:var(--ink-soft);max-width:66ch;">This isn't a new idea — researchers have studied it for decades. ThinkSmith is the first platform built entirely around it, at the scale of one child working from home. The 17.31% exam improvement wasn't produced by better teachers or harder content. The instructors, courses, and students were the same as previous years. The only variable was this method.</p>
-    <div class="stage-list">
-      <div class="stage">
-        <div class="stagenum">STAGE 1</div>
-        <div>
-          <h4>Engage</h4>
-          <p>Your child writes their own solution to a real academic challenge, in their own words — not multiple choice, not fill-in-the-blank.</p>
-        </div>
+    <div class="eyebrow">Why the order matters</div>
+    <h2>Same knowledge. Different order. Different result.</h2>
+    <p class="sub">This is not a preference — it's how learning works. As the pilot study behind ThinkSmith puts it, following Duffy &amp; Cunningham: learning is <em>“an active process of constructing knowledge rather than acquiring knowledge.”</em> Knowledge handed over first has nothing to be constructed <em>with</em>. The ThinkSmith order fixes that, four ways:</p>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="num">01</div>
+        <h3>An attempt gives knowledge a place to land</h3>
+        <p>Before any lesson, your child commits to their own idea — even a wrong one. New knowledge then has something real to connect to, build on, or correct. Without that foothold, knowledge is simply heard and forgotten: there is nothing in the learner's mind for it to attach to.</p>
+        <span class="ev">Students retain less than 20% of a lecture a week later — Guskin, cited in the study</span>
       </div>
-      <div class="stage">
-        <div class="stagenum">STAGE 2</div>
-        <div>
-          <h4>Evaluate — the key step</h4>
-          <p>They read three peer attempts at the same challenge and write structured feedback to each. This is where the deep learning happens — evaluating others' reasoning sharpens their own.</p>
-          <span class="callout">This is the step most platforms skip entirely</span>
-        </div>
+      <div class="why-card">
+        <div class="num">02</div>
+        <h3>A gap you discover yourself creates the need to know</h3>
+        <p>Trying first shows learners what they don't know — to <em>themselves</em>. So when the knowledge arrives, it answers a question they're already asking, and they use it immediately in their own solution. Used knowledge is understood and remembered; knowledge memorised in isolation, for a test that hasn't happened yet, mostly isn't.</p>
+        <span class="ev">Foundational knowledge, acquired “on a need-to-know basis” — the pilot study</span>
       </div>
-      <div class="stage">
-        <div class="stagenum">STAGE 3</div>
-        <div>
-          <h4>Reflect</h4>
-          <p>They receive feedback on their own work and write a reflection on what changed in their thinking — the closest thing to a one-on-one teacher conference at this scale.</p>
-        </div>
+      <div class="why-card">
+        <div class="num">03</div>
+        <h3>Feedback needs real thinking to work on</h3>
+        <p>A coach, a peer, or a teacher cannot guide thinking that hasn't happened yet — all they can do is repeat the lesson. An attempt, and three peers' attempts, give feedback something specific to work on: the actual misunderstanding, revealed. In the pilot, class time stopped being a lecture and became that feedback — because the engagement had already happened.</p>
+        <span class="ev">100% of surveyed instructors: engage first, class time for feedback, was more productive</span>
       </div>
-      <div class="stage">
-        <div class="stagenum">STAGE 4</div>
-        <div>
-          <h4>See their Thinking Outcome</h4>
-          <p>A synthesis across five competencies and a narrative of how their thinking developed that activity. They keep going if they want — the next activity is theirs to choose.</p>
-        </div>
+      <div class="why-card">
+        <div class="num">04</div>
+        <h3>Teaching turns recall into judgement</h3>
+        <p>Judging three peers' solutions forces your child to compare, analyse, and evaluate — higher-order thinking from the very start, not as a reward after memorising the fundamentals. The pilot study notes this reversal of the traditional fixed order also helps learners <em>keep</em> the foundational knowledge, because they acquired it while using it. And learners take ownership: they build their own learning strategies instead of waiting to be taught.</p>
+        <span class="ev">92.9% of surveyed students took more responsibility for their own learning</span>
       </div>
     </div>
+    <p class="why-close">Put together, that's the result the pilot measured: <b>not better content, not better teachers — a better order</b>, and final exam averages 17.31% higher across the ten courses that could be compared directly.</p>
   </div>
 </section>
 
@@ -649,7 +768,7 @@
         </div>
       </div>
       <div class="dash-note">
-        <b>What the platform observed:</b> Carl completed three activities this week — two on the rivers of Asia and one on chemical bonds. His Critical Thinking stood out on the rivers work; he wrote about why the Mekong matters to the people who live near it, not just where it flows. On the bonds activity his thinking was thinner — worth knowing he spent under five minutes on that submission, which usually means rushing.
+        <b>What the platform observed:</b> Carl tackled three challenges this week — two on the rivers of Asia and one on chemical bonds, each starting from his own attempt before any lesson. His Critical Thinking stood out on the rivers work; he wrote about why the Mekong matters to the people who live near it, not just where it flows. On the bonds challenge his thinking was thinner — worth knowing he spent under five minutes on that first attempt, which usually means rushing.
       </div>
     </div>
   </div>
@@ -661,16 +780,22 @@
       <div>
         <div class="eyebrow">Verified, not generated</div>
         <h2>Matched to your real curriculum.</h2>
-        <p style="margin-top:16px;">Plenty of tools claim to cover "any curriculum." Most quietly generate it — and get it wrong. ThinkSmith does the opposite: we find the official curriculum document for your child's grade, confirm it's the current version, and build from it — region by region. We'd rather map one region properly than claim fifty.</p>
+        <p style="margin-top:16px;">Plenty of tools claim to cover "any curriculum." Most quietly generate it — and get it wrong. ThinkSmith does the opposite: we find the official curriculum document for your child's grade, confirm it's the current version, and build real-life challenges from it — region by region. The curriculum decides what each challenge must cover; it is never turned into a lesson script to memorise. We'd rather map one region properly than claim fifty. So far, that means <b>Grades 5–12, built for Texas and for Ontario, Canada</b>:</p>
         <div class="region-tags">
-          <span class="region-tag live">✓ Ontario, K–12</span>
-          <span class="region-tag live">✓ Texas, K–12</span>
+          <span class="region-tag live">✓ Texas, Grades 5–12</span>
+          <span class="region-tag live">✓ Ontario, Grades 5–12</span>
           <span class="region-tag">More regions in progress</span>
         </div>
+        <div class="stat-row">
+          <div class="stat"><div class="sv">2,551</div><div class="sl">Texas challenges built — <b>1,652 of them (65%)</b> link to a free Khan Academy tutorial</div></div>
+          <div class="stat"><div class="sv">1,660</div><div class="sl">Ontario challenges built — <b>807 of them (49%)</b> link to a free Khan Academy tutorial</div></div>
+          <div class="stat"><div class="sv">4,211</div><div class="sl">challenges in total, each one built from the official curriculum — never generated</div></div>
+        </div>
+        <p style="margin-top:16px;font-size:13.5px;">About those links, plainly: Khan Academy is free, and its tutorials are there for anyone to link to. Where a tutorial can help with a challenge, ThinkSmith links to it — that is the whole relationship. <b>Khan Academy does not endorse, sponsor, or support ThinkSmith, and ThinkSmith does not endorse, sponsor, or support Khan Academy.</b></p>
       </div>
       <div class="margin-card">
         <div class="tag">CURRICULUM CHECK</div>
-        <p>Prefer your own materials? Upload your child's syllabus or course outline and ThinkSmith builds activities matched to it directly — no waiting on region coverage.</p>
+        <p>Prefer your own materials? Upload your child's syllabus or course outline and ThinkSmith builds challenges matched to it directly — no waiting on region coverage.</p>
         <div class="from">Assessed on a universal five-part model: Knowledge & Understanding, Creative Thinking, Critical Thinking, Communication, Application — at four developmental levels, across every subject and region.</div>
       </div>
     </div>
@@ -722,16 +847,16 @@
 <section class="research" id="research">
   <div class="wrap">
     <div class="eyebrow">The research</div>
-    <h2 style="font-size:34px;max-width:24ch;">Tested with 1,742 students across 22 courses. Consistent across subjects, instructors, and difficulty levels.</h2>
-    <p style="margin-top:18px;font-size:15px;color:var(--ink-soft);max-width:70ch;">Source: peer-reviewed pilot study, Ubon Ratchathani University — 1,742 students, 22 courses, 6 disciplines. Instructors held PhDs from international universities; instructional quality was top-tier throughout. The variable being tested was the method, not instructor quality — the mechanism is a property of how humans learn, not of any specific population.</p>
+    <h2 style="font-size:34px;max-width:24ch;">Tested with 1,742 students across 22 courses. In the 10 courses that could be compared directly, final exam averages rose 17.31%.</h2>
+    <p style="margin-top:18px;font-size:15px;color:var(--ink-soft);max-width:70ch;">Source: pilot study, Ubon Ratchathani University — 1,742 students, 22 courses, across seven fields: Biology, Chemistry, Computer Science, Information Technology, Mathematics, Physics and Engineering. In the pilot, students engaged with new knowledge <em>before</em> the lecture — tackling a challenge, reviewing peer ideas, and receiving structured feedback ahead of the deep-dive discussion, instead of sitting through passive instruction first. The ten comparison courses were taught by the same instructors who had previously offered them lecture-centred, so the variable being tested was the method — not the instructor, and not the course. One comparison course, Food Microbiology, showed no significant difference; it's reported in the paper, because the method is the point, not the marketing.</p>
     <a href="ThinkSmithPilotStudy.pdf" id="paperOpen" class="btn ghost" style="margin-top:22px;">Read the full research paper →</a>
   </div>
 </section>
 
 <section class="final">
   <div class="wrap">
-    <h2>Let's build this together.</h2>
-    <p>The method behind ThinkSmith has been tested for years — 1,742 students, peer-reviewed results. This platform is new, and we're onboarding a small number of founding families directly with our team to get it right from day one.</p>
+    <h2>Give your child a reason to learn — before the lesson.</h2>
+    <p>The method behind ThinkSmith has been tested for years — 1,742 students in the Ubon Ratchathani pilot study. This platform is new, and we're onboarding a small number of founding families directly with our team to get it right from day one.</p>
     <a href="#contact" class="btn contact-open">Join our founding family trial &rarr;</a>
     <p style="margin-top:14px;font-size:13.5px;">No mail app needed &mdash; the form opens right here.</p>
   </div>
@@ -784,7 +909,7 @@
       <div class="bridge-card">
         <div>
           <div class="stat">1,742 students</div>
-          <div class="stat-label">The peer-reviewed pilot study behind ThinkSmith's method</div>
+          <div class="stat-label">The Ubon Ratchathani pilot study behind ThinkSmith's method</div>
         </div>
         <a href="#research" class="story-close-link">See the full research &rarr;</a>
       </div>
@@ -804,19 +929,6 @@
 <footer>
   <div class="wrap">© 2026 ThinkSmith. All rights reserved. · <a href="safety-plan.html" style="color:inherit;">Digital Safety Plan</a> · contact@thinksmith.ca</div>
 </footer>
-
-<!-- ── Walkthrough ──────────────────────────────────────────────────────── -->
-<div class="ovl" id="demoOvl" role="dialog" aria-modal="true" aria-label="How ThinkSmith works">
-  <div class="modal wide" id="demoModal">
-    <button class="x" id="demoClose" aria-label="Close">&times;</button>
-    <!-- Loaded on first open, not on page load: the walkthrough carries audio
-         and would otherwise cost every visitor the download whether or not
-         they ever open it. -->
-    <iframe id="demoFrame" class="demo-frame" title="ThinkSmith walkthrough" src="about:blank"></iframe>
-    <p class="demo-cap">Press play to watch the whole journey, or step through it yourself.
-      <a href="thinksmith-demo.html" target="_blank" rel="noopener">Open in a new tab &rarr;</a></p>
-  </div>
-</div>
 
 <!-- ── Safeguarding policy ──────────────────────────────────────────────── -->
 <div class="ovl" id="policyOvl" role="dialog" aria-modal="true" aria-labelledby="policyTitle">
@@ -974,7 +1086,7 @@
     <h5>The findings parents care about</h5>
     <div class="stat-row">
       <div class="stat"><div class="sv">17.3%</div><div class="sl">higher final exam scores, across the 1,256 students where a direct comparison against traditional instruction was possible</div></div>
-      <div class="stat"><div class="sv">44.8%</div><div class="sl">exam improvement in CAD &amp; Engineering &mdash; dropouts and failures fell from 10 to 3</div></div>
+      <div class="stat"><div class="sv">44.8%</div><div class="sl">final exam improvement in CNC Computer-Aided Design &amp; Manufacturing &mdash; failures and withdrawals fell from 10 to 3</div></div>
       <div class="stat"><div class="sv">27.6%</div><div class="sl">higher final exam average in Calculus III, a retake course with a history of frequent failure</div></div>
     </div>
 
@@ -993,6 +1105,14 @@
       <li><b>89.3%</b> found reviewing peer ideas stimulating and a richer learning experience</li>
       <li><b>89.3%</b> reported a marked improvement in teamwork and communication</li>
     </ul>
+
+    <h5>What the instructors said</h5>
+    <p>Of the 13 instructors (of 22) who completed the survey, <b>100%</b> said having students
+      engage with new information on their own and collaboratively <em>before</em> class, then using
+      class time for feedback instead of a lecture, was more productive and a better use of
+      everyone's time. The study opens with the problem they all named: <em>“students don’t come
+      to class prepared”</em> — and notes that most students do poorly under lecture-centred
+      instruction because they struggle with rote learning.</p>
 
     <h5>Why it works: the practice cycle</h5>
     <p>Traditional instruction asks students to sit quietly while an instructor talks, leaving the
@@ -1133,12 +1253,6 @@
     return { close: close, isOpen: function () { return ovl.style.display !== "none"; } };
   }
 
-  var frame = document.getElementById("demoFrame");
-  var demo = wire("demoOvl", "demoModal", "demoOpen", "demoClose", function () {
-    if (frame.getAttribute("src") === "about:blank") {
-      frame.setAttribute("src", "thinksmith-demo.html");
-    }
-  });
   var policy = wire("policyOvl", "policyModal", "policyOpen", "policyClose");
 
   // Contact: several buttons, one dialog. wire() takes a single trigger id, so
@@ -1161,18 +1275,6 @@
   // points at the PDF, so anyone with JavaScript disabled reaches the paper.
   var paper = wire("paperOvl", "paperModal", "paperOpen", "paperClose");
 
-  // Closing the walkthrough must silence it. Reloading the iframe is the only
-  // reliable way to stop audio playing inside a document we do not control.
-  var demoClose = document.getElementById("demoClose");
-  function silenceDemo() {
-    if (frame.getAttribute("src") !== "about:blank") {
-      frame.setAttribute("src", "thinksmith-demo.html");
-    }
-  }
-  demoClose.addEventListener("click", silenceDemo);
-  document.getElementById("demoOvl").addEventListener("click", function (e) {
-    if (e.target === this) silenceDemo();
-  });
 
   // ── Contact form ─────────────────────────────────────────────────────────
   // ENDPOINT: set this to your deployed function URL.
@@ -1243,7 +1345,6 @@
 
   document.addEventListener("keydown", function (e) {
     if (e.key !== "Escape") return;
-    if (demo && demo.isOpen()) { silenceDemo(); demo.close(); }
     if (policy && policy.isOpen()) policy.close();
     if (paper && paper.isOpen()) paper.close();
     if (contact && contact.isOpen()) contact.close();
