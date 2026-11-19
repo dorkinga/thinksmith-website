@@ -175,6 +175,35 @@
   .pillars{padding-top:20px;}
   .pillars h2{font-size:34px;text-align:center;margin:0 auto;}
   .demo-inline{margin-top:18px;}
+  /* PHONE DEMO (2026-11-19). On a phone, especially held sideways, the demo
+     shared the screen with the menu and was cut off. Now the inline demo is
+     a preview with a "Tap to play" button; the tap opens it to fill the whole
+     screen (menu hidden) and starts it. Close (or Esc) pauses and returns. */
+  .demo-shell{position:relative;}
+  .demo-tap,.demo-x{display:none;}
+  .demo-tap{position:absolute;inset:18px 0 0 0;border:0;background:rgba(250,247,241,0.25);
+    cursor:pointer;align-items:center;justify-content:center;padding:0;border-radius:8px;}
+  .demo-tap span{background:#7e22ce;color:#fff;font:600 17px/1 'Inter',system-ui,sans-serif;
+    padding:14px 24px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.18);}
+  .demo-shell.full{position:fixed;inset:0;z-index:1000;background:#f7f5fc;
+    padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);}
+  .demo-shell.full .demo-frame{height:100%;margin:0;border-radius:0;}
+  .demo-shell.full .demo-tap{display:none !important;}
+  .demo-shell.full .demo-x{display:block;position:absolute;z-index:2;
+    top:calc(env(safe-area-inset-top) + 6px);right:calc(env(safe-area-inset-right) + 6px);
+    border:1px solid #d8d2e6;background:#fff;color:#333;border-radius:999px;
+    font:600 13px/1 'Inter',system-ui,sans-serif;padding:8px 12px;cursor:pointer;}
+  body.demo-lock{overflow:hidden;}
+  @media (max-width:932px), (max-height:500px){
+    .demo-tap{display:flex;}
+  }
+  /* Phone held sideways: the screen is short, so the menu scrolls away
+     instead of staying pinned over a third of it, and the preview fits. */
+  @media (max-height:500px){
+    nav{position:static;}
+    .demo-frame{height:320px;}
+    section[id], #demo{scroll-margin-top:10px;}
+  }
   .pillar-grid{
     margin-top:44px;
     display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
@@ -553,7 +582,13 @@
   <div class="wrap">
     <div class="eyebrow">How it works</div>
     <!-- The walkthrough, shown at its opening frame; nothing plays until the visitor presses Play. -->
-    <iframe class="demo-frame demo-inline" src="thinksmith-demo.html" title="ThinkSmith walkthrough" loading="lazy" allow="fullscreen" allowfullscreen></iframe>
+    <!-- On phones the inline demo is a preview: one tap opens it to fill the
+         screen and starts it; Close returns to the page and pauses it. -->
+    <div class="demo-shell" id="demoShell">
+      <iframe class="demo-frame demo-inline" id="demoInline" src="thinksmith-demo.html" title="ThinkSmith walkthrough" loading="lazy" allow="fullscreen" allowfullscreen></iframe>
+      <button type="button" class="demo-tap" id="demoTap" aria-label="Play the demo full screen"><span>&#9654; Tap to play</span></button>
+      <button type="button" class="demo-x" id="demoX" aria-label="Close the demo">&#10005; Close</button>
+    </div>
   </div>
 </section>
 
@@ -1348,6 +1383,38 @@
     if (policy && policy.isOpen()) policy.close();
     if (paper && paper.isOpen()) paper.close();
     if (contact && contact.isOpen()) contact.close();
+  });
+})();
+
+// PHONE DEMO: tap the preview to open it full screen and start it.
+(function () {
+  var shell = document.getElementById("demoShell");
+  var tap = document.getElementById("demoTap");
+  var x = document.getElementById("demoX");
+  var frame = document.getElementById("demoInline");
+  if (!shell || !tap || !x || !frame) return;
+  function playBtn() {
+    try { return frame.contentWindow.document.getElementById("play"); } catch (e) { return null; }
+  }
+  function isPlaying(b) { return b && b.textContent.indexOf("Pause") !== -1; }
+  function open() {
+    shell.classList.add("full");
+    document.body.classList.add("demo-lock");
+    var b = playBtn();
+    if (b && !isPlaying(b)) b.click();
+    x.focus();
+  }
+  function close() {
+    var b = playBtn();
+    if (isPlaying(b)) b.click();
+    shell.classList.remove("full");
+    document.body.classList.remove("demo-lock");
+    shell.scrollIntoView({ block: "center" });
+  }
+  tap.addEventListener("click", open);
+  x.addEventListener("click", close);
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && shell.classList.contains("full")) close();
   });
 })();
 </script>
