@@ -567,6 +567,7 @@
       <a href="#our-story" class="story-open">Our story</a>
       <a href="#research">Research</a>
       <a href="#pricing">Pricing</a>
+      <a href="#contact-us" class="msg-open">Contact</a>
     </div>
     <div class="navactions">
       <a href="https://app.thinksmith.ca/login" class="btn ghost">Log in</a>
@@ -978,7 +979,7 @@
 </div><!-- /#storyContent -->
 
 <footer>
-  <div class="wrap">© 2026 ThinkSmith. All rights reserved. · <a href="safety-plan.html" style="color:inherit;">Digital Safety Plan</a> · contact@thinksmith.ca</div>
+  <div class="wrap">© 2026 ThinkSmith. All rights reserved. · <a href="safety-plan.html" style="color:inherit;">Digital Safety Plan</a> · <a href="#contact-us" class="msg-open" style="color:inherit;">Contact</a></div>
 </footer>
 
 <!-- ── Safeguarding policy ──────────────────────────────────────────────── -->
@@ -1070,7 +1071,7 @@
       <a href="safety-plan.html" style="color:var(--teal-deep);font-weight:600;border-bottom:2px solid var(--amber);padding-bottom:2px;text-decoration:none;">Read our full Digital Safety Plan &rarr;</a>
     </p>
     <div class="foot">Questions about safety or privacy?
-      <a href="mailto:contact@thinksmith.ca">contact@thinksmith.ca</a></div>
+      <a href="#contact-us" class="msg-open">Contact us</a></div>
   </div>
 </div>
 
@@ -1108,8 +1109,50 @@
       <button id="cf-send" class="btn">Submit &rarr;</button>
       <div class="cmsg" id="cf-msgbox" role="status" aria-live="polite"></div>
       <p style="font-size:12.5px;color:var(--ink-soft);margin-top:16px;">
-        Goes straight to our team. Prefer email? Write to
-        <a href="mailto:contact@thinksmith.ca" style="color:var(--teal-deep);">contact@thinksmith.ca</a>.
+        Goes straight to our team. Just have a question?
+        <a href="#contact-us" class="msg-open" style="color:var(--teal-deep);">Contact us</a> instead.
+      </p>
+    </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Contact (general messages, 2026-11-26) ──────────────────────────────
+     Opened by the "Contact" link in the header, the footer and the safety
+     pop-up. Separate from the family trial form above: it posts kind:'contact'
+     to the same contact-enquiry function, which files it in the Team Admin
+     CONTACT tab (the trial form files in INVITES) and emails the team. -->
+<div class="ovl" id="msgOvl" role="dialog" aria-modal="true" aria-labelledby="msgTitle">
+  <div class="modal narrow" id="msgModal">
+    <button class="x" id="msgClose" aria-label="Close">&times;</button>
+    <div id="msgBody">
+    <div class="eyebrow">Contact</div>
+    <h3 id="msgTitle">Get in touch</h3>
+    <p style="margin-bottom:18px;">Send us a message and someone from the ThinkSmith team will reply,
+      usually within a working day.</p>
+
+    <div class="cform" id="mform">
+      <div class="cfield">
+        <label for="mf-name">Your name <span class="req">*</span></label>
+        <input id="mf-name" type="text" autocomplete="name" maxlength="120" />
+      </div>
+      <div class="cfield">
+        <label for="mf-email">Your email address <span class="req">*</span></label>
+        <input id="mf-email" type="email" autocomplete="email" maxlength="200" />
+      </div>
+      <div class="cfield">
+        <label for="mf-msg">How can we help? <span class="req">*</span></label>
+        <textarea id="mf-msg" maxlength="4000" placeholder="Tell us why you're getting in touch."></textarea>
+      </div>
+      <div class="hp" aria-hidden="true">
+        <label for="mf-web">Leave this field empty</label>
+        <input id="mf-web" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+      <button id="mf-send" class="btn">Send message &rarr;</button>
+      <div class="cmsg" id="mf-msgbox" role="status" aria-live="polite"></div>
+      <p style="font-size:12.5px;color:var(--ink-soft);margin-top:16px;">
+        Interested in the founding family trial?
+        <a href="#contact" class="contact-open" style="color:var(--teal-deep);">Join here</a> instead.
       </p>
     </div>
     </div>
@@ -1240,7 +1283,7 @@
 
   // Any other in-page anchor: come home first, then let the browser scroll.
   Array.prototype.forEach.call(
-    document.querySelectorAll('.navlinks a[href^="#"]:not(.story-open)'),
+    document.querySelectorAll('.navlinks a[href^="#"]:not(.story-open):not(.msg-open)'),
     function (a) {
       a.addEventListener("click", function () {
         if (storyEl && storyEl.style.display !== "none") showHome();
@@ -1394,11 +1437,86 @@
     });
   }
 
+  // ── Contact (general messages, 2026-11-26) ───────────────────────────────
+  // Same endpoint and spam guards as the trial form; kind:'contact' files it
+  // in the Team Admin Contact tab. Several links open it, so the extra
+  // triggers are attached here (wire() takes one trigger id).
+  var msg = wire("msgOvl", "msgModal", "msgClose", "msgClose");
+  var msgOvl = document.getElementById("msgOvl");
+  var msgOpenedAt = Date.now();
+  function openMsg(e) {
+    if (e) e.preventDefault();
+    // Only one dialog at a time: the trial form links here and back.
+    if (contact && contact.isOpen()) contact.close();
+    if (policy && policy.isOpen()) policy.close();
+    msgOvl.style.display = "flex";
+    document.body.style.overflow = "hidden";
+    msgOpenedAt = Date.now();
+    var f = document.getElementById("mf-name");
+    if (f) f.focus();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll(".msg-open"), function (b) {
+    b.addEventListener("click", openMsg);
+  });
+  // The "Join here" link inside the Contact dialog opens the trial form; close
+  // this one first so the two never stack.
+  Array.prototype.forEach.call(document.querySelectorAll("#msgOvl .contact-open"), function (b) {
+    b.addEventListener("click", function () {
+      if (msg && msg.isOpen()) msg.close();
+      document.body.style.overflow = "hidden";   // the trial form is now open
+    });
+  });
+
+  var mfSend = document.getElementById("mf-send");
+  if (mfSend) {
+    var mbox = document.getElementById("mf-msgbox");
+    var mshow = function (kind, text) { mbox.className = "cmsg " + kind; mbox.textContent = text; };
+    mfSend.addEventListener("click", function () {
+      var name = document.getElementById("mf-name").value.trim();
+      var email = document.getElementById("mf-email").value.trim();
+      var text = document.getElementById("mf-msg").value.trim();
+      if (!name || !email || !text) { mshow("bad", "Please fill in your name, email and message."); return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { mshow("bad", "That email address does not look right."); return; }
+      mfSend.disabled = true;
+      mfSend.textContent = "Sending…";
+      mshow("", "");
+      fetch(CONTACT_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name, email: email, message: text,
+          kind: "contact",
+          source: "website:contact",
+          website: document.getElementById("mf-web").value,   // honeypot
+          elapsed: Math.round((Date.now() - msgOpenedAt) / 1000)
+        })
+      })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.success) {
+          document.getElementById("msgBody").innerHTML =
+            '<div class="eyebrow">Message sent</div>' +
+            '<h3>Thank you.</h3>' +
+            '<p style="margin-top:10px;">Your message is with the ThinkSmith team and someone will ' +
+            'reply, usually within a working day. We have sent a confirmation to your inbox.</p>';
+        } else {
+          mfSend.disabled = false; mfSend.textContent = "Send message →";
+          mshow("bad", (d && d.error) || "Something went wrong. Please try again in a moment.");
+        }
+      })
+      .catch(function () {
+        mfSend.disabled = false; mfSend.textContent = "Send message →";
+        mshow("bad", "We could not send that just now. Please try again in a moment.");
+      });
+    });
+  }
+
   document.addEventListener("keydown", function (e) {
     if (e.key !== "Escape") return;
     if (policy && policy.isOpen()) policy.close();
     if (paper && paper.isOpen()) paper.close();
     if (contact && contact.isOpen()) contact.close();
+    if (msg && msg.isOpen()) msg.close();
   });
 })();
 
